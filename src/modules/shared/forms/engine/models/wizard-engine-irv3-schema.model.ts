@@ -248,12 +248,16 @@ export class WizardIRV3EngineModel {
               stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
             }
 
-            if (question.addQuestion && !question.field) {
-              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            if (question.addQuestions && !question.field) {
+              question.addQuestions.forEach(aq => {
+                stepsChildParentRelations[aq.id] = question.id;
+              });
             }
 
-            if (question.addQuestion && question.field) {
-              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            if (question.addQuestions && question.field) {
+              question.addQuestions.forEach(aq => {
+                stepsChildParentRelations[aq.id] = question.id;
+              });
             }
           });
 
@@ -296,7 +300,7 @@ export class WizardIRV3EngineModel {
             ...(q.validations && { validations: q.validations }),
             ...(q.items && { items: q.items.map(i => i) }),
             ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
-            ...(q.addQuestion && { addQuestion: q.addQuestion }),
+            ...(q.addQuestions && { addQuestions: q.addQuestions }),
             ...(q.field && { field: q.field }),
             ...(q.condition && { condition: q.condition }),
             isNestedField: false,
@@ -342,62 +346,63 @@ export class WizardIRV3EngineModel {
           // runtimerules for `addQuestions`
           const conditionalItem = q.items?.find(i => i.conditional);
 
-          if (q.addQuestion && this.getAnswers()[q.id]) {
+          if (q.addQuestions && this.getAnswers()[q.id]) {
             (this.getAnswers()[q.id] as arrStringAnswer).forEach((answer, i) => {
-              // replace variables on label's placeholders for fields-groups
-              let label = q.addQuestion!.label;
+              q.addQuestions!.forEach(aq => {
+                // replace variables on label's placeholders for fields-groups
+                let label = aq.label;
 
-              if (q.dataType === 'fields-group' && q.field) {
-                label = q.addQuestion!.label.replace(
-                  /{{[^{}]*}}/,
-                  this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
-                );
-              } else if (q.dataType === 'checkbox-array' && q.addQuestion) {
-                const itemAnswer: string =
-                  typeof this.currentAnswers[q.id][i] === 'object'
-                    ? this.currentAnswers[q.id][i][this.getCheckBoxAnswerId(q)]
-                    : this.currentAnswers[q.id][i];
+                let itemAnswer = '';
+                if (q.dataType === 'fields-group' && q.field) {
+                  label = aq.label.replace(/{{[^{}]*}}/, this.currentAnswers[q.id][i][q.field.id] ?? aq.label);
+                } else if (q.dataType === 'checkbox-array') {
+                  itemAnswer =
+                    typeof this.currentAnswers[q.id][i] === 'object'
+                      ? this.currentAnswers[q.id][i][this.getCheckBoxAnswerId(q)]
+                      : this.currentAnswers[q.id][i];
 
-                label = this.translations.questions.get(q.id)?.items.get(itemAnswer)?.label ?? '';
+                  label = this.translations.questions.get(q.id)?.items.get(itemAnswer)?.label ?? '';
 
-                // search for conditional on question items, then check if answer is from a conditional. If so, get conditional answer
-                if (conditionalItem?.conditional && conditionalItem.id === itemAnswer) {
-                  label = this.currentAnswers[conditionalItem.conditional.id];
+                  // search for conditional on question items, then check if answer is from a conditional. If so, get conditional answer
+                  if (conditionalItem?.conditional && conditionalItem.id === itemAnswer) {
+                    label = this.currentAnswers[conditionalItem.conditional.id];
+                  }
+
+                  // replace variable (i.e. '{{item}}') on label's placeholders for checkbox-arrays with addQuestions
+                  label = aq.label.replace(/{{[^{}]*}}/, label);
                 }
 
-                // replace variable (i.e. '{{item}}') on label's placeholders for checkbox-arrays with addQuestions
-                label = q.addQuestion.label.replace(/{{[^{}]*}}/, label);
-              }
-
-              // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
-              if (q.addQuestion) {
-                addSteps.push(
-                  new FormEngineModelV3({
-                    parameters: [
-                      {
-                        id: `${q.addQuestion.id}_${i}`,
-                        dataType: q.addQuestion.dataType,
-                        label: label,
-                        ...(q.addQuestion.description && {
-                          description: this.translateDescriptionUrls(q.addQuestion.description)
-                        }),
-                        ...(q.addQuestion.lengthLimit && { lengthLimit: q.addQuestion.lengthLimit }),
-                        ...(q.addQuestion.validations && { validations: q.addQuestion.validations }),
-                        ...(q.addQuestion.items && { items: q.addQuestion.items }),
-                        ...(q.addQuestion.addNewLabel && { addNewLabel: q.addQuestion.addNewLabel }),
-                        ...(q.addQuestion.addQuestion && { addQuestion: q.addQuestion.addQuestion }),
-                        ...(q.addQuestion.field && { field: q.addQuestion.field }),
-                        ...(q.addQuestion.condition && { condition: q.addQuestion.condition }),
-                        isNestedField: !!(
-                          (q.dataType === 'fields-group' && q.addQuestion) ||
-                          q.dataType === 'checkbox-array'
-                        ),
-                        parentId: q.id
-                      }
-                    ]
-                  })
-                );
-              }
+                // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
+                if (q.addQuestions) {
+                  addSteps.push(
+                    new FormEngineModelV3({
+                      parameters: [
+                        {
+                          id: `${aq.id}_${i}`,
+                          dataType: aq.dataType,
+                          label: label,
+                          ...(aq.description && {
+                            description: this.translateDescriptionUrls(aq.description)
+                          }),
+                          ...(aq.lengthLimit && { lengthLimit: aq.lengthLimit }),
+                          ...(aq.validations && { validations: aq.validations }),
+                          ...(aq.items && { items: aq.items }),
+                          ...(aq.addNewLabel && { addNewLabel: aq.addNewLabel }),
+                          ...(aq.addQuestions && { addQuestions: aq.addQuestions }),
+                          ...(aq.field && { field: aq.field }),
+                          ...(aq.condition && { condition: aq.condition }),
+                          isNestedField: !!(
+                            (q.dataType === 'fields-group' && q.addQuestions) ||
+                            q.dataType === 'checkbox-array'
+                          ),
+                          parentId: q.id,
+                          ...(itemAnswer && { createdFromParentAnswerId: itemAnswer })
+                        }
+                      ]
+                    })
+                  );
+                }
+              });
             });
           }
           // }
@@ -442,23 +447,25 @@ export class WizardIRV3EngineModel {
               // Push "parent"
               this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
 
-              if (stepParams.addQuestion && stepParams.field) {
-                value = undefined;
-                // Push "children" if any
-                if (stepAnswers) {
-                  stepAnswers.forEach((question, i) => {
-                    editStepNumber++;
+              if (stepParams.addQuestions && stepParams.field) {
+                stepParams.addQuestions.forEach(aq => {
+                  value = undefined;
+                  // Push "children" if any
+                  if (stepAnswers) {
+                    stepAnswers.forEach((question, i) => {
+                      editStepNumber++;
 
-                    stepId = `${stepParams.addQuestion!.id}_${i}`;
-                    // replace label item
-                    label = stepParams.addQuestion!.label.replace(
-                      /{{[^{}]*}}/,
-                      this.currentAnswers[stepParams.id][i][stepParams.field!.id]
-                    );
-                    value = stepAnswers[i][stepParams.addQuestion!.id];
-                    this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
-                  });
-                }
+                      stepId = `${aq.id}_${i}`;
+                      // replace label item
+                      label = aq.label.replace(
+                        /{{[^{}]*}}/,
+                        this.currentAnswers[stepParams.id][i][stepParams.field!.id]
+                      );
+                      value = stepAnswers[i][aq.id];
+                      this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+                    });
+                  }
+                });
               }
             }
             break;
@@ -499,7 +506,7 @@ export class WizardIRV3EngineModel {
                 stepAnswers = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
 
                 // Set value of parent, depending on type of answer
-                if (stepParams.addQuestion || stepParams.checkboxAnswerId) {
+                if (stepParams.addQuestions || stepParams.checkboxAnswerId) {
                   value = stepAnswers;
 
                   label = stepParams.label ?? '';
@@ -525,20 +532,22 @@ export class WizardIRV3EngineModel {
               this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
 
               // Push "children" if any
-              if (stepParams.addQuestion && stepAnswers) {
+              if (stepParams.addQuestions && stepAnswers) {
                 stepAnswers.forEach((item, i) => {
-                  editStepNumber++;
+                  stepParams.addQuestions?.forEach(aq => {
+                    editStepNumber++;
 
-                  stepId = `${stepParams.addQuestion?.id}_${i}`;
+                    stepId = `${aq.id}_${i}`;
 
-                  // Replace label variables
-                  label = stepParams.addQuestion!.label.replace(
-                    /{{[^{}]*}}/,
-                    this.translations.questions.get(stepParams.id)?.items.get(item)?.label ?? item
-                  );
-                  value = currentAnswers[stepId];
+                    // Replace label variables
+                    label = aq.label.replace(
+                      /{{[^{}]*}}/,
+                      this.translations.questions.get(stepParams.id)?.items.get(item)?.label ?? item
+                    );
+                    value = currentAnswers[stepId];
 
-                  this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+                    this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+                  });
                 });
               }
             }
@@ -563,21 +572,23 @@ export class WizardIRV3EngineModel {
       if (this.currentAnswers[stepParams.id]) {
         switch (stepParams.dataType) {
           case 'fields-group':
-            if (!stepParams.addQuestion && stepParams.field) {
+            if (!stepParams.addQuestions && stepParams.field) {
               // Convert array to nested object, if dataType is 'fields-group' without 'addQuestion'
               toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map(item => ({
                 [stepParams.field!.id]: item
               }));
             } else {
               (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
-                toReturn[`${stepParams.addQuestion!.id}_${i}`] = answer[stepParams.addQuestion!.id];
+                stepParams.addQuestions?.forEach(aq => {
+                  toReturn[`${aq.id}_${i}`] = answer[aq.id];
+                });
               });
             }
 
             break;
 
           case 'checkbox-array':
-            if (stepParams.addQuestion || (stepParams.checkboxAnswerId && this.currentAnswers)) {
+            if (stepParams.addQuestions || (stepParams.checkboxAnswerId && this.currentAnswers)) {
               // add parent question previous value
               toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as nestedObjectAnswer).map(
                 answer => answer[stepParams.checkboxAnswerId ?? stepParams.id]
@@ -585,7 +596,9 @@ export class WizardIRV3EngineModel {
 
               // add all addQuestions previous values
               (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
-                toReturn[`${stepParams.addQuestion!.id}_${i}`] = answer[stepParams.addQuestion!.id];
+                stepParams.addQuestions?.forEach(aq => {
+                  toReturn[`${aq.id}_${i}`] = answer[aq.id];
+                });
               });
             }
             break;
@@ -600,29 +613,44 @@ export class WizardIRV3EngineModel {
   }
 
   runOutboundParsing(): InnovationRecordSectionUpdateType {
+    console.log('current steps:', this.steps);
     const toReturn: Record<string, any> = {};
 
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
     for (const step of this.steps.filter(s => !s.parameters[0].isNestedField).values()) {
       const stepParams = step.parameters[0];
+      console.log('-------------------------------------\n-------------------------------------\n');
+      console.log('this.currentAnswers', this.currentAnswers);
+
       const currentAnswer = this.currentAnswers[stepParams.id];
+      console.log('stepParams', stepParams);
+      console.log('currentAnswer', currentAnswer);
+      console.log('init toReturn logic:', toReturn);
 
       if (currentAnswer) {
         toReturn[stepParams.id] = currentAnswer;
       }
-
+      console.log('first toReturn logic:', toReturn);
       if (stepParams.dataType === 'checkbox-array') {
+        const conditionalQuestions = stepParams.items?.filter(i => i.conditional);
+        console.log('conditionalQuestions?.length', conditionalQuestions?.length);
+        console.log('parsing checkbox-array');
         // create nested object if it has addQuestions
-        if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && currentAnswer) {
+        if ((stepParams.addQuestions || stepParams.checkboxAnswerId) && currentAnswer) {
           toReturn[stepParams.id] = (currentAnswer as arrStringAnswer).map((answer, i) => {
-            const addQuestionId = `${stepParams.addQuestion!.id}_${i}`;
-
-            return {
-              [this.getCheckBoxAnswerId(stepParams)]: answer,
-              ...(this.currentAnswers[addQuestionId] && {
-                [stepParams.addQuestion!.id]: this.currentAnswers[addQuestionId]
-              })
+            const result: Record<string, string> = {
+              [this.getCheckBoxAnswerId(stepParams)]: answer
             };
+
+            stepParams.addQuestions?.forEach(addQuestion => {
+              const addQuestionId = `${addQuestion.id}_${i}`;
+
+              if (this.currentAnswers[addQuestionId]) {
+                result[addQuestion.id] = this.currentAnswers[addQuestionId];
+              }
+            });
+
+            return result;
           });
         }
       }
@@ -636,16 +664,22 @@ export class WizardIRV3EngineModel {
       }
 
       if (stepParams.dataType === 'fields-group' && currentAnswer) {
-        if (!stepParams.addQuestion) {
+        if (!stepParams.addQuestions) {
           // flatten fields-group with no addQuestions
           toReturn[stepParams.id] = (currentAnswer as nestedObjectAnswer).map(item => {
             return item[stepParams.field!.id];
           });
         } else {
           // add answers from all addQuestions steps to the fields-group object
-          (currentAnswer as nestedObjectAnswer).forEach(
-            (item, i) => (item[stepParams.addQuestion!.id] = this.currentAnswers[`${stepParams.addQuestion!.id}_${i}`])
-          );
+          (currentAnswer as nestedObjectAnswer).forEach((item, i) => {
+            stepParams.addQuestions?.forEach(aq => {
+              const addQuestionId = `${aq.id}_${i}`;
+
+              if (this.currentAnswers[addQuestionId]) {
+                item[aq.id] = this.currentAnswers[addQuestionId];
+              }
+            });
+          });
           toReturn[stepParams.id] = currentAnswer;
         }
       }
@@ -656,10 +690,15 @@ export class WizardIRV3EngineModel {
         }
       }
 
+      console.log('checking conditionals');
       // add conditionals
       const conditionalItems = stepParams.items?.filter(i => i.conditional);
       conditionalItems?.forEach(c => {
         if (c.conditional && this.currentAnswers[c.conditional.id]) {
+          console.log(
+            `toReturn[${c.conditional.id}] = this.currentAnswers[${c.conditional.id}]`,
+            this.currentAnswers[c.conditional.id]
+          );
           toReturn[c.conditional.id] = this.currentAnswers[c.conditional.id];
         }
       });
@@ -681,6 +720,9 @@ export class WizardIRV3EngineModel {
         }
       }
     }
+
+    console.log('toReturn:', toReturn);
+    // return {version:1,data:{}}
 
     return {
       version: this.schema?.version ?? 0,

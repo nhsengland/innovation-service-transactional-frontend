@@ -73,6 +73,8 @@ export class SchemaContextStore {
         )
       )
       .subscribe(irSchema => {
+        console.log('irSchema', irSchema);
+
         if (irSchema) {
           this.state.set({ irSchema, expiresAt: Date.now() + EXPIRATION_IN_MS, isStateLoaded: true });
         }
@@ -149,7 +151,10 @@ export class SchemaContextStore {
       section?.steps.flatMap(st =>
         st.questions.flatMap(q => [
           { label: q.label, conditional: !!st.condition },
-          ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
+          ...(q.addQuestions?.map(aq => ({
+            label: aq.label,
+            conditional: true
+          })) ?? [])
         ])
       ) ?? [];
 

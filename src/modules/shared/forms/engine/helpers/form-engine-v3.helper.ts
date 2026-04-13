@@ -84,6 +84,19 @@ export class FormEngineHelperV3 {
 
           break;
 
+        case 'input-array': {
+          const group = new FormGroup({}, { updateOn: 'change' });
+
+          parameter.items?.forEach(item => {
+            if (!item.id) return;
+
+            group.addControl(item.id, new FormControl(parameterValue?.[item.id] ?? null));
+          });
+
+          form.addControl(parameter.id, group);
+          break;
+        }
+
         // case 'autocomplete-value':
         case 'radio-group':
           form.addControl(
@@ -166,13 +179,15 @@ export class FormEngineHelperV3 {
       newField.updateValueAndValidity();
       formGroup.addControl(parameter.field.id, newField);
     }
-    if (parameter.field && parameter.addQuestion) {
+    if (parameter.field && parameter.addQuestions) {
       const newField = FormEngineHelperV3.createParameterFormControl(
         parameter.field,
         (value || {})[parameter.field.id]
       );
       newField.updateValueAndValidity();
-      formGroup.addControl(parameter.addQuestion.id, newField);
+      parameter.addQuestions.forEach(aq => {
+        formGroup.addControl(aq.id, newField);
+      });
     }
 
     return formGroup;
@@ -356,6 +371,7 @@ export class FormEngineHelperV3 {
         case 'autocomplete-array':
         case 'checkbox-array':
         case 'fields-group':
+        case 'input-array':
           // case 'file-upload-array':
           validators.push(CustomValidators.requiredCheckboxArray(validation));
           break;

@@ -37,6 +37,7 @@ export type InnovationRecordQuestionStepType = {
   label: string;
   checkboxAnswerId?: string;
   parentId?: string;
+  createdFromParentAnswerId?: string;
   description?: string;
   field?: {
     id: string;
@@ -45,7 +46,7 @@ export type InnovationRecordQuestionStepType = {
     validations: InnovationRecordStepValidationsType;
   };
   addNewLabel?: string;
-  addQuestion?: InnovationRecordQuestionStepType;
+  addQuestions?: InnovationRecordQuestionStepType[];
   validations?: InnovationRecordStepValidationsType;
   lengthLimit?: TextareaLengthLimitType;
   items?: InnovationRecordItemsType;
@@ -64,7 +65,8 @@ export type InnovationRecordFormComponentType =
   | 'radio-group'
   | 'autocomplete-array'
   | 'checkbox-array'
-  | 'fields-group';
+  | 'fields-group'
+  | 'input-array';
 
 export type InnovationRecordStepValidationsType = {
   isRequired?: string;
@@ -86,6 +88,12 @@ export type InnovationRecordFieldGroupAnswerType = Record<string, string>[];
 
 export type InnovationRecordMinMaxValidationType = { length: number; errorMessage: string };
 
+export type ItemConditionOptionsType = {
+  relativeToId?: string;
+  mandatoryIf?: string[] /* list for IDs for which item is mandatory */;
+  displayIf?: string[] /* list for IDs for which item should display */;
+};
+
 export type InnovationRecordItemsType = {
   id?: string;
   label?: string;
@@ -95,6 +103,7 @@ export type InnovationRecordItemsType = {
   group?: string;
   type?: string;
   itemsFromAnswer?: string;
+  itemConditionOptions?: ItemConditionOptionsType;
 }[];
 
 export type InnovationRecordSectionAnswersType = Record<
