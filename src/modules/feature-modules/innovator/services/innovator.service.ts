@@ -84,8 +84,8 @@ export class InnovatorService extends CoreService {
   }
 
   createInnovationFromExcel(base64File: string): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovations/xlsx');
-    return this.http.post<{ id: string }>(url.buildUrl(), { file: base64File }).pipe(take(1));
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovations/import');
+    return this.http.post<{ id: string }>(url.buildUrl(), { format: 'excel', file: base64File }).pipe(take(1));
   }
 
   submitOrganisationSharing(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {

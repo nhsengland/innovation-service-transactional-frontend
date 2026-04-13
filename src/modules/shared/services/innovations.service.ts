@@ -1037,9 +1037,9 @@ export class InnovationsService extends CoreService {
    * @param base64File Base64 encoded string of the Excel file.
    */
   createInnovationFromExcel(base64File: string): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovations/xlsx');
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovations/import');
 
-    return this.http.post<{ id: string }>(url.buildUrl(), { file: base64File }).pipe(take(1));
+    return this.http.post<{ id: string }>(url.buildUrl(), { format: 'excel', file: base64File }).pipe(take(1));
   }
 
   private base64ToBlob(base64Content: string, type: string): Blob {
