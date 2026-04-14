@@ -109,6 +109,7 @@ export class FormEngineParameterModel {
     acceptedFiles?: FileTypes[];
     maxFileSize?: number; // In Mb.
     previousUploadedFiles?: { id: string; name: string }[];
+    localOnly?:boolean
   };
 
   selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
@@ -159,15 +160,6 @@ export class FormEngineModelV3 {
 export class FormEngineParameterModelV3 {
   id: string;
   dataType: InnovationRecordFormComponentType;
-  // | 'number'
-  // | 'password'
-  // | 'hidden'
-  // | 'date'
-  // | 'checkbox-group'
-  // | 'grouped-checkbox-array'
-  // | 'file-upload'
-  // | 'file-upload-array'
-  // | 'select-component';
   label?: string;
   description?: string;
   checkboxAnswerId?: string;

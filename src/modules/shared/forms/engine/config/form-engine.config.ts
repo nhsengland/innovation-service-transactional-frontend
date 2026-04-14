@@ -4,6 +4,7 @@ export type FileUploadType = {
   size?: number;
   extension: string;
   url: string;
+  file?: File
 };
 
 export enum FileTypes {

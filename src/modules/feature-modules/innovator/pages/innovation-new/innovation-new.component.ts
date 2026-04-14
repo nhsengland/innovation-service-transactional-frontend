@@ -2,13 +2,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent } from '@app/base/forms';
+import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { InnovatorService } from '../../services/innovator.service';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { InnovationErrorsEnum } from '@app/base/enums';
-import { getNewInnovationQuestionsWizard } from './innovation-new.config';
+import { getImportInnovationQuestionsWizard, getNewInnovationQuestionsWizard } from './innovation-new.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import {  switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-innovator-pages-innovation-new',
@@ -17,41 +19,26 @@ import { getNewInnovationQuestionsWizard } from './innovation-new.config';
 export class InnovationNewComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  wizard = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
+  wizard: WizardEngineModel = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
 
   isCreatingInnovation = false;
+  isImportingInnovation = false;
+  isImportingExcel = false;
+  importSuccess = false;
+  sectionsToFillAfterImport: string[] = [];
 
-  constructor(private innovatorService: InnovatorService) {
+  createdInnovationId: undefined | string = undefined;
+
+  baseUrl = '/innovator/dashboard';
+
+  constructor(
+    private innovatorService: InnovatorService,
+    private innovationsService: InnovationsService
+  ) {
     super();
 
     this.setPageTitle('', { showPage: false });
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
-  }
-
-  isImportingExcel = false;
-
-  onExcelFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (!file) return;
-
-    this.isImportingExcel = true;
-    const reader = new FileReader();
-
-    reader.onload = (e: any) => {
-      const base64 = e.target.result.split(',')[1];
-      this.innovatorService.createInnovationFromExcel(base64).subscribe({
-        next: response => {
-          this.setRedirectAlertSuccess(`Innovation successfully imported from Excel.`);
-          this.redirectTo(`innovator/innovations/${response.id}/registered`);
-        },
-        error: () => {
-          this.setAlertError('Failed to import from Excel. Please check the file format and try again.');
-          this.isImportingExcel = false;
-        }
-      });
-    };
-
-    reader.readAsDataURL(file);
   }
 
   ngOnInit(): void {
@@ -89,8 +76,9 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
 
     this.innovatorService.createInnovation(body).subscribe({
       next: response => {
+        this.createdInnovationId = response.id;
         this.setRedirectAlertSuccess(`You have successfully registered the innovation '${body.name}'`);
-        this.redirectTo(`innovator/innovations/${response.id}/registered`);
+        this.redirectTo(`innovator/innovations/${this.createdInnovationId}/registered`);
       },
       error: ({ error: err }: HttpErrorResponse) => {
         if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
@@ -120,5 +108,103 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       default:
         break; // Should NOT happen!
     }
+  }
+
+  downloadExcelTemplate(): void {
+    this.innovationsService.getInnovationRecordExcelTemplate().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Innovation-Record-Template.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.setAlertError('Unable to download the template. Please try again.');
+      }
+    });
+  }
+
+  onImportInnovation(): void {
+    this.isCreatingInnovation = false;
+    this.wizard = cloneDeep(getImportInnovationQuestionsWizard());
+    this.onSubmitStep('next');
+    this.setUploadConfiguration();
+  }
+
+  onStartInnovation(): void {
+    this.isCreatingInnovation = true;
+    this.wizard = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
+    this.onSubmitStep('next');
+  }
+
+  onUploadTemplate(): void {
+    this.isImportingExcel = true;
+
+    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
+    const file = formData.data.file?.file;
+
+    this.fileToBase64(file).then(fileAsBase64 => {
+      this.innovatorService
+        .createInnovationFromExcel(fileAsBase64)
+        .pipe(
+          switchMap(response => {
+            this.createdInnovationId = response.id;
+            return this.ctx.innovation.getSectionsSummary$(response.id);
+          })
+        )
+        .subscribe({
+          next: sectionSummary => {
+            /*
+                get sections that are left incomplete after import
+                filter-out 2.2 and 5.1 (and any others with mandatory documents)
+              */
+
+            this.sectionsToFillAfterImport = sectionSummary.flatMap((section, i) =>
+              section.sections
+                .filter(
+                  s => !s.isCompleted && !['EVIDENCE_OF_EFFECTIVENESS', 'REGULATIONS_AND_STANDARDS'].includes(s.id)
+                )
+                .map((sub, j) => `${i + 1}.${j + 1} ${sub.title}`)
+            );
+
+            this.importSuccess = true;
+            this.setAlertSuccess('Your innovation has been imported');
+          },
+          error: ({ error: err }: HttpErrorResponse) => {
+            if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
+              this.setAlertError('An innovation with that name already exists. Try again with a new name');
+            } else {
+              this.setAlertError(
+                'An error occurred when importing the innovation. Please try again or contact us for further help'
+              );
+            }
+            
+            this.isImportingExcel = false;
+          }
+        });
+    });
+  }
+
+  private setUploadConfiguration(): void {
+    if (this.wizard.currentStep().parameters[0].dataType === 'file-upload') {
+      this.wizard.currentStep().parameters[0].fileUploadConfig = {
+        httpUploadUrl: '',
+        acceptedFiles: [FileTypes.XLSX],
+        localOnly: true
+      };
+    }
+  }
+
+  private fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
   }
 }

@@ -156,7 +156,7 @@
       @if (ctx.user.isInnovator()) {
         <ul class="nhsuk-u-margin-bottom-7">
           <li><a href="javascript:void(0)" (click)="downloadInnovationRecordDocument()">Download all the questions (DOCX)</a> in your innovation record</li>
-          <li><a href="javascript:void(0)" (click)="downloadInnovationRecordExcel()">Download the Innovation Record as Excel (XLSX)</a></li>
+          <!-- <li><a href="javascript:void(0)" (click)="downloadInnovationRecordExcel()">Download the Innovation Record as Excel (XLSX)</a></li> -->
           <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf" /></li>
           <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv" /></li>
         </ul>

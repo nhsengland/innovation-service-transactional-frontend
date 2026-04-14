@@ -1,14 +1,14 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
-    <ng-container *ngIf="wizard.isQuestionStep()">
+    <ng-container *ngIf="wizard.isQuestionStep() && !importSuccess">
       <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l">{{ wizard.currentStep().label }}</h1>
       <p *ngIf="wizard.currentStep().description">{{ wizard.currentStep().description }}</p>
 
       @if (wizard.isFirstStep()) {
         <div>
-          <p>We’ll ask you for the name and a brief description of the innovation, as well as your head office location and website.</p>
+          <p>We'll ask you for the name and a brief description of the innovation, as well as your head office location and website.</p>
           <p>
-            Once you’ve registered, we’ll ask you more detailed questions about your innovation in your innovation record. This will help us match you with appropriate support
+            Once you've registered, we'll ask you more detailed questions about your innovation in your innovation record. This will help us match you with appropriate support
             organisations for your innovation stage and type.
           </p>
           <p>The NHS Innovation Service is not suitable for innovations that are:</p>
@@ -23,34 +23,52 @@
             </li>
           </ul>
         </div>
-        <!-- TODO: This copy as to change with collaborators -->
-        <div class="nhsuk-inset-text">
-          <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>All innovations registered on this account should be developed by the same innovator or organisation.</p>
 
-          <div class="nhsuk-u-margin-top-4" style="border-top: 1px solid #d8dde0; padding-top: 20px;">
-            <p><strong>Already have a filled Excel record?</strong></p>
-            <p>You can skip the manual registration by uploading your Excel file instead.</p>
-            <input type="file" (change)="onExcelFileSelected($event)" accept=".xlsx" style="display: none" #excelFileInput />
-            <button
-              class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0"
-              (click)="excelFileInput.click()"
-              [disabled]="isImportingExcel"
-              type="button"
-            >
-              {{ isImportingExcel ? "Importing..." : "Import from Excel" }}
-            </button>
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content">
+            <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">Start a new innovation</h3>
+            <!-- TODO: This copy as to change with collaborators -->
+            <p>All innovations registered on this account should be developed by the same innovator or organisation.</p>
+            <button type="button" class="nhsuk-button" (click)="onStartInnovation()">Start now</button>
+          </div>
+        </div>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content">
+            <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">Import an existing innovation</h3>
+            <p>If you have already submitted your innovation on another NHS service (e.g. NIA), you can import it using our Excel template.</p>
+            <ol class="nhsuk-list nhsuk-list--bullet">
+              <li>
+                <p class="nhsuk-u-margin-bottom-3">Download the template</p>
+              </li>
+              <li>
+                <p class="nhsuk-u-margin-bottom-3">Add your innovation details into your template</p>
+              </li>
+              <li>
+                <p class="nhsuk-u-margin-bottom-3">Upload the completed template</p>
+              </li>
+            </ol>
+            <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+              <p>Supporting documents cannot be imported. You will need to add these separately within each section.</p>
+            </div>
+            <button type="button" class="nhsuk-button nhsuk-u-margin-bottom-0 nhsuk-u-margin-right-3" (click)="downloadExcelTemplate()">Download template</button>
+            <button type="button" class="nhsuk-button nhsuk-button--secondary" (click)="onImportInnovation()">Upload template</button>
           </div>
         </div>
       }
 
       <theme-form-engine formId="addInnovationForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
-      <button type="submit" form="addInnovationForm" class="nhsuk-button" (click)="onSubmitStep('next')">
-        {{ wizard.isFirstStep() ? "Start now" : "Continue" }}
-      </button>
+
+      <ng-container *ngIf="isCreatingInnovation && !wizard.isFirstStep()">
+        <button type="submit" form="addInnovationForm" class="nhsuk-button" (click)="onSubmitStep('next')">Continue</button>
+      </ng-container>
+
+      <ng-container *ngIf="!isCreatingInnovation && !wizard.isFirstStep() && !importSuccess">
+        <button type="submit" form="addInnovationForm" class="nhsuk-button" (click)="onUploadTemplate()" [disabled]="isImportingExcel">Import innovation</button>
+      </ng-container>
     </ng-container>
 
-    <ng-container *ngIf="wizard.isSummaryStep()">
+    <ng-container *ngIf="isCreatingInnovation && wizard.isSummaryStep()">
       <h1 class="nhsuk-heading-l">Check your answers</h1>
 
       <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
@@ -63,7 +81,37 @@
         </dd>
       </div>
 
-      <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="submitWizard()" [disabled]="isCreatingInnovation">Complete registration</button>
+      <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="submitWizard()">Complete registration</button>
+    </ng-container>
+
+    <ng-container *ngIf="importSuccess">
+      <ng-container *ngIf="sectionsToFillAfterImport.length !== 0; else completeInnovationImport">
+        <p>Some information is still needed before you can submit your innovation.</p>
+        <p>You can add the remaining details in the Innovation Service, or update your Excel template and upload it again.</p>
+        <p class="nhsuk-u-font-weight-bold">Sections to complete:</p>
+        <ol class="nhsuk-list nhsuk-list--bullet">
+          <li *ngFor="let section of sectionsToFillAfterImport">
+            <p class="nhsuk-u-margin-bottom-3">{{ section }}</p>
+          </li>
+        </ol>
+      </ng-container>
+
+      <ng-template #completeInnovationImport>
+        <p>We have created your Innovation Record using the information you provided.</p>
+        <p>Please review your information before submitting.</p>
+      </ng-template>
+
+      <div class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>Supporting documents cannot be imported. You will need to add these separately within each evidence section.</p>
+      </div>
+
+         <div class="d-flex align-items-center">
+          <a routerLink="baseUrl" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-5">Continue to the Innovation Record</a>
+          <div class="text-align-center">
+            <a *ngIf="!sectionsToFillAfterImport.length" [routerLink]="baseUrl">Cancel</a>
+          </div>
+        </div>
     </ng-container>
   </div>
 </div>

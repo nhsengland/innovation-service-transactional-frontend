@@ -5,7 +5,7 @@ import {
   WizardStepType,
   WizardSummaryType
 } from '@modules/shared/forms';
-import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
+import { FileUploadType, INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
 
@@ -33,7 +33,7 @@ const stepsLabels = {
 };
 
 // Types.
-type StepPayloadType = {
+type NewInnovationStepPayloadType = {
   name: string;
   description?: string;
   officeLocation: string;
@@ -45,7 +45,11 @@ type StepPayloadType = {
   videoDemonstrationUrl?: string;
 };
 
-type OutboundPayloadType = {
+type ImportInnovationStepPayloadType = {
+  file: FileUploadType;
+};
+
+type NewInnovationOutboundPayloadType = {
   name: string;
   description: string;
   officeLocation: string;
@@ -56,6 +60,31 @@ type OutboundPayloadType = {
   hasVideoDemonstration?: string;
   videoDemonstrationUrl?: string;
 };
+
+export function getImportInnovationQuestionsWizard(): WizardEngineModel {
+  return new WizardEngineModel({
+    showSummary: false,
+    steps: [
+      new FormEngineModel({
+        label: 'Register a new innovation',
+        parameters: []
+      }),
+      new FormEngineModel({
+        label: 'Import an existing innovation',
+
+        parameters: [
+          {
+            id: 'file',
+            dataType: 'file-upload',
+            validations: { isRequired: [true, 'You need to upload 1 file'] }
+          }
+        ]
+      })
+    ],
+    outboundParsing: (data: ImportInnovationStepPayloadType) => ImportInnovationOutboundParsing(data),
+
+  });
+}
 
 export function getNewInnovationQuestionsWizard(currentSchema: InnovationRecordSchemaInfoType): WizardEngineModel {
   return new WizardEngineModel({
@@ -107,19 +136,19 @@ export function getNewInnovationQuestionsWizard(currentSchema: InnovationRecordS
     runtimeRules: [
       (
         steps: WizardStepType[],
-        currentValues: StepPayloadType,
+        currentValues: NewInnovationStepPayloadType,
         currentStep: number | 'summary',
         schema?: InnovationRecordSchemaInfoType
       ) => runtimeRules(steps, currentValues, currentStep, currentSchema)
     ],
-    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+    outboundParsing: (data: NewInnovationStepPayloadType) => NewInnovationOutboundParsing(data),
+    summaryParsing: (data: NewInnovationStepPayloadType) => summaryParsing(data)
   });
 }
 
 function runtimeRules(
   steps: WizardStepType[],
-  currentValues: StepPayloadType,
+  currentValues: NewInnovationStepPayloadType,
   currentStep: number | 'summary',
   schema?: InnovationRecordSchemaInfoType
 ): void {
@@ -216,7 +245,7 @@ function runtimeRules(
   );
 }
 
-function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+function NewInnovationOutboundParsing(data: NewInnovationStepPayloadType): NewInnovationOutboundPayloadType {
   return {
     name: data.name.trim(),
     description: data.description ?? '',
@@ -230,7 +259,13 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   };
 }
 
-function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
+function ImportInnovationOutboundParsing (data: ImportInnovationStepPayloadType): ImportInnovationStepPayloadType {
+  return {
+    file: data.file
+  }
+}
+
+function summaryParsing(data: NewInnovationStepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
   let editStepNumber = 2;

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl, FormGroup } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
@@ -33,11 +33,13 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
           httpUploadBody?: Record<string, any>;
           acceptedFiles?: FileTypes[];
           maxFileSize?: number; // In Mb.
+          localOnly?:boolean;
         }
   ) {
     this.fileConfig = {
       httpUploadUrl: c?.httpUploadUrl ?? '',
-      httpUploadBody: c?.httpUploadBody
+      httpUploadBody: c?.httpUploadBody,
+      localOnly: c?.localOnly
     };
 
     this.dzConfig = {
@@ -58,6 +60,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
   fileConfig: {
     httpUploadUrl: string;
     httpUploadBody?: Record<string, any>;
+    localOnly?: boolean;
   } = { httpUploadUrl: '' };
 
   dzConfig: {
@@ -127,6 +130,16 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     formdata.append('file', file, file.name);
     Object.entries(this.fileConfig?.httpUploadBody || {}).forEach(([key, value]) => formdata.append(key, value));
 
+    if(this.fileConfig.localOnly){
+      return of({
+        id:'',
+        name: file.name,
+        extension:file.type,
+        url:'',
+        file: file
+      })
+    }
+
     return this.http.post<FileUploadType>(this.fileConfig?.httpUploadUrl || '', formdata).pipe(
       take(1),
       map(response => response)
@@ -137,7 +150,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     this.hasError = false;
     this.hasUploadError = false;
 
-    if (!this.fileConfig.httpUploadUrl) {
+    if (!this.fileConfig.httpUploadUrl && !this.fileConfig.localOnly) {
       console.error('No httpUploadUrl provided for file upload.');
       return;
     }
@@ -186,6 +199,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
             this.fieldGroupControl.addControl('size', new FormControl(response.size));
             this.fieldGroupControl.addControl('extension', new FormControl(response.extension));
             this.fieldGroupControl.addControl('url', new FormControl(response.url));
+            response.file && this.fieldGroupControl.addControl('file',new FormControl(response.file) )
 
             this.evaluateDropZoneTabIndex();
             this.setAuxMessageAndFocus(`${file.name} added.`);

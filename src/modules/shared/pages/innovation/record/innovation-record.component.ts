@@ -144,12 +144,15 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       next: (payload: any[]) => {
         // Transform the InnovationAllSectionsInfoDTO array into an InnovationRecordDocumentType object
         // The backend ExcelExportService expects a dictionary keyed by section ID.
-        const exportPayload = payload.reduce((acc, curr) => {
-          if (curr?.section?.section && curr?.data) {
-            acc[curr.section.section] = curr.data;
-          }
-          return acc;
-        }, {} as Record<string, any>);
+        const exportPayload = payload.reduce(
+          (acc, curr) => {
+            if (curr?.section?.section && curr?.data) {
+              acc[curr.section.section] = curr.data;
+            }
+            return acc;
+          },
+          {} as Record<string, any>
+        );
 
         this.innovationsService.getInnovationRecordExcelExport(exportPayload).subscribe({
           next: (blob: Blob) => {
