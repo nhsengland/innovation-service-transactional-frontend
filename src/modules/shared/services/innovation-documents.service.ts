@@ -15,7 +15,8 @@ export type ContextTypeType =
   | 'INNOVATION_SECTION'
   | 'INNOVATION_EVIDENCE'
   | 'INNOVATION_PROGRESS_UPDATE'
-  | 'INNOVATION_MESSAGE';
+  | 'INNOVATION_MESSAGE'
+  | 'INNOVATION_REGULATIONS';
 
 export type InnovationDocumentsListFiltersType = {
   name?: null | string;
