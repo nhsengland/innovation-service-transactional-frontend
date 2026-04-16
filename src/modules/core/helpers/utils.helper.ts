@@ -157,10 +157,15 @@ export class UtilsHelper {
     evidenceList: EvidenceV3Type[],
     supportingDocumentsList: InnovationDocumentsListOutDTO['data']
   ): EvidenceV3Type[] {
-    console.log('evidenceList', evidenceList);
-    console.log('supportingDocumentsList', supportingDocumentsList);
     const docContextIds = new Set(supportingDocumentsList.map(d => d.context.id));
-
     return evidenceList.filter(e => !docContextIds.has(e.evidenceId)).map(e => e);
+  }
+
+  static allRegulationsHavedocuments(
+    regulationsList: string[],
+    regulationsDocumentsList: InnovationDocumentsListOutDTO['data']
+  ) {
+    const docContextIds = new Set(regulationsDocumentsList.map(d => d.context.id));
+    return regulationsList.filter(e => !docContextIds.has(e)).map(e => e);
   }
 }
