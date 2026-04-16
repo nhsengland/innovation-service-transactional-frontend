@@ -39,8 +39,7 @@ export const stepsLabels = {
   },
   q6: {
     label: 'Supporting Documents',
-    description:
-      'Add documents for your evidence. Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
+    description: 'Add documents for your evidence. Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
     conditional: false
   }
   // q6: {
@@ -56,10 +55,10 @@ const stepsChildParentRelations = {
 };
 
 // Types.
-type StepPayloadType =
-  Omit<Required<DocumentType202405>['evidences'][number], 'id'> & {
-    file: UpsertInnovationDocumentType[];
-  };type OutboundPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'>;
+type StepPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'> & {
+  file: UpsertInnovationDocumentType[];
+};
+type OutboundPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'>;
 
 // Logic.
 export const SECTION_2_EVIDENCES = new WizardEngineModel({
@@ -246,15 +245,5 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     editStepNumber: editStepNumber++
   });
 
-  //   toReturn.push({
-  //   label: stepsLabels.q6.label,
-  //   value: formatFileSummary(data.file) ?? [],
-  //   editStepNumber: editStepNumber++
-  // });
-
   return toReturn;
-}
-
-function formatFileSummary(files: UpsertInnovationDocumentType[] ):string {
-  return files.map((f)=>{`${f.name}(${f.file?.extension})`}).join('\n')
 }
