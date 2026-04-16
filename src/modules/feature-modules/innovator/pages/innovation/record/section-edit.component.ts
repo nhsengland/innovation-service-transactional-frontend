@@ -13,6 +13,7 @@ import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stor
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
+import { InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -28,6 +29,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   isArchived: boolean;
   sectionId: string;
   baseUrl: string;
+  summaryRedirectUrl: string;
 
   sectionsIdsList: string[];
   sectionQuestionsIdList: string[];
@@ -40,6 +42,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   lastSection = false;
 
   isEvidenceSection = false;
+  isRegulationsSection = false;
+
+  allowMarkSectionAsComplete = true;
+
+  sectionInfo: undefined | InnovationSectionInfoDTO;
 
   displayChangeButtonList: number[] = [];
 
@@ -49,6 +56,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
+    this.summaryRedirectUrl = this.baseUrl;
 
     this.sectionsIdsList = this.ctx.schema.getSubSectionsIds();
     this.sectionQuestionsIdList = this.ctx.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
@@ -59,6 +67,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.isArchived = this.ctx.innovation.isArchived();
 
     this.isEvidenceSection = this.sectionId === 'EVIDENCE_OF_EFFECTIVENESS';
+    this.isRegulationsSection = this.sectionId === 'REGULATIONS_AND_STANDARDS';
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
@@ -75,6 +84,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
           next: sectionInfoResponse => {
+            this.sectionInfo = sectionInfoResponse;
             this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
             this.sectionStatus = sectionInfoResponse.status;
 
@@ -122,6 +132,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
       if (this.sectionStatus === 'DRAFT') {
         this.submitButton.isActive = validInformation.valid;
+
         if (this.innovation.status !== InnovationStatusEnum.CREATED) {
           this.submitButton.label = 'Save updates';
         }
@@ -135,6 +146,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       }
 
       this.wizard.gotoSummary();
+      this.handleMandatoryDocumentsSections();
       this.setPageTitle('Check your answers', { size: 'l' });
     } else {
       this.wizard.showSummary = false;
@@ -259,21 +271,44 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             this.innovation.status === InnovationStatusEnum.CREATED ||
             this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
           ) {
-            this.redirectTo(
-              this.lastSection ? `/innovator/innovations/${this.innovation.id}/submission-ready` : this.baseUrl
-            );
+            this.summaryRedirectUrl = this.lastSection
+              ? `/innovator/innovations/${this.innovation.id}/submission-ready`
+              : this.baseUrl;
           } else {
-            this.redirectTo(`${this.baseUrl}/submitted`);
+            this.summaryRedirectUrl = `${this.baseUrl}/submitted`;
           }
         },
         error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
       });
     }
 
-    
-    if (this.isEvidenceSection) {
-      this.redirectTo(`${this.baseUrl}`)
-    }
+    this.redirectTo(this.summaryRedirectUrl);
+  }
 
+  handleMandatoryDocumentsSections() {
+    const sectionData = this.sectionInfo?.data;
+    // redirect to documents flows depending on section answers
+    switch (this.sectionId) {
+      case 'EVIDENCE_OF_EFFECTIVENESS':
+        this.submitButton.label = 'Save';
+        if (sectionData && sectionData.hasEvidence && sectionData.hasEvidence === 'YES' && !this.isChangeMode) {
+          this.allowMarkSectionAsComplete = false;
+          this.summaryRedirectUrl = `${this.baseUrl}/evidences`;
+        }
+        break;
+
+      case 'REGULATIONS_AND_STANDARDS':
+        this.submitButton.label = 'Save';
+        if (
+          sectionData &&
+          sectionData.hasRegulationKnowledge &&
+          ['YES_ALL', 'YES_SOME'].includes(sectionData.hasRegulationKnowledge) &&
+          !this.isChangeMode
+        ) {
+          this.allowMarkSectionAsComplete = false;
+          this.summaryRedirectUrl = `${this.baseUrl}/documents`;
+        }
+        break;
+    }
   }
 }
