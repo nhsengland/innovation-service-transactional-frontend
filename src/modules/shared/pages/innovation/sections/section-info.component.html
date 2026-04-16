@@ -75,9 +75,8 @@
         <shared-innovation-summary [sectionData]="this.sectionSummaryData" title="Questions and answers" />
       </ng-container>
 
-      <ng-container *ngIf="this.evidenceData.hasEvidences">
+      <ng-container *ngIf="isEvidenceSection && this.evidenceData.hasEvidences">
         <h2 class="nhsuk-u-margin-top-4">Evidence</h2>
-        <button *ngIf="ctx.user.isInnovator()" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary">Add evidence</button>
         <p *ngIf="sectionSummaryData.evidencesList.length === 0">There are no evidences on this section.</p>
         <dl *ngIf="sectionSummaryData.evidencesList.length > 0" class="nhsuk-summary-list">
           <div *ngFor="let item of sectionSummaryData.evidencesList; index as i" class="nhsuk-summary-list__row">
@@ -88,6 +87,12 @@
             </dd>
           </div>
         </dl>
+        <button *ngIf="ctx.user.isInnovator()" routerLink="evidences/new" class="nhsuk-button">Add evidence</button>
+      </ng-container>
+
+      <ng-container *ngIf="isRegulationsSection && pageStatus() === 'READY'">
+        <h2 class="nhsuk-u-margin-top-4">Supporting Documents</h2>
+        <shared-innovation-regulations-docs-table [sectionInfo]="sectionInfoData" [sectionRegulationsDocuments]="regulationsData.regulationsDocumentsList" />
       </ng-container>
 
       <ng-container *ngIf="shouldShowDocuments">
