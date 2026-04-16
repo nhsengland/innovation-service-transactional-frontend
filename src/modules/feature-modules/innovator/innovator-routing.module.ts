@@ -103,6 +103,9 @@ import { InnovationSubmissionReadyComponent } from './pages/innovation/submissio
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
 import { ShareInnovationsWithOrgComponent } from './pages/share-innovations-with-org/share-innovations-with-org.component';
+import { InnovationEvidenceListComponent } from '../../shared/pages/innovation/sections/section-evidence-list.component';
+import { InnovationRegulationsListPageComponent } from '../../shared/pages/innovation/sections/section-regulations-list.component';
+import { PageInnovationSectionRegulationInfoComponent } from '@modules/shared/pages/innovation/sections/section-regulation-info';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -288,11 +291,34 @@ const routes: Routes = [
                             component: InnovationSectionEditComponent,
                             data: { layout: { type: 'full' } }
                           },
-
+                          {
+                            path: 'regulations',
+                            data: { breadcrumb: null },
+                            children: [
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                component: InnovationRegulationsListPageComponent,
+                                data: { layout: { type: 'full' } }
+                              },
+                              {
+                                path: ':regulationId',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionRegulationInfoComponent,
+                                data: { layout: { type: 'full' } }
+                              }
+                            ]
+                          },
                           {
                             path: 'evidences',
                             data: { breadcrumb: null },
                             children: [
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                component: InnovationEvidenceListComponent,
+                                data: { layout: { type: 'full' } }
+                              },
                               { path: 'new', pathMatch: 'full', redirectTo: 'new/1' },
                               {
                                 path: 'new/:questionId',

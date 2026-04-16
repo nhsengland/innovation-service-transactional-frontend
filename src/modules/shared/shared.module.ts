@@ -134,6 +134,8 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepC
 
 import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/strategic-roles-list.component';
 import { BytesPrettyPrintPipeModule } from './pipes/bytes-pretty-print.module';
+import { InnovationRegulationsDocumentsTableComponent } from './components/regulations-table/section-regulations-documents-table.component';
+import { PageInnovationSectionRegulationInfoComponent } from './pages/innovation/sections/section-regulation-info';
 @NgModule({
   imports: [
     RouterModule,
@@ -202,6 +204,7 @@ import { BytesPrettyPrintPipeModule } from './pipes/bytes-pretty-print.module';
     PageInnovationRecordWrapperComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
+    PageInnovationSectionRegulationInfoComponent,
     PageInnovationAllSectionsInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
     PageInnovationStatusListComponent,
@@ -228,6 +231,7 @@ import { BytesPrettyPrintPipeModule } from './pipes/bytes-pretty-print.module';
     WizardInnovationSupportSummaryProgressUpdateDocumentFileStepComponent,
     WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent,
 
+    InnovationRegulationsDocumentsTableComponent,
     InnovationSectionSummaryComponent,
     KeyProgressAreasPageComponent,
     // // Innovations.
@@ -296,7 +300,10 @@ import { BytesPrettyPrintPipeModule } from './pipes/bytes-pretty-print.module';
     StrategicRoleTranslatePipe,
 
     InnovationAssessmentDetailsComponent,
-    PageStrategicRolesListComponent
+    PageStrategicRolesListComponent,
+
+    InnovationRegulationsDocumentsTableComponent,
+    PageInnovationSectionRegulationInfoComponent
   ]
 })
 export class SharedModule {}
