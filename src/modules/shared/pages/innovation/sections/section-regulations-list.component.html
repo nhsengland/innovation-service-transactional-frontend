@@ -1,0 +1,17 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-margin-top-0">
+    <span class="nhsuk-u-visually-hidden">Information: </span>
+    <p class="nhsuk-u-margin-bottom-4">You must add a document for each certification.</p>
+    <p>You can leave this page and come back later. Your progress will be saved automatically.</p>
+  </div>
+  <div class="nhsuk-grid-row">
+    <ng-container *ngIf="pageStatus() === 'READY'">
+      <div class="nhsuk-grid-column-three-quarters">
+        <shared-innovation-regulations-docs-table [sectionInfo]="sectionInfoData" [sectionRegulationsDocuments]="regulationsDocuments" />
+      </div>
+    </ng-container>
+  </div>
+  <div class="nhsuk-u-margin-bottom-6">
+    <a [href]="baseUrl">Back to section</a>
+  </div>
+</theme-content-wrapper>

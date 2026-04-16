@@ -1,0 +1,16 @@
+<dl class="nhsuk-summary-list">
+  <div *ngFor="let item of selectedRegulations; index as i" class="nhsuk-summary-list__row">
+    <dt class="nhsuk-summary-list__key">{{ item | irv3translate: "items" : "standards" }}</dt>
+    <dd class="nhsuk-summary-list__value text-pre-wrap">
+      <p *ngFor="let doc of regulationsDocuments[item]">
+        <a href="{{ doc.file.url }}" attr.aria-label="Download {{ doc.name }} file"
+          >{{ doc.name }} ({{ doc.file.extension | uppercase }}{{ doc.file.size ? ", " + (doc.file.size | bytesPrettyPrint) : "" }})</a
+        >
+      </p>
+    </dd>
+    <dd class="nhsuk-summary-list__actions">
+      <a *ngIf="certificationsHasDocuments(item)" routerLink="regulations/{{ item }}" attr.aria-label="View {{ item }} details">More details</a>
+      <a *ngIf="!certificationsHasDocuments(item)" routerLink="''" attr.aria-label="View {{ item }} details">Continue</a>
+    </dd>
+  </div>
+</dl>
