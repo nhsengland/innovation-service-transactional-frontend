@@ -81,6 +81,8 @@ import { InnovationTaskStatusEnum } from '@modules/stores';
 import { PageInnovationAssessmentEditReasonComponent } from './pages/innovation/assessment/assessment-edit-reason.component';
 import { NeedsAssessorAndInnovationListComponent } from './pages/needs-assessor-and-innovation-list/needs-assessor-and-innovation-list.component';
 import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
+import { InnovationRegulationsListPageComponent } from '@modules/shared/pages/innovation/sections/section-regulations-list.component';
+import { PageInnovationSectionRegulationInfoComponent } from '@modules/shared/pages/innovation/sections/section-regulation-info';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -301,6 +303,23 @@ const routes: Routes = [
                             data: { breadcrumb: null }
                           },
                           {
+                            path: 'regulations',
+                            data: { breadcrumb: null },
+                            children: [
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                redirectTo: '../'
+                              },
+                              {
+                                path: ':regulationId',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionRegulationInfoComponent,
+                                data: { layout: { type: 'full' } }
+                              }
+                            ]
+                          },
+                          {
                             path: 'evidences',
                             data: { breadcrumb: null },
                             children: [
@@ -309,7 +328,7 @@ const routes: Routes = [
                                 path: ':evidenceId',
                                 pathMatch: 'full',
                                 component: PageInnovationSectionEvidenceInfoComponent,
-                                data: { layout: { type: 'full' },breadcrumb: 'Evidence Info' }
+                                data: { layout: { type: 'full' }, breadcrumb: 'Evidence Info' }
                               }
                             ]
                           }

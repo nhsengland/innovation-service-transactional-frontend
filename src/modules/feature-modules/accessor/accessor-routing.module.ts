@@ -89,6 +89,8 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
 import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
+import { InnovationRegulationsListPageComponent } from '@modules/shared/pages/innovation/sections/section-regulations-list.component';
+import { PageInnovationSectionRegulationInfoComponent } from '@modules/shared/pages/innovation/sections/section-regulation-info';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -255,12 +257,29 @@ const routes: Routes = [
                             component: PageInnovationSectionInfoComponent,
                             data: { breadcrumb: null }
                           },
-
+                          {
+                            path: 'regulations',
+                            data: { breadcrumb: null },
+                            children: [
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                component: InnovationRegulationsListPageComponent,
+                                data: { layout: { type: 'full' } }
+                              },
+                              {
+                                path: ':regulationId',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionRegulationInfoComponent,
+                                data: { layout: { type: 'full' } }
+                              }
+                            ]
+                          },
                           {
                             path: 'evidences',
                             data: { breadcrumb: null },
                             children: [
-                              { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
+                              { path: '', pathMatch: 'full', redirectTo: '../' },
                               {
                                 path: ':evidenceId',
                                 // resolve: { innovationSectionEvidenceData: InnovationSectionEvidenceDataResolver },

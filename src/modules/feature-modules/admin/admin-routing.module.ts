@@ -96,6 +96,8 @@ import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { InnovationRegulationsListPageComponent } from '@modules/shared/pages/innovation/sections/section-regulations-list.component';
+import { PageInnovationSectionRegulationInfoComponent } from '@modules/shared/pages/innovation/sections/section-regulation-info';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -583,6 +585,23 @@ const routes: Routes = [
                             pathMatch: 'full',
                             component: PageInnovationSectionInfoComponent,
                             data: { module: 'admin', breadcrumb: null }
+                          },
+                          {
+                            path: 'regulations',
+                            data: { breadcrumb: null },
+                            children: [
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                redirectTo: '../'
+                              },
+                              {
+                                path: ':regulationId',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionRegulationInfoComponent,
+                                data: { layout: { type: 'full' } }
+                              }
+                            ]
                           },
                           {
                             path: 'evidences',
