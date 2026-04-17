@@ -18,6 +18,7 @@ import {
   WIZARD_WITH_LOCATION_QUESTIONS
 } from './document-newdit.config';
 import { EvidenceDraftService } from '@modules/stores/ctx/evidence/evidenceDraft.store';
+import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 
 @Component({
   selector: 'shared-pages-innovation-documents-document-newdit',
@@ -37,12 +38,15 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     queryParams: {
       sectionId?: string;
       evidenceId?: string;
+      regulationId?: string;
       progressUpdateId?: string;
       entrypoint?: string;
     };
   };
 
+  isDefaultEntrypoint = true;
   isEntrypointEvidenceSection = false;
+  isEntrypointRegulationsSection = false;
 
   wizard = new WizardEngineModel({});
 
@@ -51,7 +55,8 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService,
-    private evidenceDraftService: EvidenceDraftService
+    private evidenceDraftService: EvidenceDraftService,
+    private irv3translate: IrV3TranslatePipe
   ) {
     super();
 
@@ -64,6 +69,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
       queryParams: {
         sectionId: this.activatedRoute.snapshot.queryParams.sectionId,
         evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId,
+        regulationId: this.activatedRoute.snapshot.queryParams.regulationId,
         progressUpdateId: this.activatedRoute.snapshot.queryParams.progressUpdateId,
         entrypoint: this.activatedRoute.snapshot.queryParams.entrypoint
       }
@@ -71,6 +77,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
     this.isEntrypointEvidenceSection =
       !!this.pageData.queryParams.evidenceId || this.pageData.queryParams.entrypoint === 'EVIDENCE_OF_EFFECTIVENESS';
+
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
@@ -84,12 +91,14 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
             context: { type: 'INNOVATION_SECTION', id: this.pageData.queryParams.sectionId }
           });
         } else if (this.pageData.queryParams.evidenceId) {
+          this.isDefaultEntrypoint = false;
           this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
           this.wizard.setInboundParsedAnswers({
             innovationId: this.innovationId,
             context: { type: 'INNOVATION_EVIDENCE', id: this.pageData.queryParams.evidenceId }
           });
         } else if (this.isEntrypointEvidenceSection) {
+          this.isDefaultEntrypoint = false;
           this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
           this.wizard.setInboundParsedAnswers({
             innovationId: this.innovationId,
@@ -100,6 +109,17 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
             'shared.catalog.innovation.evidence.evidenceSubmitType.' +
               this.evidenceDraftService.evidence()?.evidenceSubmitType
           );
+        } else if (this.pageData.queryParams.regulationId) {
+          this.isEntrypointRegulationsSection = true;
+          this.isDefaultEntrypoint = false;
+
+          this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
+          this.wizard.setInboundParsedAnswers({
+            innovationId: this.innovationId,
+            context: { type: 'INNOVATION_REGULATIONS', id: this.pageData.queryParams.regulationId }
+          });
+
+          this.titleHint = this.irv3translate.transform(this.pageData.queryParams.regulationId, 'items', 'standards');
         } else {
           this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS).setInboundParsedAnswers({
             innovationId: this.innovationId,
@@ -183,7 +203,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     }
 
     if (this.wizard.isQuestionStep()) {
-      this.setPageTitle(this.wizard.currentStepTitle(), { width:'full', showPage: false });
+      this.setPageTitle(this.wizard.currentStepTitle(), { width: 'full', showPage: false });
       this.setUploadConfiguration();
     } else {
       this.setSummaryTitle();
@@ -192,12 +212,27 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   setSummaryTitle() {
     let summaryTitle = '';
-    if (this.isEntrypointEvidenceSection) {
+    if (this.isEntrypointEvidenceSection || this.isEntrypointRegulationsSection) {
       summaryTitle = 'Document';
     } else {
       summaryTitle = 'Check your answers';
     }
     this.setPageTitle(summaryTitle, { hint: this.titleHint, width: '2.thirds', size: 'l' });
+  }
+
+  onAddRegulationsDocument(): void {
+    const wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
+    this.innovationDocumentsService.createDocument(this.innovationId, wizardSummary).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your document has been added');
+        this.redirectTo(
+          this.redirectUrl({
+            sectionId: this.pageData.queryParams.sectionId,
+            regulationId: this.pageData.queryParams.regulationId
+          })
+        );
+      }
+    });
   }
 
   onAddEvidenceDocument(): void {
@@ -207,11 +242,9 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     /**
      * IF IT'S COMING FROM THE EVIDENCE DETAILS, CALL ADD DOCUMENT ENDPOINT HERE
      */
-    evidenceId && console.log('this.router.url.endsWith(evidenceId)', this.router.url.endsWith(evidenceId));
     if (evidenceId && this.router.url.endsWith(evidenceId)) {
       this.innovationDocumentsService.createDocument(this.innovationId, wizardSummary).subscribe({
         next: () => {
-          console.log('adding doc');
           this.setRedirectAlertSuccess('Your document has been added');
           this.redirectTo(
             this.redirectUrl({
@@ -280,11 +313,13 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     }
   }
 
-  redirectUrl(data?: { documentId?: string; sectionId?: string; evidenceId?: string }): string {
+  redirectUrl(data?: { documentId?: string; sectionId?: string; evidenceId?: string; regulationId?: string }): string {
     const baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
 
     if (data?.evidenceId) {
       return `${baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${data.evidenceId}`;
+    } else if (data?.regulationId) {
+      return `${baseUrl}/record/sections/REGULATIONS_AND_STANDARDS/regulations/${data.regulationId}`;
     } else if (data?.sectionId) {
       return `${baseUrl}/record/sections/${data.sectionId}`;
     } else if (data?.documentId) {

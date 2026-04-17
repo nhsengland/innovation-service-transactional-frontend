@@ -23,8 +23,9 @@ export class InnovationEvidenceListComponent extends CoreComponent implements On
 
   ngOnInit(): void {
     // Redirect to overview if user should not have access to this page
-    if (this.sectionId !== 'EVIDENCE_OF_EFFECTIVENESS') {
-      this.redirectTo(`/innovator/innovations/${this.innovation.id}/record/sections`);
+    if (!this.ctx.user.isInnovator) {
+      this.redirectTo(this.baseUrl);
+      return;
     }
 
     this.setPageTitle('Evidence', { width: '2.thirds' });

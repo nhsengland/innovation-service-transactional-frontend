@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <ng-container *ngIf="wizard.isQuestionStep()">
         <theme-form-engine formId="questionForm" [titleHint]="titleHint" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
@@ -21,9 +22,10 @@
           </div>
         </dl>
 
+        <button *ngIf="isEntrypointRegulationsSection" type="button" class="nhsuk-button" (click)="onAddRegulationsDocument()">Confirm and add regulation document</button>
         <button *ngIf="isEntrypointEvidenceSection" type="button" class="nhsuk-button" (click)="onAddEvidenceDocument()">Confirm and add document</button>
-        <button *ngIf="pageData.isCreation && !isEntrypointEvidenceSection" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add document</button>
-        <button *ngIf="pageData.isEdition && !isEntrypointEvidenceSection" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and update document</button>
+        <button *ngIf="pageData.isCreation && isDefaultEntrypoint" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add document</button>
+        <button *ngIf="pageData.isEdition && isDefaultEntrypoint" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and update document</button>
       </ng-container>
     </div>
   </div>

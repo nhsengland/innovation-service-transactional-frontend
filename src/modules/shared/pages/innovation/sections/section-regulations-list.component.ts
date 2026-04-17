@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 import { MappedObjectType } from '@app/base/types';
+import { RegulationsSectionAnswersType } from '@modules/shared/components/regulations-table/section-regulations-documents-table.component';
 import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
@@ -17,9 +19,12 @@ export class InnovationRegulationsListPageComponent extends CoreComponent implem
   innovation: ContextInnovationType;
   sectionId: string;
 
-  sectionInfoData: MappedObjectType = {};
+  sectionInfoData: RegulationsSectionAnswersType = { standards: [] };
 
   regulationsDocuments: InnovationDocumentsListOutDTO['data'] = [];
+
+  regulationsList: string[] = [];
+  allRegulationsHaveDocuments: boolean = false;
 
   baseUrl: string;
 
@@ -32,11 +37,16 @@ export class InnovationRegulationsListPageComponent extends CoreComponent implem
     this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/REGULATIONS_AND_STANDARDS`;
+    this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/record/sections/REGULATIONS_AND_STANDARDS`;
   }
 
   ngOnInit(): void {
     this.setPageStatus('LOADING');
+
+    if (!this.ctx.user.isInnovator()) {
+      this.redirectTo(this.baseUrl);
+      return;
+    }
 
     forkJoin([
       this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId),
@@ -50,11 +60,13 @@ export class InnovationRegulationsListPageComponent extends CoreComponent implem
         }
       })
     ]).subscribe(([sectionInfo, regulationDocumentResponse]) => {
-      console.log('**section info', sectionInfo);
-      this.sectionInfoData = sectionInfo.data;
+      this.sectionInfoData = sectionInfo.data as RegulationsSectionAnswersType;
       this.regulationsDocuments = regulationDocumentResponse.data;
+      this.regulationsList = this.sectionInfoData.standards?.map(i => i.type) ?? [];
 
-      console.log('hasRegulationKnowledge', this.sectionInfoData.hasRegulationKnowledge);
+      this.allRegulationsHaveDocuments =
+        UtilsHelper.regulationsWithoutDocuments(this.regulationsList, this.regulationsDocuments).length === 0;
+
       // Redirect to overview if user should not have access to this page
       if (
         this.sectionId !== 'REGULATIONS_AND_STANDARDS' ||

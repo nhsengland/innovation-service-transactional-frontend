@@ -260,7 +260,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onSubmitSection(): void {
-    if (!this.isEvidenceSection) {
+    if (this.allowMarkSectionAsComplete) {
       this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
         next: () => {
           const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
@@ -296,17 +296,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.summaryRedirectUrl = `${this.baseUrl}/evidences`;
         }
         break;
-
       case 'REGULATIONS_AND_STANDARDS':
         this.submitButton.label = 'Save';
         if (
           sectionData &&
           sectionData.hasRegulationKnowledge &&
-          ['YES_ALL', 'YES_SOME'].includes(sectionData.hasRegulationKnowledge) &&
-          !this.isChangeMode
+          ['YES_ALL', 'YES_SOME'].includes(sectionData.hasRegulationKnowledge)
         ) {
           this.allowMarkSectionAsComplete = false;
-          this.summaryRedirectUrl = `${this.baseUrl}/documents`;
+          this.summaryRedirectUrl = `${this.baseUrl}/regulations`;
         }
         break;
     }

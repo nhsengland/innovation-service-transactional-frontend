@@ -65,11 +65,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     allEvidencesHaveDocuments: boolean;
   };
   regulationsData: {
-    hasRegulations: boolean;
     regulationsDocumentsList: InnovationDocumentsListOutDTO['data'];
     regulationsList: string[];
-    regulationsWithoutDocuments: string[];
+    hasRegulations: boolean;
     allRegulationsHaveDocuments: boolean;
+    regulationsWithoutDocuments: string[];
   };
 
   sectionInfoData: MappedObjectType = {};
@@ -279,7 +279,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.sectionSummaryData.evidencesList = evidenceData;
 
           this.evidenceData.evidenceSupportingDocumentsList = evidenceSupportingDocuments ?? [];
-          this.evidenceData.evidencesWithoutDocuments = UtilsHelper.allEvidenceHaveDocuments(
+          this.evidenceData.evidencesWithoutDocuments = UtilsHelper.evidenceWithoutDocuments(
             this.sectionSummaryData.evidencesList,
             evidenceSupportingDocuments
           );
@@ -293,26 +293,29 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             this.evidenceData.hasAddedEvidence &&
             this.evidenceData.allEvidencesHaveDocuments;
 
-          // add warning callout if answered YES but has not added evidence
-          if (this.evidenceData.hasEvidences && !this.evidenceData.hasAddedEvidence) {
-            this.setAlertError('There is a problem', {
-              message: 'In order to mark this section as complete, you need to add at least one evidence.',
-              width: 'full'
-            });
-          }
+          // only add errors for innovators
+          if (this.ctx.user.isInnovator()) {
+            // add warning callout if answered YES but has not added evidence
+            if (this.evidenceData.hasEvidences && !this.evidenceData.hasAddedEvidence) {
+              this.setAlertError('There is a problem', {
+                message: 'In order to mark this section as complete, you need to add at least one evidence.',
+                width: 'full'
+              });
+            }
 
-          // add error if any evidence is missing document
-          if (this.evidenceData.hasAddedEvidence && !this.evidenceData.allEvidencesHaveDocuments) {
-            const errorItemsList = this.evidenceData.evidencesWithoutDocuments.map(e => ({
-              title: e.label,
-              callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${e.evidenceId})`
-            }));
+            // add error if any evidence is missing document
+            if (this.evidenceData.hasAddedEvidence && !this.evidenceData.allEvidencesHaveDocuments) {
+              const errorItemsList = this.evidenceData.evidencesWithoutDocuments.map(e => ({
+                title: e.label,
+                callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${e.evidenceId})`
+              }));
 
-            this.setAlertError('There is a problem', {
-              message: 'You must add a supporting document for this evidence.',
-              itemsList: errorItemsList,
-              width: 'full'
-            });
+              this.setAlertError('There is a problem', {
+                message: 'You must add a supporting document for this evidence.',
+                itemsList: errorItemsList,
+                width: 'full'
+              });
+            }
           }
         }
 
@@ -321,12 +324,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           // only show documents if legacy section documents are present
           this.shouldShowDocuments = !!sectionDocumentsResp?.count;
 
-          if (sectionInfo.data.standards)
-            this.regulationsData.regulationsList = (sectionInfo.data as RegulationsSectionAnswersType).standards.map(
-              s => s.type
-            );
+          this.regulationsData.regulationsDocumentsList = regulationsDocumentsResp?.data ?? [];
 
-          this.regulationsData.regulationsWithoutDocuments = UtilsHelper.allRegulationsHavedocuments(
+          if (sectionInfo.data.standards)
+            this.regulationsData.regulationsList =
+              (sectionInfo.data as RegulationsSectionAnswersType).standards?.map(s => s.type) ?? [];
+
+          this.regulationsData.regulationsWithoutDocuments = UtilsHelper.regulationsWithoutDocuments(
             this.regulationsData.regulationsList,
             this.regulationsData.regulationsDocumentsList
           );
@@ -344,16 +348,17 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             this.regulationsData.hasRegulations &&
             this.regulationsData.allRegulationsHaveDocuments;
 
-          // add error if any regulation is missing document
+          // add error if any regulation is missing document, and only for innovators
           if (
+            this.ctx.user.isInnovator() &&
             this.regulationsData.hasRegulations &&
             sectionInfo.data.standards &&
             !!sectionInfo.data.standards.length &&
-            !!this.regulationsData.allRegulationsHaveDocuments
+            !this.regulationsData.allRegulationsHaveDocuments
           ) {
             const errorItemsList = this.regulationsData.regulationsWithoutDocuments.map(e => ({
               title: this.irv3translate.transform(e, 'items', 'standards'),
-              callback: `${this.baseUrl}/record/sections/REGULATIONS_AND_STANDARDS/regulations/${e})`
+              callback: `${this.baseUrl}/documents/new?regulationId=${e}`
             }));
             this.setAlertError('There is a problem', {
               message: 'Each certification must include at least one supporting document to complete this section.',
@@ -361,8 +366,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
               width: 'full'
             });
           }
-
-          console.log('regulations data', this.regulationsData);
         }
 
         if (this.isSectionComplete) {
@@ -392,7 +395,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
               .flatMap(s => s.sections)
               .some(s => s.status != InnovationSectionStatusEnum.SUBMITTED && s.id !== this.sectionId)
           : false;
-        console.log('this.sectionSummaryData', this.sectionSummaryData);
         this.setPageStatus('READY');
       }
     );

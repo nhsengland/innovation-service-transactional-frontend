@@ -12,6 +12,7 @@
     </ng-container>
   </div>
   <div class="nhsuk-u-margin-bottom-6">
-    <a [href]="baseUrl">Back to section</a>
+    <a *ngIf="!allRegulationsHaveDocuments" [href]="baseUrl">Back to section</a>
+    <a *ngIf="allRegulationsHaveDocuments" [href]="baseUrl" class="nhsuk-button">Save and continue</a>
   </div>
 </theme-content-wrapper>

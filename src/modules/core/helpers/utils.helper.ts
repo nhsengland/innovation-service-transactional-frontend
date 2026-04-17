@@ -153,7 +153,7 @@ export class UtilsHelper {
     return `${majorVersion}.${minorVersion}`;
   }
 
-  static allEvidenceHaveDocuments(
+  static evidenceWithoutDocuments(
     evidenceList: EvidenceV3Type[],
     supportingDocumentsList: InnovationDocumentsListOutDTO['data']
   ): EvidenceV3Type[] {
@@ -161,7 +161,7 @@ export class UtilsHelper {
     return evidenceList.filter(e => !docContextIds.has(e.evidenceId)).map(e => e);
   }
 
-  static allRegulationsHavedocuments(
+  static regulationsWithoutDocuments(
     regulationsList: string[],
     regulationsDocumentsList: InnovationDocumentsListOutDTO['data']
   ) {

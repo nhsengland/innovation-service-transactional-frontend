@@ -27,8 +27,14 @@
       </div>
     </div>
   </ng-container>
-  <div class="nhsuk-u-margin-bottom-6">
-    <a class="nhsuk-button nhsuk-u-margin-right-4">Add another document</a>
-    <a class="nhsuk-button nhsuk-button--secondary">Save and continue</a>
+  <div *ngIf="ctx.user.isInnovator()" class="nhsuk-u-margin-bottom-6">
+    <a
+      routerLink="/{{ baseUrl }}/documents/new"
+      [queryParams]="{ regulationId: regulationId }"
+      [attr.aria-label]="'Continue'"
+      class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-right-4"
+      >Add another document</a
+    >
+    <a routerLink="/{{ baseUrl }}/record/sections/REGULATIONS_AND_STANDARDS/regulations" routerLinkActive="router-link-active" class="nhsuk-button">Save and continue</a>
   </div>
 </theme-content-wrapper>
