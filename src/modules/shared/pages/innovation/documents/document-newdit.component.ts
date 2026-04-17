@@ -19,6 +19,7 @@ import {
 } from './document-newdit.config';
 import { EvidenceDraftService } from '@modules/stores/ctx/evidence/evidenceDraft.store';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
+import { innovationsSubSections } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
   selector: 'shared-pages-innovation-documents-document-newdit',
@@ -76,7 +77,8 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     };
 
     this.isEntrypointEvidenceSection =
-      !!this.pageData.queryParams.evidenceId || this.pageData.queryParams.entrypoint === 'EVIDENCE_OF_EFFECTIVENESS';
+      !!this.pageData.queryParams.evidenceId ||
+      this.pageData.queryParams.entrypoint === innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS;
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
@@ -317,9 +319,9 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     const baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
 
     if (data?.evidenceId) {
-      return `${baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${data.evidenceId}`;
+      return `${baseUrl}/record/sections/${innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS}/evidences/${data.evidenceId}`;
     } else if (data?.regulationId) {
-      return `${baseUrl}/record/sections/REGULATIONS_AND_STANDARDS/regulations/${data.regulationId}`;
+      return `${baseUrl}/record/sections/${innovationsSubSections.REGULATIONS_AND_STANDARDS}/regulations/${data.regulationId}`;
     } else if (data?.sectionId) {
       return `${baseUrl}/record/sections/${data.sectionId}`;
     } else if (data?.documentId) {

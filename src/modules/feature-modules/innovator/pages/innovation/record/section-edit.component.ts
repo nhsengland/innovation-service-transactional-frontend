@@ -14,6 +14,7 @@ import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stor
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
 import { InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
+import { innovationsSubSections } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -66,8 +67,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.isArchived = this.ctx.innovation.isArchived();
 
-    this.isEvidenceSection = this.sectionId === 'EVIDENCE_OF_EFFECTIVENESS';
-    this.isRegulationsSection = this.sectionId === 'REGULATIONS_AND_STANDARDS';
+    this.isEvidenceSection = this.sectionId === innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS;
+    this.isRegulationsSection = this.sectionId === innovationsSubSections.REGULATIONS_AND_STANDARDS;
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
@@ -289,14 +290,14 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     const sectionData = this.sectionInfo?.data;
     // redirect to documents flows depending on section answers
     switch (this.sectionId) {
-      case 'EVIDENCE_OF_EFFECTIVENESS':
+      case innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS:
         this.submitButton.label = 'Save';
         if (sectionData && sectionData.hasEvidence && sectionData.hasEvidence === 'YES' && !this.isChangeMode) {
           this.allowMarkSectionAsComplete = false;
           this.summaryRedirectUrl = `${this.baseUrl}/evidences`;
         }
         break;
-      case 'REGULATIONS_AND_STANDARDS':
+      case innovationsSubSections.REGULATIONS_AND_STANDARDS:
         this.submitButton.label = 'Save';
         if (
           sectionData &&

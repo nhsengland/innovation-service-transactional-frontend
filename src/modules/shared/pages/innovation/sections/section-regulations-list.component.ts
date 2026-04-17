@@ -9,6 +9,7 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
+import { innovationsSubSections } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -37,7 +38,7 @@ export class InnovationRegulationsListPageComponent extends CoreComponent implem
     this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/record/sections/REGULATIONS_AND_STANDARDS`;
+    this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/record/sections/${innovationsSubSections.REGULATIONS_AND_STANDARDS}`;
   }
 
   ngOnInit(): void {

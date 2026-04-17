@@ -6,7 +6,7 @@ import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
-import { ContextInnovationType, UserRoleEnum } from '@modules/stores';
+import { ContextInnovationType } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-section-regulation-info',

@@ -6,7 +6,10 @@ import {
   UpsertInnovationDocumentType
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
-import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import {
+  getAllSectionsListV3,
+  innovationsSubSections
+} from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 // Labels.
 const stepsLabels = {
@@ -197,7 +200,13 @@ function wizardWithLocationRuntimeRules(
             description: `If you want to upload evidence of impact and benefit, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>`,
             validations: { isRequired: [true, 'Choose one option'] },
             items: innovationSectionsItems
-              .filter(s => !['EVIDENCE_OF_EFFECTIVENESS', 'REGULATIONS_AND_STANDARDS'].includes(s.value))
+              .filter(
+                s =>
+                  ![
+                    innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS,
+                    innovationsSubSections.REGULATIONS_AND_STANDARDS
+                  ].includes(s.value)
+              )
               .map(item => ({
                 ...item
               }))

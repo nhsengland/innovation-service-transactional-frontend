@@ -22,6 +22,7 @@ import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engi
 import { irSchemaTranslationsMap } from '../../innovation/innovation-record/202405/ir-v3-schema-translation.helper';
 import { InnovationRecordQuestionStepType } from '../../innovation/innovation-record/202405/ir-v3-types';
 import { stepsLabels } from '../../innovation/innovation-record/202405/evidences-section-2-2.config';
+import { innovationsSubSections } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 const EXPIRATION_IN_MS = 60000;
 
@@ -154,17 +155,17 @@ export class SchemaContextStore {
       ) ?? [];
 
     // add conditional questions regarding 'EVIDENCE_OF_EFFECTIVENESS' (evidences still uses previous wizard and its config file)
-    if (sectionId === 'EVIDENCE_OF_EFFECTIVENESS') {
+    if (sectionId === innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS) {
       flattenedQuestions.push(...Object.values(stepsLabels));
     }
 
     // add conditional questions special cases regarding 'TESTING_WITH_USERS' and 'REGULATIONS_AND_STANDARDS', specifically questions with template tags (i.e.: {{item}} )
-    if (sectionId === 'TESTING_WITH_USERS') {
+    if (sectionId === innovationsSubSections.TESTING_WITH_USERS) {
       const questionToAdd = { label: 'Describe the testing and feedback for each testing type', conditional: true };
       flattenedQuestions.splice(4, 1, questionToAdd);
     }
 
-    if (sectionId === 'REGULATIONS_AND_STANDARDS') {
+    if (sectionId === innovationsSubSections.REGULATIONS_AND_STANDARDS) {
       const questionToAdd = { label: 'Do you have a certification for each standard?', conditional: true };
       flattenedQuestions.splice(2, 1, questionToAdd);
     }
@@ -208,7 +209,7 @@ export class SchemaContextStore {
         sectionId: subsection?.id,
         steps: subsection!.steps.map(() => new FormEngineModelV3({ parameters: [] }))
       }),
-      ...(sectionId === 'EVIDENCE_OF_EFFECTIVENESS' && { evidences: true })
+      ...(sectionId === innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS && { evidences: true })
     };
   }
 

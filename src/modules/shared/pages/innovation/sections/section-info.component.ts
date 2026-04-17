@@ -22,6 +22,7 @@ import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovati
 import { UtilsHelper } from '@app/base/helpers';
 import { RegulationsSectionAnswersType } from '../../../components/regulations-table/section-regulations-documents-table.component';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
+import { innovationsSubSections } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 export type SectionInfoType = {
   id: string;
@@ -30,12 +31,32 @@ export type SectionInfoType = {
   status: { id: InnovationSectionStatusEnum; label: string };
   submitButton: { show: boolean; label: string };
   isNotStarted: boolean;
-  // hasEvidences: boolean;
   wizard: WizardIRV3EngineModel;
   allStepsList: InnovationSectionStepLabels;
   date: string;
   submittedBy: null | { name: string; displayTag?: string };
   openTasksCount: number;
+};
+
+type SectionSummaryDataType = {
+  sectionInfo: SectionInfoType;
+  summaryList: WizardSummaryV3Type[];
+  evidencesList: EvidenceV3Type[];
+  documentsList: InnovationDocumentsListOutDTO['data'];
+};
+type EvidenceDataType = {
+  evidenceSupportingDocumentsList: InnovationDocumentsListOutDTO['data'];
+  evidencesWithoutDocuments: EvidenceV3Type[];
+  hasEvidences: boolean;
+  hasAddedEvidence: boolean;
+  allEvidencesHaveDocuments: boolean;
+};
+type RegulationsDataType = {
+  regulationsDocumentsList: InnovationDocumentsListOutDTO['data'];
+  regulationsList: string[];
+  hasRegulations: boolean;
+  allRegulationsHaveDocuments: boolean;
+  regulationsWithoutDocuments: string[];
 };
 
 @Component({
@@ -49,35 +70,19 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   assessmentType = '';
   sectionLabel = '';
 
-  sectionsIdsList: string[];
+  baseUrl: string;
+  search?: string;
 
-  sectionSummaryData: {
-    sectionInfo: SectionInfoType;
-    summaryList: WizardSummaryV3Type[];
-    evidencesList: EvidenceV3Type[];
-    documentsList: InnovationDocumentsListOutDTO['data'];
-  };
-  evidenceData: {
-    evidenceSupportingDocumentsList: InnovationDocumentsListOutDTO['data'];
-    evidencesWithoutDocuments: EvidenceV3Type[];
-    hasEvidences: boolean;
-    hasAddedEvidence: boolean;
-    allEvidencesHaveDocuments: boolean;
-  };
-  regulationsData: {
-    regulationsDocumentsList: InnovationDocumentsListOutDTO['data'];
-    regulationsList: string[];
-    hasRegulations: boolean;
-    allRegulationsHaveDocuments: boolean;
-    regulationsWithoutDocuments: string[];
-  };
-
+  // IR/sections data
+  sectionSummaryData: SectionSummaryDataType;
+  evidenceData: EvidenceDataType;
+  regulationsData: RegulationsDataType;
   sectionInfoData: MappedObjectType = {};
 
+  // pagination
+  sectionsIdsPaginationList: string[];
   previousSection: null | { id: string; title: string } = null;
   nextSection: null | { id: string; title: string } = null;
-
-  baseUrl: string;
 
   // Flags
   shouldShowDocuments = false;
@@ -88,8 +93,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isRegulationsSection = false;
   isSectionComplete = false;
 
-  search?: string;
-
   customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
@@ -99,52 +102,23 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   ) {
     super();
 
+    this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    this.search = this.activatedRoute.snapshot.queryParams.search;
-
-    this.innovation = this.ctx.innovation.info();
-    this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
     this.assessmentType =
       this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
-    this.sectionsIdsList = this.ctx.schema.getSubSectionsIds();
-
     this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
+    this.search = this.activatedRoute.snapshot.queryParams.search;
+
+    this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
+
+    this.sectionsIdsPaginationList = this.ctx.schema.getSubSectionsIds();
 
     // init empty vars
-    this.evidenceData = {
-      evidenceSupportingDocumentsList: [],
-      evidencesWithoutDocuments: [],
-      hasEvidences: false,
-      hasAddedEvidence: false,
-      allEvidencesHaveDocuments: false
-    };
-    this.sectionSummaryData = {
-      sectionInfo: {
-        id: '',
-        nextSectionId: null,
-        title: '',
-        status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
-        submitButton: { show: false, label: 'Mark section complete' },
-        isNotStarted: false,
-        wizard: new WizardIRV3EngineModel({}),
-        allStepsList: {},
-        date: '',
-        submittedBy: null,
-        openTasksCount: 0
-      },
-      summaryList: [],
-      evidencesList: [],
-      documentsList: []
-    };
-    this.regulationsData = {
-      regulationsDocumentsList: [],
-      regulationsList: [],
-      regulationsWithoutDocuments: [],
-      hasRegulations: false,
-      allRegulationsHaveDocuments: false
-    };
+    this.evidenceData = this.returnEmptyEvidenceData();
+    this.sectionSummaryData = this.returnEmptySectionSummaryData();
+    this.regulationsData = this.returnEmptyRegulationsData();
   }
 
   ngOnInit(): void {
@@ -163,19 +137,17 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    this.isEvidenceSection = this.sectionId === 'EVIDENCE_OF_EFFECTIVENESS';
-    this.isRegulationsSection = this.sectionId === 'REGULATIONS_AND_STANDARDS';
+    this.isEvidenceSection = this.sectionId === innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS;
+    this.isRegulationsSection = this.sectionId === innovationsSubSections.REGULATIONS_AND_STANDARDS;
 
-    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+    const sectionIdentification = this.getSectionMetadata(this.sectionId);
 
-    this.sectionLabel = sectionIdentification
-      ? `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
-      : '';
-
-    this.setPageTitle(this.translate(sectionIdentification?.section.title ?? ''), {
-      width: 'full',
-      hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : ''
-    });
+    this.sectionLabel = sectionIdentification.label;
+    this.setPageTitle(sectionIdentification.title),
+      {
+        width: 'full',
+        hint: sectionIdentification.hint
+      };
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
     const section = this.ctx.schema.getIrSchemaSectionV3(this.sectionId);
@@ -189,99 +161,73 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       !!this.innovation.submittedAt ||
       this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
-    forkJoin([
-      this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
-      !this.shouldShowDocuments
-        ? of(null)
-        : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
-            skip: 0,
-            take: 100,
-            order: { createdAt: 'ASC' },
-            filters: {
-              contextTypes: ['INNOVATION_SECTION'],
-              contextId: this.sectionSummaryData.sectionInfo.id,
-              fields: ['description']
-            }
-          }),
-      !this.isEvidenceSection
-        ? of(null)
-        : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
-            skip: 0,
-            take: 100,
-            order: { createdAt: 'ASC' },
-            filters: {
-              contextTypes: ['INNOVATION_EVIDENCE'],
-              fields: ['description']
-            }
-          }),
-      !this.isRegulationsSection
-        ? of(null)
-        : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
-            skip: 0,
-            take: 100,
-            order: { createdAt: 'ASC' },
-            filters: {
-              contextTypes: ['INNOVATION_REGULATIONS'],
-              fields: ['description']
-            }
-          }),
-      this.ctx.user.isInnovator() && this.innovation.status === InnovationStatusEnum.CREATED
-        ? this.ctx.innovation.getSectionsSummary$(this.innovation.id)
-        : of(null)
-    ]).subscribe(
-      ([sectionInfo, sectionDocumentsResp, evidenceDocumentsResp, regulationsDocumentsResp, allSections]) => {
-        this.sectionInfoData = sectionInfo.data;
+    forkJoin({
+      sectionInfo: this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId),
+      sectionDocuments: this.shouldShowDocuments
+        ? this.getDocumentsByContext('INNOVATION_SECTION', this.sectionId)
+        : of(null),
+      evidenceDocuments: this.isEvidenceSection ? this.getDocumentsByContext('INNOVATION_EVIDENCE') : of(null),
+      regulationsDocuments: this.isRegulationsSection ? this.getDocumentsByContext('INNOVATION_REGULATIONS') : of(null),
+      allSections:
+        this.ctx.user.isInnovator() && this.innovation.status === InnovationStatusEnum.CREATED
+          ? this.ctx.innovation.getSectionsSummary$(this.innovation.id)
+          : of(null)
+    }).subscribe({
+      next: response => {
+        // data for regulations table
+        this.sectionInfoData = response.sectionInfo.data;
+
+        // set mandatory documents data
+        const sectionDocuments = response.sectionDocuments?.data ?? [];
+        this.sectionSummaryData.documentsList = sectionDocuments;
+
+        const wizard = this.sectionSummaryData.sectionInfo.wizard;
+        wizard.setAnswers(response.sectionInfo.data).runRules();
+        const data = wizard.runInboundParsing().parseSummary();
+
+        this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 
         this.sectionSummaryData.sectionInfo.status = {
-          id: sectionInfo.status,
-          label: this.translate(`shared.catalog.innovation.support_status.${sectionInfo.status}.name`)
+          id: response.sectionInfo.status,
+          label: this.translate(`shared.catalog.innovation.support_status.${response.sectionInfo.status}.name`)
         };
         this.sectionSummaryData.sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(
           this.sectionSummaryData.sectionInfo.status.id
         );
+        this.sectionSummaryData.sectionInfo.date = response.sectionInfo.submittedAt;
+        this.sectionSummaryData.sectionInfo.submittedBy = response.sectionInfo.submittedBy;
+        this.sectionSummaryData.sectionInfo.openTasksCount = response.sectionInfo.tasksIds
+          ? response.sectionInfo.tasksIds.length
+          : 0;
 
-        this.sectionSummaryData.sectionInfo.date = sectionInfo.submittedAt;
-        this.sectionSummaryData.sectionInfo.submittedBy = sectionInfo.submittedBy;
-        this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
-
-        const wizard = this.sectionSummaryData.sectionInfo.wizard;
-        wizard.setAnswers(sectionInfo.data).runRules();
-
-        const data = this.sectionSummaryData.sectionInfo.wizard.runInboundParsing().parseSummary();
-
-        const evidenceData = sectionInfo.data.evidences
-          ? (sectionInfo.data.evidences as { id: string; name: string; summary: string }[]).map(item => ({
-              evidenceId: item.id,
-              label: item.name,
-              value: item.summary
-            }))
-          : [];
-
-        const sectionDocuments = sectionDocumentsResp?.data ?? [];
-        const evidenceSupportingDocuments = evidenceDocumentsResp?.data ?? [];
-
-        this.sectionSummaryData.documentsList = sectionDocuments ?? [];
-
-        const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
+        const validInformation = wizard.validateData();
         this.isSectionComplete = this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid;
 
         // Special business rule around section 2.2. EVIDENCE_OF_EFFECTIVENESS
         if (this.isEvidenceSection) {
           // only show documents if legacy section documents are present
-          this.shouldShowDocuments = !!sectionDocumentsResp?.count;
+          this.shouldShowDocuments = !!response.sectionDocuments?.count;
 
-          this.evidenceData.hasEvidences = !!(
-            section.evidences &&
-            sectionInfo.data.hasEvidence &&
-            sectionInfo.data.hasEvidence === 'YES'
-          );
+          const evidenceSupportingDocuments = response.evidenceDocuments?.data ?? [];
+          const evidenceData = response.sectionInfo.data.evidences
+            ? (response.sectionInfo.data.evidences as { id: string; name: string; summary: string }[]).map(item => ({
+                evidenceId: item.id,
+                label: item.name,
+                value: item.summary
+              }))
+            : [];
 
           this.sectionSummaryData.evidencesList = evidenceData;
 
-          this.evidenceData.evidenceSupportingDocumentsList = evidenceSupportingDocuments ?? [];
+          this.evidenceData.evidenceSupportingDocumentsList = evidenceSupportingDocuments;
           this.evidenceData.evidencesWithoutDocuments = UtilsHelper.evidenceWithoutDocuments(
             this.sectionSummaryData.evidencesList,
             evidenceSupportingDocuments
+          );
+          this.evidenceData.hasEvidences = !!(
+            section.evidences &&
+            response.sectionInfo.data.hasEvidence &&
+            response.sectionInfo.data.hasEvidence === 'YES'
           );
           this.evidenceData.hasAddedEvidence = this.sectionSummaryData.evidencesList.length > 0;
           this.evidenceData.allEvidencesHaveDocuments = this.evidenceData.evidencesWithoutDocuments.length === 0;
@@ -295,54 +241,33 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
           // only add errors for innovators
           if (this.ctx.user.isInnovator()) {
-            // add warning callout if answered YES but has not added evidence
-            if (this.evidenceData.hasEvidences && !this.evidenceData.hasAddedEvidence) {
-              this.setAlertError('There is a problem', {
-                message: 'In order to mark this section as complete, you need to add at least one evidence.',
-                width: 'full'
-              });
-            }
-
-            // add error if any evidence is missing document
-            if (this.evidenceData.hasAddedEvidence && !this.evidenceData.allEvidencesHaveDocuments) {
-              const errorItemsList = this.evidenceData.evidencesWithoutDocuments.map(e => ({
-                title: e.label,
-                callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${e.evidenceId})`
-              }));
-
-              this.setAlertError('There is a problem', {
-                message: 'You must add a supporting document for this evidence.',
-                itemsList: errorItemsList,
-                width: 'full'
-              });
-            }
+            this.handleMissingEvidenceAlerts();
           }
         }
 
         // Special business rules around section 5.1 REGULATIONS_AND_STANDARDS
         if (this.isRegulationsSection) {
           // only show documents if legacy section documents are present
-          this.shouldShowDocuments = !!sectionDocumentsResp?.count;
+          this.shouldShowDocuments = !!response.sectionDocuments?.count;
 
-          this.regulationsData.regulationsDocumentsList = regulationsDocumentsResp?.data ?? [];
+          this.regulationsData.regulationsDocumentsList = response.regulationsDocuments?.data ?? [];
 
-          if (sectionInfo.data.standards)
-            this.regulationsData.regulationsList =
-              (sectionInfo.data as RegulationsSectionAnswersType).standards?.map(s => s.type) ?? [];
+          this.regulationsData.regulationsList =
+            (response.sectionInfo.data as RegulationsSectionAnswersType).standards?.map(s => s.type) ?? [];
+
+          this.regulationsData.hasRegulations =
+            response.sectionInfo.data.hasRegulationKnowledge &&
+            ['YES_ALL', 'YES_SOME'].includes(response.sectionInfo.data.hasRegulationKnowledge);
+
+          this.regulationsData.allRegulationsHaveDocuments =
+            this.regulationsData.regulationsWithoutDocuments.length === 0;
 
           this.regulationsData.regulationsWithoutDocuments = UtilsHelper.regulationsWithoutDocuments(
             this.regulationsData.regulationsList,
             this.regulationsData.regulationsDocumentsList
           );
 
-          this.regulationsData.allRegulationsHaveDocuments =
-            this.regulationsData.regulationsWithoutDocuments.length === 0;
-
-          this.regulationsData.hasRegulations =
-            sectionInfo.data.hasRegulationKnowledge &&
-            ['YES_ALL', 'YES_SOME'].includes(sectionInfo.data.hasRegulationKnowledge);
-
-          console.log('this.regulationsData', this.regulationsData);
+          // extra rules for Regulations section in order to be able to mark as complete
           this.isSectionComplete =
             this.isSectionComplete &&
             this.regulationsData.hasRegulations &&
@@ -352,19 +277,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           if (
             this.ctx.user.isInnovator() &&
             this.regulationsData.hasRegulations &&
-            sectionInfo.data.standards &&
-            !!sectionInfo.data.standards.length &&
+            // response.sectionInfo.data.standards &&
+            !!response.sectionInfo.data.standards.length &&
             !this.regulationsData.allRegulationsHaveDocuments
           ) {
-            const errorItemsList = this.regulationsData.regulationsWithoutDocuments.map(e => ({
-              title: this.irv3translate.transform(e, 'items', 'standards'),
-              callback: `${this.baseUrl}/documents/new?regulationId=${e}`
-            }));
-            this.setAlertError('There is a problem', {
-              message: 'Each certification must include at least one supporting document to complete this section.',
-              itemsList: errorItemsList,
-              width: 'full'
-            });
+            this.handleMissingRegulationsAlerts();
           }
         }
 
@@ -377,8 +294,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.sectionSummaryData.sectionInfo.submitButton.show = false;
         }
 
-        this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
-
         this.getPreviousAndNextPagination();
 
         this.customNotificationLinks = [
@@ -390,20 +305,24 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         ];
 
         // If the user is an innovator and the innovation is in CREATED status, we need to check if all other sections are submitted.
-        this.lastSection = allSections
-          ? !allSections
+        this.lastSection = response.allSections
+          ? !response.allSections
               .flatMap(s => s.sections)
               .some(s => s.status != InnovationSectionStatusEnum.SUBMITTED && s.id !== this.sectionId)
           : false;
         this.setPageStatus('READY');
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
       }
-    );
+    });
   }
 
   private getPreviousAndNextPagination(): void {
-    const currentSectionIndex = this.sectionsIdsList.indexOf(this.sectionId);
-    const previousSectionId = this.sectionsIdsList[currentSectionIndex - 1] || null;
-    const nextSectionId = this.sectionsIdsList[currentSectionIndex + 1] || null;
+    const currentSectionIndex = this.sectionsIdsPaginationList.indexOf(this.sectionId);
+    const previousSectionId = this.sectionsIdsPaginationList[currentSectionIndex - 1] || null;
+    const nextSectionId = this.sectionsIdsPaginationList[currentSectionIndex + 1] || null;
 
     if (previousSectionId) {
       const previousSection = this.ctx.schema.getIrSchemaSectionIdentificationV3(previousSectionId);
@@ -459,8 +378,115 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   }
 
   private getNextSectionId(): string | null {
-    const currentSectionIndex = this.sectionsIdsList.indexOf(this.sectionSummaryData.sectionInfo.id);
+    const currentSectionIndex = this.sectionsIdsPaginationList.indexOf(this.sectionSummaryData.sectionInfo.id);
 
-    return this.sectionsIdsList[currentSectionIndex + 1] || null;
+    return this.sectionsIdsPaginationList[currentSectionIndex + 1] || null;
+  }
+
+  private getDocumentsByContext(
+    contextType: 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_REGULATIONS',
+    contextId?: string
+  ) {
+    return this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+      skip: 0,
+      take: 100,
+      order: { createdAt: 'ASC' },
+      filters: {
+        contextTypes: [contextType],
+        ...(contextId && { contextId }),
+        fields: ['description']
+      }
+    });
+  }
+
+  private getSectionMetadata(sectionId: string) {
+    const identification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
+
+    return {
+      label: identification
+        ? `${identification.group.number}.${identification.section.number} '${identification.section.title}'`
+        : '',
+      title: identification?.section.title ?? '',
+      hint: identification ? `${identification.group.number}. ${identification.group.title}` : ''
+    };
+  }
+
+  private handleMissingEvidenceAlerts(): void {
+    // add warning callout if answered YES but has not added evidence
+    if (this.evidenceData.hasEvidences && !this.evidenceData.hasAddedEvidence) {
+      this.setAlertError('There is a problem', {
+        message: 'In order to mark this section as complete, you need to add at least one evidence.',
+        width: 'full'
+      });
+    }
+
+    // add error if any evidence is missing document
+    if (this.evidenceData.hasAddedEvidence && !this.evidenceData.allEvidencesHaveDocuments) {
+      const errorItemsList = this.evidenceData.evidencesWithoutDocuments.map(e => ({
+        title: e.label,
+        callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${e.evidenceId})`
+      }));
+
+      this.setAlertError('There is a problem', {
+        message: 'You must add a supporting document for this evidence.',
+        itemsList: errorItemsList,
+        width: 'full'
+      });
+    }
+  }
+
+  private handleMissingRegulationsAlerts(): void {
+    const errorItemsList = this.regulationsData.regulationsWithoutDocuments.map(e => ({
+      title: this.irv3translate.transform(e, 'items', 'standards'),
+      callback: `${this.baseUrl}/documents/new?regulationId=${e}`
+    }));
+    this.setAlertError('There is a problem', {
+      message: 'Each certification must include at least one supporting document to complete this section.',
+      itemsList: errorItemsList,
+      width: 'full'
+    });
+  }
+
+  private returnEmptySectionSummaryData(): SectionSummaryDataType {
+    return {
+      sectionInfo: this.returnEmptySectionInfoData(),
+      summaryList: [],
+      evidencesList: [],
+      documentsList: []
+    };
+  }
+  private returnEmptyEvidenceData(): EvidenceDataType {
+    return {
+      evidenceSupportingDocumentsList: [],
+      evidencesWithoutDocuments: [],
+      hasEvidences: false,
+      hasAddedEvidence: false,
+      allEvidencesHaveDocuments: false
+    };
+  }
+  private returnEmptyRegulationsData(): RegulationsDataType {
+    return {
+      regulationsDocumentsList: [],
+      regulationsList: [],
+      regulationsWithoutDocuments: [],
+      hasRegulations: false,
+      allRegulationsHaveDocuments: false
+    };
+  }
+
+  private returnEmptySectionInfoData(): SectionInfoType {
+    return {
+      id: '',
+      nextSectionId: null,
+      title: '',
+      status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
+      submitButton: { show: false, label: 'Mark section complete' },
+      isNotStarted: false,
+      wizard: new WizardIRV3EngineModel({}),
+      allStepsList: {},
+      date: '',
+      submittedBy: null,
+      openTasksCount: 0
+    };
   }
 }
