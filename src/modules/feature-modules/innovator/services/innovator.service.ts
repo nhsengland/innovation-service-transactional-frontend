@@ -64,6 +64,12 @@ export type SurveyAnswersType = {
   comment: string;
 };
 
+export type InnovationImportResponseType = {
+  id: string;
+  validationIssues: Record<string, string[]>;
+  emptySections: string[];
+};
+
 @Injectable()
 export class InnovatorService extends CoreService {
   constructor() {
@@ -83,9 +89,11 @@ export class InnovatorService extends CoreService {
     );
   }
 
-  createInnovationFromExcel(base64File: string): Observable<{ id: string }> {
+  createInnovationFromExcel(base64File: string): Observable<InnovationImportResponseType> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovations/import');
-    return this.http.post<{ id: string }>(url.buildUrl(), { format: 'excel', file: base64File }).pipe(take(1));
+    return this.http
+      .post<InnovationImportResponseType>(url.buildUrl(), { format: 'excel', file: base64File })
+      .pipe(take(1));
   }
 
   submitOrganisationSharing(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {

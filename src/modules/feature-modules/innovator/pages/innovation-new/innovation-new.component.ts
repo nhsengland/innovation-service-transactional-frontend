@@ -4,13 +4,12 @@ import { cloneDeep } from 'lodash';
 import { CoreComponent } from '@app/base';
 import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { InnovatorService } from '../../services/innovator.service';
+import { InnovationImportResponseType, InnovatorService } from '../../services/innovator.service';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { InnovationErrorsEnum } from '@app/base/enums';
 import { getImportInnovationQuestionsWizard, getNewInnovationQuestionsWizard } from './innovation-new.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import {  switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-innovator-pages-innovation-new',
@@ -146,44 +145,26 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     const file = formData.data.file?.file;
 
     this.fileToBase64(file).then(fileAsBase64 => {
-      this.innovatorService
-        .createInnovationFromExcel(fileAsBase64)
-        .pipe(
-          switchMap(response => {
-            this.createdInnovationId = response.id;
-            return this.ctx.innovation.getSectionsSummary$(response.id);
-          })
-        )
-        .subscribe({
-          next: sectionSummary => {
-            /*
-                get sections that are left incomplete after import
-                filter-out 2.2 and 5.1 (and any others with mandatory documents)
-              */
+      this.innovatorService.createInnovationFromExcel(fileAsBase64).subscribe({
+        next: response => {
+          this.createdInnovationId = response.id;
+          this.sectionsToFillAfterImport = this.getNotCompletedSections(response);
 
-            this.sectionsToFillAfterImport = sectionSummary.flatMap((section, i) =>
-              section.sections
-                .filter(
-                  s => !s.isCompleted && !['EVIDENCE_OF_EFFECTIVENESS', 'REGULATIONS_AND_STANDARDS'].includes(s.id)
-                )
-                .map((sub, j) => `${i + 1}.${j + 1} ${sub.title}`)
+          this.importSuccess = true;
+          this.setAlertSuccess('Your innovation has been imported');
+        },
+        error: ({ error: err }: HttpErrorResponse) => {
+          if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
+            this.setAlertError('An innovation with that name already exists. Try again with a new name');
+          } else {
+            this.setAlertError(
+              'An error occurred when importing the innovation. Please try again or contact us for further help'
             );
-
-            this.importSuccess = true;
-            this.setAlertSuccess('Your innovation has been imported');
-          },
-          error: ({ error: err }: HttpErrorResponse) => {
-            if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
-              this.setAlertError('An innovation with that name already exists. Try again with a new name');
-            } else {
-              this.setAlertError(
-                'An error occurred when importing the innovation. Please try again or contact us for further help'
-              );
-            }
-            
-            this.isImportingExcel = false;
           }
-        });
+
+          this.isImportingExcel = false;
+        }
+      });
     });
   }
 
@@ -206,5 +187,16 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = error => reject(error);
     });
+  }
+
+  private getNotCompletedSections(res: InnovationImportResponseType): string[] {
+    const withErrors = Object.keys(res.validationIssues).filter(id => id !== 'GLOBAL_WARNING');
+    const empty = res.emptySections;
+
+    const sections = [...new Set([...withErrors, ...empty])];
+
+    const numberedSections = sections.map(s => this.ctx.schema.getNumberedTranslatedSection(s));
+
+    return numberedSections;
   }
 }

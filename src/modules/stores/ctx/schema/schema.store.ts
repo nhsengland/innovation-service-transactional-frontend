@@ -223,6 +223,10 @@ export class SchemaContextStore {
     }, []);
   }
 
+  getNumberedTranslatedSection(id: string): string {
+    return this.getIrSchemaNumberedSubSectionsList().find(s => s.value === id)?.label ?? id;
+  }
+
   getIrSchemaTranslationsMap(): IrSchemaTranslatorMapType {
     return irSchemaTranslationsMap(this.irSchemaInfo().schema);
   }
