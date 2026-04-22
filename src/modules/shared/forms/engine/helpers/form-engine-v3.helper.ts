@@ -408,11 +408,14 @@ export class FormEngineHelperV3 {
       validators.push(Validators.maxLength(parameter.validations.maxLength));
     }
     if (parameter.validations?.equalToLength) {
-      validation =
-        typeof parameter.validations.equalToLength === 'number'
-          ? [parameter.validations.equalToLength, null]
-          : parameter.validations.equalToLength;
-      validators.push(CustomValidators.equalToLength(validation[0] as number, validation[1]));
+      const validation = parameter.validations.equalToLength;
+      if (typeof validation === 'number') {
+        validators.push(CustomValidators.equalToLength(validation));
+      } else if (Array.isArray(validation)) {
+        validators.push(CustomValidators.equalToLength(validation[0] as number, validation[1] as string));
+      } else if (typeof validation === 'object' && validation.length) {
+        validators.push(CustomValidators.equalToLength(validation.length, validation.errorMessage));
+      }
     }
 
     if (parameter.validations?.min) {

@@ -77,7 +77,7 @@ export type InnovationRecordStepValidationsType = {
   postcodeFormat?: boolean;
   urlFormat?: FormatUrlValidatorType;
   pattern?: string | [string, string];
-  equalToLength?: number | [number, string];
+  equalToLength?: number | [number, string] | { length: number; errorMessage: string };
   async?: AsyncValidatorFn[];
   existsIn?: string[] | [string[], string];
   validEmail?: string;

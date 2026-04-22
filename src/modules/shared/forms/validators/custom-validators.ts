@@ -66,8 +66,15 @@ export class CustomValidators {
   }
 
   static equalToLength(length: number, message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null =>
-      (control.value ?? '').length === length ? null : { equalToLength: message ? { message, length } : { length } };
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value ?? '';
+
+      if (value === '' || value === null || value === undefined) {
+        return null;
+      }
+
+      return String(value).length === length ? null : { equalToLength: message ? { message, length } : { length } };
+    };
   }
 
   static hexadecimalFormatValidator(): ValidatorFn {

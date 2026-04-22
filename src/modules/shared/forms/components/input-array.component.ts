@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
@@ -105,9 +105,26 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
     items.forEach(i => {
       const itemControl = this.getItemControl(i.id);
       const isOptional = i.itemConditionOptions && this.isItemOptional(i.itemConditionOptions);
-      if (!isOptional && itemControl && i.validations && i.validations.isRequired) {
-        const validation = i.validations.isRequired;
-        itemControl?.setValidators(CustomValidators.required(validation));
+    
+      if (itemControl && i.validations) {
+        const validations: ValidatorFn[] = [];
+        if (!isOptional) {
+          const validation = i.validations.isRequired ?? 'Is required';
+          validations.push(CustomValidators.required(validation));
+        }
+        if (i.validations.equalToLength) {
+
+          const validation = i.validations.equalToLength;
+
+          if (typeof validation === 'number') {
+            validations.push(CustomValidators.equalToLength(validation));
+          } else if (Array.isArray(validation)) {
+            validations.push(CustomValidators.equalToLength(validation[0] as number, validation[1] as string));
+          } else if (typeof validation === 'object' && validation.length) {
+            validations.push(CustomValidators.equalToLength(validation.length, validation.errorMessage));
+          }
+        }
+        itemControl.setValidators(validations);
         itemControl.updateValueAndValidity();
       }
     });
