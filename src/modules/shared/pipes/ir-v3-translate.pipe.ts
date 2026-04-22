@@ -5,7 +5,7 @@ import { CtxStore } from '@modules/stores';
 export class IrV3TranslatePipe implements PipeTransform {
   constructor(private ctx: CtxStore) {}
   transform(
-    value: string | string[] | undefined,
+    value: string | string[] | Object | undefined,
     type: 'sections' | 'subsections' | 'questions' | 'items',
     questionId?: string
   ): string {
@@ -21,10 +21,23 @@ export class IrV3TranslatePipe implements PipeTransform {
         if (typeof value === 'string' && questionId) {
           return translations['questions'].get(questionId.split('_')[0])?.items?.get(value)?.label ?? value;
         } else if (value instanceof Array && questionId) {
+          // handle arrays translation
           const translatedArr: string[] = [];
           value.forEach(v =>
             translatedArr.push(translations['questions'].get(questionId.split('_')[0])?.items?.get(v)?.label ?? v)
           );
+          return translatedArr.join('\n');
+        } else if (value instanceof Object && questionId) {
+          // handle object translation
+          const translatedArr: string[] = [];
+          Object.entries(value).forEach(
+            ([k, v]) =>
+              v &&
+              translatedArr.push(
+                `${translations['questions'].get(questionId.split('_')[0])?.items?.get(k)?.label ?? k}: ${v}`
+              )
+          );
+          console.log('translatedArr', translatedArr);
           return translatedArr.join('\n');
         }
     }

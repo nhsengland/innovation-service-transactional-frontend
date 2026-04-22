@@ -1,19 +1,17 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  DoCheck,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Injector
-} from '@angular/core';
-import { AbstractControl, ControlContainer, FormControl, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
 import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
 import { FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
-import { InnovationRecordStepValidationsType, ItemConditionOptionsType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  InnovationRecordItemsType,
+  InnovationRecordStepValidationsType,
+  ItemConditionOptionsType
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
+import { CustomValidators } from '../validators/custom-validators';
 
 export type InnovationRecordItemType = {
   id?: string;
@@ -29,17 +27,15 @@ export type InnovationRecordItemType = {
     forceExpandAndDisableToggleIf?: string[];
     displayIf?: string[];
   };
-  validations?: InnovationRecordStepValidationsType
+  validations?: InnovationRecordStepValidationsType;
 };
-
-
 
 @Component({
   selector: 'theme-form-input-array-v3',
   templateUrl: './input-array.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormInputArrayV3Component implements OnInit, DoCheck {
+export class FormInputArrayV3Component extends ControlValueAccessorComponent implements OnInit, DoCheck {
   @Input() id?: string;
   @Input() groupName = '';
   @Input() label?: string;
@@ -50,7 +46,7 @@ export class FormInputArrayV3Component implements OnInit, DoCheck {
   @Input() pageUniqueField = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
-  @Input() createdFromParentAnswerId?: undefined | string = undefined
+  @Input() createdFromParentAnswerId?: undefined | string = undefined;
 
   itemHasErrorMap: Record<string, boolean> = {};
   itemErrorMap: Record<string, { message: string; params: Record<string, string> }> = {};
@@ -58,18 +54,16 @@ export class FormInputArrayV3Component implements OnInit, DoCheck {
   inputCssClass = '';
   divCssOverride = '';
 
-  get parentFieldControl(): AbstractControl | null {
-    return this.injector.get(ControlContainer).control;
+  constructor(
+    injector: Injector,
+    private cdr: ChangeDetectorRef
+  ) {
+    super(injector);
   }
 
   get fieldGroupControl(): FormGroup {
     return this.parentFieldControl?.get(this.groupName) as FormGroup;
   }
-
-  constructor(
-    private injector: Injector,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.id = this.id || RandomGeneratorHelper.generateRandom();
@@ -77,11 +71,12 @@ export class FormInputArrayV3Component implements OnInit, DoCheck {
     this.inputCssClass = this.width ? `nhsuk-u-width-${this.width}` : 'nhsuk-u-width-two-thirds';
     this.divCssOverride = this.cssOverride || '';
 
-    console.log('id:', this.id)
-    console.log('items:', this.items)
-    console.log('groupName:', this.groupName)
-    console.log('createdFromParentAnswerId:', this.createdFromParentAnswerId)
+    if (this.items) this.setItemsValidations(this.items!);
 
+    // console.log('id:', this.id);
+    // console.log('items:', this.items);
+    // console.log('groupName:', this.groupName);
+    // console.log('createdFromParentAnswerId:', this.createdFromParentAnswerId);
   }
 
   ngDoCheck(): void {
@@ -92,7 +87,6 @@ export class FormInputArrayV3Component implements OnInit, DoCheck {
       if (!control) return;
 
       const hasError = control.invalid && (control.touched || control.dirty);
-
       this.itemHasErrorMap[item.id] = hasError;
       this.itemErrorMap[item.id] = hasError
         ? FormEngineHelperV3.getValidationMessage(control.errors)
@@ -107,45 +101,37 @@ export class FormInputArrayV3Component implements OnInit, DoCheck {
     return this.fieldGroupControl?.get(itemId) as FormControl;
   }
 
-  hasError(itemId?: string): boolean {
-    if (!itemId) return false;
-    return this.itemHasErrorMap[itemId] ?? false;
-  }
-
-  getError(itemId?: string): { message: string; params: Record<string, string> } {
-    if (!itemId) return { message: '', params: {} };
-    return this.itemErrorMap[itemId] ?? { message: '', params: {} };
-  }
-
-  getAriaDescribedBy(item: InnovationRecordItemType): string | null {
-    let s = '';
-
-    if (item.description) {
-      s += `hint-${item.id}`;
-    }
-
-    if (this.hasError(item.id)) {
-      s += `${s ? ' ' : ''}error-${item.id}`;
-    }
-
-    return s || null;
+  setItemsValidations(items: InnovationRecordItemsType) {
+    items.forEach(i => {
+      const itemControl = this.getItemControl(i.id);
+      const isOptional = i.itemConditionOptions && this.isItemOptional(i.itemConditionOptions);
+      if (!isOptional && itemControl && i.validations && i.validations.isRequired) {
+        const validation = i.validations.isRequired;
+        itemControl?.setValidators(CustomValidators.required(validation));
+        itemControl.updateValueAndValidity();
+      }
+    });
   }
 
   trackByItem(index: number, item: InnovationRecordItemType): string {
     return item.id ?? String(index);
   }
 
-  shouldShowItem(itemConditions:ItemConditionOptionsType): boolean{
-    if(this.createdFromParentAnswerId){
-      return itemConditions.displayIf?.includes(this.createdFromParentAnswerId) ?? false
+  shouldShowItem(itemConditions: ItemConditionOptionsType): boolean {
+    if (this.createdFromParentAnswerId) {
+      return itemConditions.displayIf?.includes(this.createdFromParentAnswerId) ?? false;
     }
-    return false
+    return false;
   }
 
-  isItemOptional(itemConditions:ItemConditionOptionsType):boolean{
-    if(this.createdFromParentAnswerId){
-      return !itemConditions.mandatoryIf?.includes(this.createdFromParentAnswerId)
+  isItemOptional(itemConditions: ItemConditionOptionsType): boolean {
+    if (this.createdFromParentAnswerId) {
+      return !itemConditions.mandatoryIf?.includes(this.createdFromParentAnswerId);
     }
-    return false
+    return false;
+  }
+
+  getLabel(item: InnovationRecordItemType): string {
+    return this.isItemOptional(item.itemConditionOptions ?? {}) ? `${item.label} (Optional)` : `${item.label}`;
   }
 }

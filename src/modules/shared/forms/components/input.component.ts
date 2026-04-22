@@ -82,9 +82,11 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
     this.type = this.type || 'text';
     this.placeholder = this.placeholder || '';
 
+    // console.log('fieldControl for ', this.controlName);
+    // console.log('validator: ', this.fieldControl.validator);
+    // console.log(this.fieldControl);
     if (this.lengthLimit) {
       this.lengthLimitCharacters = this.currentAvailableCharacters = INPUT_LENGTH_LIMIT[this.lengthLimit];
-
       const validators = this.fieldControl.validator ? [this.fieldControl.validator] : [];
       validators.push(Validators.maxLength(this.lengthLimitCharacters));
       this.fieldControl.setValidators(validators);
@@ -100,6 +102,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
             )
             .subscribe(value => {
               this.fieldControl.setValue(value);
+              console.log('value', value);
               this.currentAvailableCharacters = this.lengthLimitCharacters! - value.length;
               this.cdr.markForCheck();
             })

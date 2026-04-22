@@ -20,7 +20,6 @@ export class FormEngineHelperV3 {
     formValidations?: ValidatorFn[]
   ): FormGroup {
     const inputParameters = parameters;
-
     parameters = inputParameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
 
     const form = new FormGroup({}, { updateOn: 'blur', validators: formValidations });
@@ -89,6 +88,13 @@ export class FormEngineHelperV3 {
 
           parameter.items?.forEach(item => {
             if (!item.id) return;
+
+            if (
+              parameter.createdFromParentAnswerId &&
+              !item.itemConditionOptions?.displayIf?.includes(parameter.createdFromParentAnswerId)
+            ) {
+              return;
+            }
 
             group.addControl(item.id, new FormControl(parameterValue?.[item.id] ?? null));
           });
@@ -203,7 +209,12 @@ export class FormEngineHelperV3 {
   ): { valid: boolean; data: Record<string, any> } {
     const returnForm: { valid: boolean; data: Record<string, any> } = { valid: form.valid, data: {} };
 
+    console.log('valid', form.valid);
+    console.log('error', form.errors);
+    console.log('value', form.value);
     Object.keys(form.getRawValue()).forEach(key => {
+      console.log('key:', key);
+      console.log(`returnForm.data[${key}]`, form.getRawValue()[key]);
       // getRawValues is needed to return also disabled fields!
       returnForm.data[key] = form.getRawValue()[key];
     });

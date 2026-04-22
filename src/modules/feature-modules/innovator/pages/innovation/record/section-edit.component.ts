@@ -13,6 +13,7 @@ import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stor
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -75,8 +76,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             this.sectionStatus = sectionInfoResponse.status;
 
             this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
-
-            console.log('wizard.currentStepParameters()',this.wizard.currentStepParameters())
           },
           error: () => {
             this.setPageStatus('ERROR');
@@ -158,7 +157,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
     if (action === 'next' && !formData?.valid) {
-      console.log('formData:', formData)
+      console.log('formData:', formData);
       // Apply validation only when moving forward.
       return;
     }

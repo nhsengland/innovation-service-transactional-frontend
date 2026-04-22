@@ -26,9 +26,15 @@
         <div *ngSwitchCase="'checkbox-array'">
           <theme-form-checkbox-array-v3 [arrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [pageUniqueField]="onlyOneField" />
         </div>
-        
+
         <div *ngSwitchCase="'input-array'">
-          <theme-form-input-array-v3 [groupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [createdFromParentAnswerId]="p.createdFromParentAnswerId" />
+          <theme-form-input-array-v3
+            [groupName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [items]="p.items"
+            [createdFromParentAnswerId]="p.createdFromParentAnswerId"
+          />
         </div>
 
         <div *ngSwitchCase="'textarea'">

@@ -104,6 +104,7 @@ export type InnovationRecordItemsType = {
   type?: string;
   itemsFromAnswer?: string;
   itemConditionOptions?: ItemConditionOptionsType;
+  validations?: InnovationRecordStepValidationsType;
 }[];
 
 export type InnovationRecordSectionAnswersType = Record<

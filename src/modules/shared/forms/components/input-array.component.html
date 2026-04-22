@@ -17,40 +17,9 @@
   </ng-container>
 
   <ng-container *ngFor="let item of items; trackBy: trackByItem">
-    <div *ngIf="item.itemConditionOptions && shouldShowItem(item.itemConditionOptions)" class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError(item.id) }">
-      <ng-container *ngIf="item.label">
-        <span>{{ item.label }}</span><span *ngIf="isItemOptional(item.itemConditionOptions)"> (Optional)</span>
-      </ng-container>
-      <ng-container *ngIf="item.description">
-        <div [id]="'hint-' + item.id" class="nhsuk-hint" [innerHTML]="item.description">
-          <span>For example...</span>
-        </div>
-      </ng-container>
-      <span class="nhsuk-hint"> For example...</span>
-
-      <ng-container *ngIf="hasError(item.id)">
-        <span [id]="'error-' + item.id" class="nhsuk-error-message" role="alert">
-          <span class="nhsuk-u-visually-hidden">Error:</span>
-          {{ getError(item.id).message | translate: getError(item.id).params }}
-        </span>
-      </ng-container>
-
-      <div class="d-flex" *ngIf="getItemControl(item.id) as control">
-        <input
-          [formControl]="control"
-          [id]="item.id"
-          [name]="item.id"
-          [type]="item.type || 'text'"
-          [placeholder]="placeholder"
-          [value]="control.value"
-          [readonly]="isEditable === false"
-          class="nhsuk-input"
-          [ngClass]="inputCssClass"
-          [attr.aria-invalid]="hasError(item.id) ? 'true' : null"
-          [attr.aria-describedby]="getAriaDescribedBy(item)"
-        />
-
-        <ng-content select="[append]"></ng-content>
+    <div *ngIf="item.itemConditionOptions && shouldShowItem(item.itemConditionOptions)" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full" *ngIf="getItemControl(item.id) as control">
+        <theme-form-input [formControl]="control" [controlName]="item.id ?? ''" [label]="getLabel(item)" [description]="'test'" [pageUniqueField]="false" />
       </div>
     </div>
   </ng-container>

@@ -1,6 +1,6 @@
 import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
-import { ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import {
   InnovationRecordConditionType,
   InnovationRecordSchemaV3Type,
@@ -424,10 +424,12 @@ export class WizardIRV3EngineModel {
     this.summary = [];
 
     const currentAnswers = this.currentAnswers;
-
+    console.log('currentAnswers', this.currentAnswers);
     // Parse condition step's answers
     for (const [i, step] of this.steps.entries()) {
       const stepParams = step.parameters[0];
+      console.log('stepParams', stepParams);
+
       let stepId = stepParams.id;
       let label = stepId.split('|')[0];
       let value: string | string[] | undefined = currentAnswers[stepParams.id];
@@ -439,7 +441,7 @@ export class WizardIRV3EngineModel {
           case 'fields-group':
             {
               const stepAnswers = currentAnswers[stepParams.id] as nestedObjectAnswer;
-
+              console.log('stepAnswers', stepAnswers);
               if (stepAnswers) {
                 value = stepAnswers.map(item => item[stepParams.field!.id]);
               }
@@ -462,6 +464,7 @@ export class WizardIRV3EngineModel {
                         this.currentAnswers[stepParams.id][i][stepParams.field!.id]
                       );
                       value = stepAnswers[i][aq.id];
+                      console.log(`answers for ${aq.id} (stepAnswers[${i}][${aq.id}]):`, stepAnswers[i][aq.id]);
                       this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
                     });
                   }
@@ -534,7 +537,9 @@ export class WizardIRV3EngineModel {
               // Push "children" if any
               if (stepParams.addQuestions && stepAnswers) {
                 stepAnswers.forEach((item, i) => {
+                  console.log(`stepAnswers for each: ${item}`);
                   stepParams.addQuestions?.forEach(aq => {
+                    console.log(`stepParams for each: ${aq.id}`, aq);
                     editStepNumber++;
 
                     stepId = `${aq.id}_${i}`;
@@ -546,6 +551,9 @@ export class WizardIRV3EngineModel {
                     );
                     value = currentAnswers[stepId];
 
+                    console.log('label', label);
+                    console.log('value', value);
+                    console.log('************');
                     this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
                   });
                 });
@@ -560,7 +568,7 @@ export class WizardIRV3EngineModel {
         }
       }
     }
-
+    console.log('this.summary', this.summary);
     return this.summary;
   }
 

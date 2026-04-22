@@ -14,7 +14,7 @@ import {
   PLATFORM_ID,
   SimpleChanges
 } from '@angular/core';
-import { FormArray, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -132,6 +132,7 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
   getFormValues(triggerFormChanges?: boolean): { valid: boolean; data: Record<string, any> } {
     const shouldTriggerChanges = triggerFormChanges !== undefined ? triggerFormChanges : true;
 
+    this.logInvalidControls(this.form);
     if (shouldTriggerChanges && !this.form.valid) {
       this.form.markAllAsTouched();
 
@@ -161,5 +162,47 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.formChangeSubscription.unsubscribe();
+  }
+
+  logInvalidControls(control: AbstractControl, path = ''): void {
+    if (control instanceof FormControl) {
+      if (control.invalid) {
+        console.log('Invalid control:', path, {
+          value: control.value,
+          errors: control.errors,
+          status: control.status,
+          touched: control.touched,
+          dirty: control.dirty
+        });
+      }
+      return;
+    }
+
+    if (control instanceof FormGroup) {
+      if (control.errors) {
+        console.log('Invalid group:', path || '(root)', {
+          errors: control.errors,
+          value: control.value
+        });
+      }
+
+      Object.keys(control.controls).forEach(key => {
+        this.logInvalidControls(control.controls[key], path ? `${path}.${key}` : key);
+      });
+      return;
+    }
+
+    if (control instanceof FormArray) {
+      if (control.errors) {
+        console.log('Invalid array:', path || '(root)', {
+          errors: control.errors,
+          value: control.value
+        });
+      }
+
+      control.controls.forEach((child, index) => {
+        this.logInvalidControls(child, `${path}[${index}]`);
+      });
+    }
   }
 }
