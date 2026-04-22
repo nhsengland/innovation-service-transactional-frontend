@@ -424,11 +424,9 @@ export class WizardIRV3EngineModel {
     this.summary = [];
 
     const currentAnswers = this.currentAnswers;
-    console.log('currentAnswers', this.currentAnswers);
     // Parse condition step's answers
     for (const [i, step] of this.steps.entries()) {
       const stepParams = step.parameters[0];
-      console.log('stepParams', stepParams);
 
       let stepId = stepParams.id;
       let label = stepId.split('|')[0];
@@ -441,7 +439,6 @@ export class WizardIRV3EngineModel {
           case 'fields-group':
             {
               const stepAnswers = currentAnswers[stepParams.id] as nestedObjectAnswer;
-              console.log('stepAnswers', stepAnswers);
               if (stepAnswers) {
                 value = stepAnswers.map(item => item[stepParams.field!.id]);
               }
@@ -464,7 +461,6 @@ export class WizardIRV3EngineModel {
                         this.currentAnswers[stepParams.id][i][stepParams.field!.id]
                       );
                       value = stepAnswers[i][aq.id];
-                      console.log(`answers for ${aq.id} (stepAnswers[${i}][${aq.id}]):`, stepAnswers[i][aq.id]);
                       this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
                     });
                   }
@@ -537,9 +533,7 @@ export class WizardIRV3EngineModel {
               // Push "children" if any
               if (stepParams.addQuestions && stepAnswers) {
                 stepAnswers.forEach((item, i) => {
-                  console.log(`stepAnswers for each: ${item}`);
                   stepParams.addQuestions?.forEach(aq => {
-                    console.log(`stepParams for each: ${aq.id}`, aq);
                     editStepNumber++;
 
                     stepId = `${aq.id}_${i}`;
@@ -551,9 +545,6 @@ export class WizardIRV3EngineModel {
                     );
                     value = currentAnswers[stepId];
 
-                    console.log('label', label);
-                    console.log('value', value);
-                    console.log('************');
                     this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
                   });
                 });
@@ -568,7 +559,6 @@ export class WizardIRV3EngineModel {
         }
       }
     }
-    console.log('this.summary', this.summary);
     return this.summary;
   }
 
@@ -621,28 +611,20 @@ export class WizardIRV3EngineModel {
   }
 
   runOutboundParsing(): InnovationRecordSectionUpdateType {
-    console.log('current steps:', this.steps);
     const toReturn: Record<string, any> = {};
 
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
     for (const step of this.steps.filter(s => !s.parameters[0].isNestedField).values()) {
       const stepParams = step.parameters[0];
-      console.log('-------------------------------------\n-------------------------------------\n');
-      console.log('this.currentAnswers', this.currentAnswers);
 
       const currentAnswer = this.currentAnswers[stepParams.id];
-      console.log('stepParams', stepParams);
-      console.log('currentAnswer', currentAnswer);
-      console.log('init toReturn logic:', toReturn);
 
       if (currentAnswer) {
         toReturn[stepParams.id] = currentAnswer;
       }
-      console.log('first toReturn logic:', toReturn);
       if (stepParams.dataType === 'checkbox-array') {
         const conditionalQuestions = stepParams.items?.filter(i => i.conditional);
-        console.log('conditionalQuestions?.length', conditionalQuestions?.length);
-        console.log('parsing checkbox-array');
+
         // create nested object if it has addQuestions
         if ((stepParams.addQuestions || stepParams.checkboxAnswerId) && currentAnswer) {
           toReturn[stepParams.id] = (currentAnswer as arrStringAnswer).map((answer, i) => {
@@ -698,15 +680,10 @@ export class WizardIRV3EngineModel {
         }
       }
 
-      console.log('checking conditionals');
       // add conditionals
       const conditionalItems = stepParams.items?.filter(i => i.conditional);
       conditionalItems?.forEach(c => {
         if (c.conditional && this.currentAnswers[c.conditional.id]) {
-          console.log(
-            `toReturn[${c.conditional.id}] = this.currentAnswers[${c.conditional.id}]`,
-            this.currentAnswers[c.conditional.id]
-          );
           toReturn[c.conditional.id] = this.currentAnswers[c.conditional.id];
         }
       });
@@ -728,10 +705,7 @@ export class WizardIRV3EngineModel {
         }
       }
     }
-
-    console.log('toReturn:', toReturn);
-    // return {version:1,data:{}}
-
+    
     return {
       version: this.schema?.version ?? 0,
       data: toReturn

@@ -209,12 +209,7 @@ export class FormEngineHelperV3 {
   ): { valid: boolean; data: Record<string, any> } {
     const returnForm: { valid: boolean; data: Record<string, any> } = { valid: form.valid, data: {} };
 
-    console.log('valid', form.valid);
-    console.log('error', form.errors);
-    console.log('value', form.value);
     Object.keys(form.getRawValue()).forEach(key => {
-      console.log('key:', key);
-      console.log(`returnForm.data[${key}]`, form.getRawValue()[key]);
       // getRawValues is needed to return also disabled fields!
       returnForm.data[key] = form.getRawValue()[key];
     });

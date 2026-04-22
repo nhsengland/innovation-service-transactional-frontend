@@ -72,11 +72,6 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
     this.divCssOverride = this.cssOverride || '';
 
     if (this.items) this.setItemsValidations(this.items!);
-
-    // console.log('id:', this.id);
-    // console.log('items:', this.items);
-    // console.log('groupName:', this.groupName);
-    // console.log('createdFromParentAnswerId:', this.createdFromParentAnswerId);
   }
 
   ngDoCheck(): void {
@@ -105,7 +100,7 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
     items.forEach(i => {
       const itemControl = this.getItemControl(i.id);
       const isOptional = i.itemConditionOptions && this.isItemOptional(i.itemConditionOptions);
-    
+
       if (itemControl && i.validations) {
         const validations: ValidatorFn[] = [];
         if (!isOptional) {
@@ -113,7 +108,6 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
           validations.push(CustomValidators.required(validation));
         }
         if (i.validations.equalToLength) {
-
           const validation = i.validations.equalToLength;
 
           if (typeof validation === 'number') {

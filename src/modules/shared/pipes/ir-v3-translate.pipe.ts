@@ -37,7 +37,6 @@ export class IrV3TranslatePipe implements PipeTransform {
                 `${translations['questions'].get(questionId.split('_')[0])?.items?.get(k)?.label ?? k}: ${v}`
               )
           );
-          console.log('translatedArr', translatedArr);
           return translatedArr.join('\n');
         }
     }

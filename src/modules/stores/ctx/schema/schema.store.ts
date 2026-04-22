@@ -73,8 +73,6 @@ export class SchemaContextStore {
         )
       )
       .subscribe(irSchema => {
-        console.log('irSchema', irSchema);
-
         if (irSchema) {
           this.state.set({ irSchema, expiresAt: Date.now() + EXPIRATION_IN_MS, isStateLoaded: true });
         }
