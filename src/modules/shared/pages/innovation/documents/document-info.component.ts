@@ -92,7 +92,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
   gotoDeletePage() {
     this.resetAlert();
-    this.setPageTitle('Are you sure you want to delete this document?');
+    this.setPageTitle('Are you sure you want to delete this document?', { width: 'full' });
     this.setBackLink('Go back', this.gotoInfoPage.bind(this));
     this.pageStep = 'DELETE';
   }

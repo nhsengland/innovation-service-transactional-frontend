@@ -45,7 +45,10 @@
         <ng-template #defaultDeleteMessage>
           <p>If you delete this document, it cannot be recovered.</p>
         </ng-template>
-        <button type="button" class="nhsuk-button" (click)="onDelete()">Delete document</button>
+        <div class="d-flex align-items-center">
+          <button type="button" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-5" (click)="onDelete()">Delete document</button>
+          <a class="cursor-pointer" (click)="gotoInfoPage()">Cancel</a>
+        </div>
       </ng-container>
     </div>
   </div>

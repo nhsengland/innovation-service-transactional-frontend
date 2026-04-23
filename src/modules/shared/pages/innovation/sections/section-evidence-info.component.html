@@ -46,12 +46,15 @@
           <button *ngIf="ctx.user.isInnovator()" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5 nhsuk-u-margin-right-5" (click)="gotoDeletePage()">
             Delete evidence
           </button>
-          <a [href]="sectionUrl">Back to section</a>
+          <a class="cursor-pointer" (click)="gotoInfoPage()">Back to section</a>
         </div>
       </ng-container>
       <ng-container *ngIf="pageStep === 'DELETE' && summaryList && documentsList">
         <p>If you delete this evidence, it cannot be recovered.</p>
-        <button type="button" class="nhsuk-button" (click)="onDeleteEvidence()">Delete evidence</button>
+        <div class="d-flex align-items-center">
+          <button type="button" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-5" (click)="onDeleteEvidence()">Delete evidence</button>
+          <a class="cursor-pointer" (click)="gotoInfoPage()">Cancel</a>
+        </div>
       </ng-container>
     </div>
   </div>
