@@ -147,14 +147,23 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
             this.evidenceDraftService.updateAllDocumentContexts(evidenceId);
 
             from(this.evidenceDraftService.documents())
-              .pipe(
-                concatMap(document => this.innovationDocumentsService.createDocument(this.innovation.id, document)),
-                finalize(() => {
+              .pipe(concatMap(document => this.innovationDocumentsService.createDocument(this.innovation.id, document)))
+              .subscribe({
+                complete: () => {
                   // we submitted evidence and documents, we can clear the draft store
                   this.evidenceDraftService.clearDraft();
-                })
-              )
-              .subscribe();
+
+                  this.setRedirectAlertSuccess("You have completed section 2.2 'Evidence of impact and benefit'", {
+                    message: 'You can still add more evidence below if needed.'
+                  });
+
+                  this.redirectTo(
+                    `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`
+                  );
+                }
+              });
+
+            return;
           }
 
           // TODO mark section as complete and redirect to section details page
