@@ -35,7 +35,9 @@
                 <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
               </dd>
               <dd class="nhsuk-summary-list__actions">
-                <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
+                <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" [queryParams]="{ evidenceId: evidenceId }" attr.aria-label="View {{ document.name }} details"
+                  >More details</a
+                >
               </dd>
             </div>
           </ng-container>
