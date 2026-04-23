@@ -20,11 +20,12 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   evidenceId: string;
   pageStep: 'INFO' | 'DELETE' = 'INFO';
   baseUrl: string;
+  sectionUrl: string;
 
   wizard: WizardEngineModel;
 
-  summaryList: null | WizardSummaryType[] = null
-  documentsList: null | InnovationDocumentsListOutDTO['data'] = null
+  summaryList: null | WizardSummaryType[] = null;
+  documentsList: null | InnovationDocumentsListOutDTO['data'] = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,6 +37,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
     this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
+    this.sectionUrl = `${this.baseUrl}/record/sections/${this.sectionId}`;
 
     this.wizard =
       this.ctx.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
@@ -47,7 +49,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   ngOnInit(): void {
-    this.setBackLink('Go back',`${this.baseUrl}/record/sections/${this.sectionId}`);
+    this.setBackLink('Go back', `${this.baseUrl}/record/sections/${this.sectionId}`);
 
     forkJoin([
       this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
