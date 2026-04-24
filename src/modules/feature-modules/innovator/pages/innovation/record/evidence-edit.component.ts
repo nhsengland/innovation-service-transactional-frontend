@@ -222,4 +222,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       this.setPageStatus('READY');
     });
   }
+
+  getDraftUploadedDocument(): UpsertInnovationDocumentType[] {
+    return this.evidenceDraftService.documents();
+  }
 }
