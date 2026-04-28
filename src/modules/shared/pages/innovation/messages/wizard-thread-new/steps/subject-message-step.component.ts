@@ -32,6 +32,18 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
 
   sectionId?: string;
 
+  showLinkForm = false;
+  linkForm = new FormGroup(
+    {
+      linkText: new FormControl<string>('', CustomValidators.required('Link text is required')),
+      linkUrl: new FormControl<string>('', [
+        CustomValidators.required('Link URL is required'),
+        CustomValidators.urlFormatValidator({ message: 'Enter a valid URL' })
+      ])
+    },
+    { updateOn: 'blur' }
+  );
+
   form = new FormGroup({
     subject: new FormControl<string>('', {
       validators: [CustomValidators.required('A subject is required'), Validators.maxLength(100)],
@@ -95,6 +107,30 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
       file: this.form.value.file ?? null,
       fileName: this.form.value.fileName ?? ''
     };
+  }
+
+  toggleLinkForm(): void {
+    this.showLinkForm = !this.showLinkForm;
+    if (!this.showLinkForm) {
+      this.linkForm.reset();
+    }
+  }
+
+  onInsertLink(): void {
+    if (!this.linkForm.valid) {
+      this.linkForm.markAllAsTouched();
+      return;
+    }
+
+    const text = this.linkForm.value.linkText || '';
+    const url = (this.linkForm.value.linkUrl || '').trim();
+    const markdownLink = `[${text}](${url})`;
+
+    const currentMessage = this.form.value.message || '';
+    const newMessage = currentMessage.length > 0 ? `${currentMessage} ${markdownLink}` : markdownLink;
+
+    this.form.patchValue({ message: newMessage });
+    this.toggleLinkForm();
   }
 
   onCancelStep(): void {
