@@ -39,6 +39,10 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     return !!this.activatedRoute.snapshot.params.evidenceId;
   }
 
+  isEvidenceDocumentStep(): boolean {
+    return this.wizard.currentStep().parameters[0].id === 'supportingDocuments';
+  }
+
   supportingDocumentsList: UpsertInnovationDocumentType[] = [];
 
   constructor(
@@ -225,5 +229,10 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
   getDraftUploadedDocument(): UpsertInnovationDocumentType[] {
     return this.evidenceDraftService.documents();
+  }
+
+  changeTempDocument(): void {
+    this.evidenceDraftService.clearDocuments();
+    this.onGotoStep(this.wizard.getSummary().length + 1 || 1);
   }
 }

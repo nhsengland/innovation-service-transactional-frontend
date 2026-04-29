@@ -9,6 +9,12 @@
     <div class="nhsuk-hint" id="hint-{{ id }}" [innerHTML]="description"></div>
   </ng-container>
 
+  <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-margin-top-0">
+    <span class="nhsuk-u-visually-hidden">Information: </span>
+    <p class="nhsuk-u-margin-bottom-4">You must add a document to support this evidence.</p>
+    <p>You can leave this page and come back later. Your progress will be saved automatically.</p>
+  </div>
+  <!-- 
   <ng-container *ngIf="hasError">
     <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
   </ng-container>
@@ -28,15 +34,9 @@
         <a *ngIf="document.id" routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
       </dd>
     </div>
-  </dl>
+  </dl> -->
 
-  <button
-    *ngIf="!supportingDocumentsList || supportingDocumentsList.length === 0"
-    type="button"
-    class="nhsuk-button nhsuk-button--secondary"
-    [routerLink]="[baseUrl, 'documents', 'new']"
-    [queryParams]="{ entrypoint: 'EVIDENCE_OF_EFFECTIVENESS' }"
-  >
+  <button type="button" class="nhsuk-button nhsuk-button" [routerLink]="[baseUrl, 'documents', 'new']" [queryParams]="{ entrypoint: 'EVIDENCE_OF_EFFECTIVENESS' }">
     Add document
   </button>
 </div>

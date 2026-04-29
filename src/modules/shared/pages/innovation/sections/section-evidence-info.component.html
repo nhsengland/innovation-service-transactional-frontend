@@ -46,7 +46,7 @@
           <button *ngIf="ctx.user.isInnovator()" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5 nhsuk-u-margin-right-5" (click)="gotoDeletePage()">
             Delete evidence
           </button>
-          <a class="cursor-pointer" (click)="gotoInfoPage()">Back to section</a>
+          <a routerLink="/{{ sectionUrl }}">Back to section</a>
         </div>
       </ng-container>
       <ng-container *ngIf="pageStep === 'DELETE' && summaryList && documentsList">

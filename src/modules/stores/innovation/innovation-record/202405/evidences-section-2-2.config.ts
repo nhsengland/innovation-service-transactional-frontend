@@ -178,7 +178,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           id: 'supportingDocuments',
           dataType: 'elements-list-info',
           label: stepsLabels.q6.label,
-          description: stepsLabels.q6.description,
+          // description: stepsLabels.q6.description,
           validations: { isRequired: [true, 'You must add at least one document to complete this evidence.'] }
         }
       ]

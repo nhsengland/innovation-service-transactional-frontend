@@ -67,6 +67,13 @@ export class EvidenceDraftService {
     this._draft.set(null);
   }
 
+  clearDocuments() {
+    this._draft.update(d => ({
+      ...d!,
+      documents: []
+    }));
+  }
+
   updateAllDocumentContexts(evidenceId: string) {
     this._draft.update(d => ({
       ...d!,

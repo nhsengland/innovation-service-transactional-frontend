@@ -9,7 +9,7 @@
           [values]="wizard.getAnswers()"
           [supportingDocumentsList]="supportingDocumentsList"
         ></theme-form-engine>
-        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
+        <button *ngIf="!isEvidenceDocumentStep()" type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
       </ng-container>
 
       <ng-container *ngIf="wizard.isSummaryStep()">
@@ -49,7 +49,7 @@
                   >
                 </dd>
                 <dd class="nhsuk-summary-list__actions">
-                  <a href="javascript:void(0)" (click)="onGotoStep(wizard.getSummary().length + 1 || 1)"
+                  <a href="javascript:void(0)" (click)="changeTempDocument()"
                     >Change<span class="nhsuk-u-visually-hidden"> {{ doc.name | lowercase }} </span></a
                   >
                 </dd>
