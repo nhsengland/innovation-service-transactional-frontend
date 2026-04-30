@@ -34,8 +34,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
           acceptedFiles?: FileTypes[];
           maxFileSize?: number; // In Mb.
           localOnly?: boolean;
-              customValidationError?: ValidationErrors;
-
+          customValidationError?: ValidationErrors;
         }
   ) {
     this.fileConfig = {
@@ -170,7 +169,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       if (wrongFormat) {
         this.hasUploadError = true;
         this.error = FormEngineHelper.getValidationMessage({ wrongFileFormat: 'true' });
-        console.log('this.fileConfig', this.fileConfig);
+
         if (this.fileConfig.localOnly && this.fileConfig.customValidationError) {
           this.error = FormEngineHelper.getValidationMessage(this.fileConfig.customValidationError);
         }
