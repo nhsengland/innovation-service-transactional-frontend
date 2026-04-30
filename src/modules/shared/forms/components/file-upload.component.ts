@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
-import { AbstractControl, ControlContainer, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -33,13 +33,16 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
           httpUploadBody?: Record<string, any>;
           acceptedFiles?: FileTypes[];
           maxFileSize?: number; // In Mb.
-          localOnly?:boolean;
+          localOnly?: boolean;
+              customValidationError?: ValidationErrors;
+
         }
   ) {
     this.fileConfig = {
       httpUploadUrl: c?.httpUploadUrl ?? '',
       httpUploadBody: c?.httpUploadBody,
-      localOnly: c?.localOnly
+      localOnly: c?.localOnly,
+      customValidationError: c?.customValidationError
     };
 
     this.dzConfig = {
@@ -61,6 +64,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     httpUploadUrl: string;
     httpUploadBody?: Record<string, any>;
     localOnly?: boolean;
+    customValidationError?: ValidationErrors;
   } = { httpUploadUrl: '' };
 
   dzConfig: {
@@ -130,14 +134,14 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     formdata.append('file', file, file.name);
     Object.entries(this.fileConfig?.httpUploadBody || {}).forEach(([key, value]) => formdata.append(key, value));
 
-    if(this.fileConfig.localOnly){
+    if (this.fileConfig.localOnly) {
       return of({
-        id:'',
+        id: '',
         name: file.name,
-        extension:file.type,
-        url:'',
+        extension: file.type,
+        url: '',
         file: file
-      })
+      });
     }
 
     return this.http.post<FileUploadType>(this.fileConfig?.httpUploadUrl || '', formdata).pipe(
@@ -166,6 +170,10 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       if (wrongFormat) {
         this.hasUploadError = true;
         this.error = FormEngineHelper.getValidationMessage({ wrongFileFormat: 'true' });
+        console.log('this.fileConfig', this.fileConfig);
+        if (this.fileConfig.localOnly && this.fileConfig.customValidationError) {
+          this.error = FormEngineHelper.getValidationMessage(this.fileConfig.customValidationError);
+        }
       }
 
       event.rejectedFiles.forEach(file => {
@@ -199,7 +207,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
             this.fieldGroupControl.addControl('size', new FormControl(response.size));
             this.fieldGroupControl.addControl('extension', new FormControl(response.extension));
             this.fieldGroupControl.addControl('url', new FormControl(response.url));
-            response.file && this.fieldGroupControl.addControl('file',new FormControl(response.file) )
+            response.file && this.fieldGroupControl.addControl('file', new FormControl(response.file));
 
             this.evaluateDropZoneTabIndex();
             this.setAuxMessageAndFocus(`${file.name} added.`);

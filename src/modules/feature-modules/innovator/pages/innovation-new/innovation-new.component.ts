@@ -54,6 +54,8 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
 
     this.wizard.addAnswers(formData.data).runRules();
 
+    this.resetAlert();
+
     this.navigateTo(action);
   }
 
@@ -173,7 +175,8 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       this.wizard.currentStep().parameters[0].fileUploadConfig = {
         httpUploadUrl: '',
         acceptedFiles: [FileTypes.XLSX],
-        localOnly: true
+        localOnly: true,
+        customValidationError: { wrongTemplateFileFormat: true }
       };
     }
   }

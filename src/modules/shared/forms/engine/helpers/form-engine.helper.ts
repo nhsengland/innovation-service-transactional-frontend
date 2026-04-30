@@ -312,6 +312,9 @@ export class FormEngineHelper {
     if (error.wrongFileFormat) {
       return { message: 'shared.forms_module.validations.wrong_file_format', params: {} };
     }
+    if (error.wrongTemplateFileFormat) {
+      return { message: 'shared.forms_module.validations.wrong_template_file_format', params: {} };
+    }
     if (error.uploadError) {
       return { message: 'shared.forms_module.validations.upload_error', params: {} };
     }
