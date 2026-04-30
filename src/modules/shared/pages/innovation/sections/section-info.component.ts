@@ -259,13 +259,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             response.sectionInfo.data.hasRegulationKnowledge &&
             ['YES_ALL', 'YES_SOME'].includes(response.sectionInfo.data.hasRegulationKnowledge);
 
-          this.regulationsData.allRegulationsHaveDocuments =
-            this.regulationsData.regulationsWithoutDocuments.length === 0;
-
           this.regulationsData.regulationsWithoutDocuments = UtilsHelper.regulationsWithoutDocuments(
             this.regulationsData.regulationsList,
             this.regulationsData.regulationsDocumentsList
           );
+
+          this.regulationsData.allRegulationsHaveDocuments =
+            this.regulationsData.regulationsWithoutDocuments.length === 0;
 
           // extra rules for Regulations section in order to be able to mark as complete
           this.isSectionComplete =

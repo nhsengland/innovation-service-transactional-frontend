@@ -77,8 +77,10 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
           width: 'full'
         });
       }
-
-      this.setPageTitle(this.summaryList[1].value ?? '', { width: '2.thirds' });
+      this.setPageTitle(this.summaryList[1].value ?? '', {
+        hint: this.summaryList[0].value?.split('(')[0] ?? '',
+        width: '2.thirds'
+      });
       this.setPageStatus('READY');
     });
   }

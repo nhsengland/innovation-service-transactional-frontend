@@ -209,6 +209,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         .runRules();
       this.supportingDocumentsList = [...this.supportingDocumentsList, ...this.evidenceDraftService.documents()];
       this.wizard.gotoSummary();
+      this.setPageTitle('Check your answers', { width: 'full', size: 'l' });
     }
   }
 
