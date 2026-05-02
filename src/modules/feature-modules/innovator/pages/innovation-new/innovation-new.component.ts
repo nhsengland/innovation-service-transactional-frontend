@@ -28,7 +28,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
 
   createdInnovationId: undefined | string = undefined;
 
-  baseUrl = '/innovator/dashboard';
+  baseUrl = '/innovator';
 
   constructor(
     private innovatorService: InnovatorService,
@@ -159,6 +159,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
           if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
             this.setAlertError('An innovation with that name already exists. Try again with a new name');
           } else if (err.error === InnovationErrorsEnum.INNOVATION_INFO_EMPTY_INPUT) {
+            // TODO: confirm error copy
             this.setAlertError('Import failed as some mandatory fields are missing. Please try again.');
           } else {
             this.setAlertError(

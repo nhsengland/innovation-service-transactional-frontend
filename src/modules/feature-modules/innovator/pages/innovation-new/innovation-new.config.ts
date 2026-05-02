@@ -76,13 +76,14 @@ export function getImportInnovationQuestionsWizard(): WizardEngineModel {
           {
             id: 'file',
             dataType: 'file-upload',
+            description: `<p>Upload the completed Excel (.xlsx) template you downloaded from this service.</p>
+<p class="nhsuk-u-margin-top-4">Make sure you don't alter the structure or format of the template, as it must match exactly to import successfully.</p>`,
             validations: { isRequired: [true, 'You need to upload 1 file'] }
           }
         ]
       })
     ],
-    outboundParsing: (data: ImportInnovationStepPayloadType) => ImportInnovationOutboundParsing(data),
-
+    outboundParsing: (data: ImportInnovationStepPayloadType) => ImportInnovationOutboundParsing(data)
   });
 }
 
@@ -259,10 +260,10 @@ function NewInnovationOutboundParsing(data: NewInnovationStepPayloadType): NewIn
   };
 }
 
-function ImportInnovationOutboundParsing (data: ImportInnovationStepPayloadType): ImportInnovationStepPayloadType {
+function ImportInnovationOutboundParsing(data: ImportInnovationStepPayloadType): ImportInnovationStepPayloadType {
   return {
     file: data.file
-  }
+  };
 }
 
 function summaryParsing(data: NewInnovationStepPayloadType): WizardSummaryType[] {
