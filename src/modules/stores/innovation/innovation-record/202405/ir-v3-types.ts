@@ -37,6 +37,7 @@ export type InnovationRecordQuestionStepType = {
   label: string;
   checkboxAnswerId?: string;
   parentId?: string;
+  generatedFromAnswer?: string;
   description?: string;
   field?: {
     id: string;
@@ -86,8 +87,6 @@ export type InnovationRecordStepValidationsType = {
 export type InnovationRecordFieldGroupAnswerType = Record<string, string>[];
 
 export type InnovationRecordMinMaxValidationType = { length: number; errorMessage: string };
-
-export type AddQuestionRelatedAnswers = {}[];
 
 export type ItemConditionOptionsType = {
   mandatoryIf?: ConditionGroupType /* mark as mandatory if on list */;

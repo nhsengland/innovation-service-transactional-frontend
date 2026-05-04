@@ -14,23 +14,41 @@ import { CustomValidators } from '../../validators/custom-validators';
 import {
   ConditionGroupType,
   ConditionType,
+  InnovationRecordFormComponentType,
+  InnovationRecordItemsType,
   InnovationRecordMinMaxValidationType,
   ItemConditionOptionsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 export class FormEngineHelperV3 {
-  static isItemOptional(item: ItemConditionOptionsType, answers: Record<string, any>[]): boolean {
-    return !this.evaluateConditionGroup(item.mandatoryIf, answers);
+  static filterQuestionItems(
+    dataType: InnovationRecordFormComponentType | undefined,
+    items: InnovationRecordItemsType | undefined,
+    answers: Record<string, string>
+  ): InnovationRecordItemsType {
+    switch (dataType) {
+      case 'input-array':
+        let filteredItems: InnovationRecordItemsType =
+          items?.filter(i => this.shouldShowItem(i.itemConditionOptions ?? {}, answers)) ?? [];
+        return filteredItems;
+
+      default:
+        return items ?? [];
+    }
   }
 
-  static shouldShowItem(item: ItemConditionOptionsType, answers: Record<string, any>[]): boolean {
+  static isItemOptional(item: ItemConditionOptionsType, relativeIdsAnswers: Record<string, string>): boolean {
+    return !this.evaluateConditionGroup(item.mandatoryIf, relativeIdsAnswers);
+  }
+
+  static shouldShowItem(item: ItemConditionOptionsType, relativeIdsAnswers: Record<string, string>): boolean {
     if (!item.displayIf) return true;
-    return this.evaluateConditionGroup(item.displayIf, answers);
+    return this.evaluateConditionGroup(item.displayIf, relativeIdsAnswers);
   }
 
-  static evaluateCondition(condition: ConditionType, answers: Record<string, any>[]): boolean {
+  static evaluateCondition(condition: ConditionType, relativeIdsAnswers: Record<string, string>): boolean {
     const relativeId = condition.id;
-    const answer = answers.find(i => relativeId in i)?.[relativeId];
+    const answer = relativeIdsAnswers[relativeId];
 
     // inclusive = answer must be one of the provided list items
     if (condition.logic === 'inclusive' || !condition.logic) {
@@ -41,11 +59,13 @@ export class FormEngineHelperV3 {
     return !condition.list.includes(answer);
   }
 
-  static evaluateConditionGroup(group: ConditionGroupType | undefined, answers: Record<string, any>[]): boolean {
+  static evaluateConditionGroup(
+    group: ConditionGroupType | undefined,
+    relativeIdsAnswers: Record<string, string>
+  ): boolean {
     if (!group?.conditions?.length) return false;
 
-    const results = group.conditions.map(condition => this.evaluateCondition(condition, answers));
-
+    const results = group.conditions.map(condition => this.evaluateCondition(condition, relativeIdsAnswers));
     return group.groupLogic === 'OR' ? results.some(Boolean) : results.every(Boolean);
   }
 
@@ -123,13 +143,6 @@ export class FormEngineHelperV3 {
 
           parameter.items?.forEach((item, i) => {
             if (!item.id) return;
-
-            if (
-              item.itemConditionOptions &&
-              !this.shouldShowItem(item.itemConditionOptions, parameter.relatedAnswers ?? [])
-            ) {
-              return;
-            }
 
             group.addControl(item.id, new FormControl(parameterValue?.[item.id] ?? null));
           });

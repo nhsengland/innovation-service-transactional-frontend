@@ -3,7 +3,6 @@ import { AsyncValidatorFn } from '@angular/forms';
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 import {
-  AddQuestionRelatedAnswers,
   InnovationRecordFormComponentType,
   InnovationRecordItemsType,
   InnovationRecordQuestionStepType,
@@ -174,7 +173,8 @@ export class FormEngineParameterModelV3 {
 
   additional?: FormEngineParameterModelV3[];
 
-  relatedAnswers?: AddQuestionRelatedAnswers; // if created from a 'addAnswer' step, pass down the answer item it referes to
+  generatedFromAnswer?: string;
+  relatedAnswers?: Record<string, string>; // if created from a 'addAnswer' step, pass down the answer item it referes to
 
   groupedItems?: {
     // Used in "grouped-checkbox-array" dataType.
@@ -243,6 +243,7 @@ export class FormEngineParameterModelV3 {
     this.isNestedField = data.isNestedField;
     this.checkboxAnswerId = data.checkboxAnswerId;
     this.parentId = data.parentId;
+    this.generatedFromAnswer = data.generatedFromAnswer;
     this.relatedAnswers = data.relatedAnswers;
 
     // this.additional = data.additional;

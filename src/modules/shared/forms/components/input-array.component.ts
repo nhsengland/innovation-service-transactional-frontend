@@ -6,7 +6,6 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
 import { FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
 import {
-  AddQuestionRelatedAnswers,
   InnovationRecordItemsType,
   InnovationRecordStepValidationsType,
   ItemConditionOptionsType
@@ -43,7 +42,7 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
   @Input() pageUniqueField = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
-  @Input() relatedAnswers?: AddQuestionRelatedAnswers = [];
+  @Input() relatedAnswers?: Record<string, string> = {};
 
   itemHasErrorMap: Record<string, boolean> = {};
   itemErrorMap: Record<string, { message: string; params: Record<string, string> }> = {};
@@ -96,8 +95,7 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
   setItemsValidations(items: InnovationRecordItemsType) {
     items.forEach(i => {
       const itemControl = this.getItemControl(i.id);
-      console.log(`testing isOptional for ${i.id}`);
-      console.log(`item.description: ${i.description}`);
+
       const isOptional =
         i.itemConditionOptions && FormEngineHelperV3.isItemOptional(i.itemConditionOptions, this.relatedAnswers!);
 
