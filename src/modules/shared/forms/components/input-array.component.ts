@@ -6,6 +6,7 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
 import { FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
 import {
+  AddQuestionRelatedAnswers,
   InnovationRecordItemsType,
   InnovationRecordStepValidationsType,
   ItemConditionOptionsType
@@ -22,11 +23,7 @@ export type InnovationRecordItemType = {
   group?: string;
   type?: string;
   itemsFromAnswer?: string;
-  itemConditionOptions?: {
-    relativeToId?: string;
-    forceExpandAndDisableToggleIf?: string[];
-    displayIf?: string[];
-  };
+  itemConditionOptions?: ItemConditionOptionsType;
   validations?: InnovationRecordStepValidationsType;
 };
 
@@ -46,7 +43,7 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
   @Input() pageUniqueField = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
-  @Input() createdFromParentAnswerId?: undefined | string = undefined;
+  @Input() relatedAnswers?: AddQuestionRelatedAnswers = [];
 
   itemHasErrorMap: Record<string, boolean> = {};
   itemErrorMap: Record<string, { message: string; params: Record<string, string> }> = {};
@@ -99,7 +96,10 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
   setItemsValidations(items: InnovationRecordItemsType) {
     items.forEach(i => {
       const itemControl = this.getItemControl(i.id);
-      const isOptional = i.itemConditionOptions && this.isItemOptional(i.itemConditionOptions);
+      console.log(`testing isOptional for ${i.id}`);
+      console.log(`item.description: ${i.description}`);
+      const isOptional =
+        i.itemConditionOptions && FormEngineHelperV3.isItemOptional(i.itemConditionOptions, this.relatedAnswers!);
 
       if (itemControl && i.validations) {
         const validations: ValidatorFn[] = [];
@@ -129,20 +129,16 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
   }
 
   shouldShowItem(itemConditions: ItemConditionOptionsType): boolean {
-    if (this.createdFromParentAnswerId) {
-      return itemConditions.displayIf?.includes(this.createdFromParentAnswerId) ?? false;
-    }
-    return false;
-  }
-
-  isItemOptional(itemConditions: ItemConditionOptionsType): boolean {
-    if (this.createdFromParentAnswerId) {
-      return !itemConditions.mandatoryIf?.includes(this.createdFromParentAnswerId);
-    }
-    return false;
+    return FormEngineHelperV3.shouldShowItem(itemConditions, this.relatedAnswers!);
   }
 
   getLabel(item: InnovationRecordItemType): string {
-    return this.isItemOptional(item.itemConditionOptions ?? {}) ? `${item.label} (Optional)` : `${item.label}`;
+    if (!item.itemConditionOptions) {
+      return '';
+    } else {
+      return FormEngineHelperV3.isItemOptional(item.itemConditionOptions, this.relatedAnswers!)
+        ? `${item.label} (Optional)`
+        : `${item.label}`;
+    }
   }
 }

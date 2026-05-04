@@ -11,9 +11,44 @@ import {
 import { FormEngineParameterModelV3 } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
-import { InnovationRecordMinMaxValidationType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  ConditionGroupType,
+  ConditionType,
+  InnovationRecordMinMaxValidationType,
+  ItemConditionOptionsType
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 export class FormEngineHelperV3 {
+  static isItemOptional(item: ItemConditionOptionsType, answers: Record<string, any>[]): boolean {
+    return !this.evaluateConditionGroup(item.mandatoryIf, answers);
+  }
+
+  static shouldShowItem(item: ItemConditionOptionsType, answers: Record<string, any>[]): boolean {
+    if (!item.displayIf) return true;
+    return this.evaluateConditionGroup(item.displayIf, answers);
+  }
+
+  static evaluateCondition(condition: ConditionType, answers: Record<string, any>[]): boolean {
+    const relativeId = condition.id;
+    const answer = answers.find(i => relativeId in i)?.[relativeId];
+
+    // inclusive = answer must be one of the provided list items
+    if (condition.logic === 'inclusive' || !condition.logic) {
+      return condition.list.includes(answer);
+    }
+
+    // exclusive = answer can be anything except the provided list items
+    return !condition.list.includes(answer);
+  }
+
+  static evaluateConditionGroup(group: ConditionGroupType | undefined, answers: Record<string, any>[]): boolean {
+    if (!group?.conditions?.length) return false;
+
+    const results = group.conditions.map(condition => this.evaluateCondition(condition, answers));
+
+    return group.groupLogic === 'OR' ? results.some(Boolean) : results.every(Boolean);
+  }
+
   static buildForm(
     parameters: FormEngineParameterModelV3[],
     values: Record<string, any> = {},
@@ -86,12 +121,12 @@ export class FormEngineHelperV3 {
         case 'input-array': {
           const group = new FormGroup({}, { updateOn: 'change' });
 
-          parameter.items?.forEach(item => {
+          parameter.items?.forEach((item, i) => {
             if (!item.id) return;
 
             if (
-              parameter.createdFromParentAnswerId &&
-              !item.itemConditionOptions?.displayIf?.includes(parameter.createdFromParentAnswerId)
+              item.itemConditionOptions &&
+              !this.shouldShowItem(item.itemConditionOptions, parameter.relatedAnswers ?? [])
             ) {
               return;
             }

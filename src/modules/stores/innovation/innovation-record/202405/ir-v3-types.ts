@@ -37,7 +37,6 @@ export type InnovationRecordQuestionStepType = {
   label: string;
   checkboxAnswerId?: string;
   parentId?: string;
-  createdFromParentAnswerId?: string;
   description?: string;
   field?: {
     id: string;
@@ -88,10 +87,23 @@ export type InnovationRecordFieldGroupAnswerType = Record<string, string>[];
 
 export type InnovationRecordMinMaxValidationType = { length: number; errorMessage: string };
 
+export type AddQuestionRelatedAnswers = {}[];
+
 export type ItemConditionOptionsType = {
-  relativeToId?: string;
-  mandatoryIf?: string[] /* list for IDs for which item is mandatory */;
-  displayIf?: string[] /* list for IDs for which item should display */;
+  mandatoryIf?: ConditionGroupType /* mark as mandatory if on list */;
+  displayIf?: ConditionGroupType /* show item depending on previous answer */;
+};
+
+export type ConditionType = {
+  list: string[];
+  id: string;
+  logic?: 'inclusive' | 'exclusive';
+  relation?: 'parent' | 'sibling';
+};
+
+export type ConditionGroupType = {
+  groupLogic?: 'AND' | 'OR';
+  conditions: ConditionType[];
 };
 
 export type InnovationRecordItemsType = {

@@ -2962,7 +2962,7 @@ export const IR_SCHEMA: InnovationRecordSchemaV3Type = {
             {
               questions: [
                 {
-                    id: 'standards',
+                  id: 'standards',
                   dataType: 'checkbox-array',
                   checkboxAnswerId: 'type',
                   label: 'Which regulations, standards and certifications apply to your innovation?',
@@ -2994,200 +2994,334 @@ export const IR_SCHEMA: InnovationRecordSchemaV3Type = {
                     {
                       id: 'certifications',
                       dataType: 'input-array',
-                      label: 'Provide certification for {{item}}',
-                      description: 'Add those that apply',
-                      validations: {
-                        isRequired: 'Choose at least one option'
-                      },
+                      label: 'Enter the registration numbers for {{item}}',
+                      description: 'Fields are required unless marked optional. You can add any missing details later',
                       items: [
                         {
                           id: 'GMDN',
                           label: 'GMDN',
+                          description:
+                            'This is a 5-digit number. For example, for a single-use scalpel the code is 47569.',
                           itemConditionOptions: {
-                            mandatoryIf: [
-                              'UK_MDR_CLASS_I',
-                              'UK_MDR_CLASS_II_A',
-                              'UK_MDR_CLASS_II_B',
-                              'UK_MDR_CLASS_III',
-                              'UK_MDR_GENERAL_IVD',
-                              'UK_MDR_IVD_SELF_TEST',
-                              'UK_MDR_IVD_ANNEX_II_A',
-                              'UK_MDR_IVD_ANNEX_II_B'
-                            ],
-                            displayIf: [
-                              'UK_MDR_CLASS_I',
-                              'UK_MDR_CLASS_II_A',
-                              'UK_MDR_CLASS_II_B',
-                              'UK_MDR_CLASS_III',
-                              'EU_MDR_CLASS_I',
-                              'EU_MDR_CLASS_II_A',
-                              'EU_MDR_CLASS_II_B',
-                              'EU_MDR_CLASS_III',
-                              'UK_MDR_GENERAL_IVD',
-                              'UK_MDR_IVD_SELF_TEST',
-                              'UK_MDR_IVD_ANNEX_II_A',
-                              'UK_MDR_IVD_ANNEX_II_B',
-                              'EU_IVDR_CLASS_A',
-                              'EU_IVDR_CLASS_B',
-                              'EU_IVDR_CLASS_C',
-                              'EU_IVDR_CLASS_D'
-                            ]
-                          },
-                          conditional: {
-                            id: 'gmdnId',
-                            dataType: 'text',
-                            label: 'GMDN Number',
-                            validations: {
-                              isRequired: 'Must be 5 characters long',
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: [
+                                    'UK_MDR_CLASS_I',
+                                    'UK_MDR_CLASS_II_A',
+                                    'UK_MDR_CLASS_II_B',
+                                    'UK_MDR_CLASS_III',
+                                    'UKR_MDR_GENERAL_IVD',
+                                    'UKR_MDR_IVD_SELF_TEST',
+                                    'UKR_MDR_IVD_ANNEX_II_B',
+                                    'UKR_MDR_IVD_ANNEX_II_A',
+                                    'EU_MDR_CLASS_I',
+                                    'EU_MDR_CLASS_II_A',
+                                    'EU_MDR_CLASS_II_B',
+                                    'EU_MDR_CLASS_III',
+                                    'EU_IVDR_IVD_CLASS_A',
+                                    'EU_IVDR_IVD_CLASS_B',
+                                    'EU_IVDR_IVD_CLASS_C',
+                                    'EU_IVDR_IVD_CLASS_D'
+                                  ]
+                                }
+                              ]
+                            },
+                            displayIf: {
+                              conditions: [
+                                {
+                                  id: 'standards',
+                                  list: [
+                                    'UK_MDR_CLASS_I',
+                                    'UK_MDR_CLASS_II_A',
+                                    'UK_MDR_CLASS_II_B',
+                                    'UK_MDR_CLASS_III',
+                                    'UKR_MDR_GENERAL_IVD',
+                                    'UKR_MDR_IVD_SELF_TEST',
+                                    'UKR_MDR_IVD_ANNEX_II_A',
+                                    'UKR_MDR_IVD_ANNEX_II_B',
+                                    'EU_MDR_CLASS_I',
+                                    'EU_MDR_CLASS_II_A',
+                                    'EU_MDR_CLASS_II_B',
+                                    'EU_MDR_CLASS_III',
+                                    'EU_IVDR_IVD_CLASS_A',
+                                    'EU_IVDR_IVD_CLASS_B',
+                                    'EU_IVDR_IVD_CLASS_C',
+                                    'EU_IVDR_IVD_CLASS_D'
+                                  ]
+                                }
+                              ]
                             }
-                          }
-                        },
-                        {
-                          id: 'UDI-DI',
-                          label: 'UDI-DI',
-                          itemConditionOptions: {
-                            mandatoryIf: [
-                              'EU_MDR_CLASS_I',
-                              'EU_MDR_CLASS_II_A',
-                              'EU_MDR_CLASS_II_B',
-                              'EU_MDR_CLASS_III',
-                              'EU_IVDR_CLASS_A',
-                              'EU_IVDR_CLASS_B',
-                              'EU_IVDR_CLASS_C',
-                              'EU_IVDR_CLASS_D'
-                            ],
-                            displayIf: [
-                              'UK_MDR_CLASS_I',
-                              'UK_MDR_CLASS_II_A',
-                              'UK_MDR_CLASS_II_B',
-                              'UK_MDR_CLASS_III',
-                              'EU_MDR_CLASS_I',
-                              'EU_MDR_CLASS_II_A',
-                              'EU_MDR_CLASS_II_B',
-                              'EU_MDR_CLASS_III',
-                              'UK_MDR_GENERAL_IVD',
-                              'UK_MDR_IVD_SELF_TEST',
-                              'UK_MDR_IVD_ANNEX_II_A',
-                              'UK_MDR_IVD_ANNEX_II_B',
-                              'EU_IVDR_CLASS_A',
-                              'EU_IVDR_CLASS_B',
-                              'EU_IVDR_CLASS_C',
-                              'EU_IVDR_CLASS_D'
-                            ]
                           },
-                          conditional: {
-                            id: 'udidiId',
-                            dataType: 'text',
-                            label: 'UDI-DI Number',
-                            validations: {
-                              isRequired: 'Must be 8 characters long',
-                            }
+                          validations: {
+                            equalToLength: { length: 5, errorMessage: 'Must be 5 characters long' }
                           }
                         },
                         {
                           id: 'UDI',
-                          label: 'UDI',
+                          label: 'Basic UDI',
+                          description:
+                            'Up to 50 characters. Formats used by issuing entities vary. If your issuing entity is GS1, this is the GMN. For example, 753030353AAAAAW8.',
                           itemConditionOptions: {
-                            mandatoryIf: [
-                              'EU_MDR_CLASS_I',
-                              'EU_MDR_CLASS_II_A',
-                              'EU_MDR_CLASS_II_B',
-                              'EU_MDR_CLASS_III',
-                              'EU_IVDR_CLASS_A',
-                              'EU_IVDR_CLASS_B',
-                              'EU_IVDR_CLASS_C',
-                              'EU_IVDR_CLASS_D'
-                            ],
-                            displayIf: [
-                              'UK_MDR_CLASS_I',
-                              'UK_MDR_CLASS_II_A',
-                              'UK_MDR_CLASS_II_B',
-                              'UK_MDR_CLASS_III',
-                              'EU_MDR_CLASS_I',
-                              'EU_MDR_CLASS_II_A',
-                              'EU_MDR_CLASS_II_B',
-                              'EU_MDR_CLASS_III',
-                              'UK_MDR_GENERAL_IVD',
-                              'UK_MDR_IVD_SELF_TEST',
-                              'UK_MDR_IVD_ANNEX_II_A',
-                              'UK_MDR_IVD_ANNEX_II_B',
-                              'EU_IVDR_CLASS_A',
-                              'EU_IVDR_CLASS_B',
-                              'EU_IVDR_CLASS_C',
-                              'EU_IVDR_CLASS_D'
-                            ]
-                          },
-                          conditional: {
-                            id: 'udiId',
-                            dataType: 'text',
-                            label: 'UDI Number',
-                            validations: {
-                              isRequired: 'Must be 8 characters long',
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: [
+                                    'EU_MDR_CLASS_I',
+                                    'EU_MDR_CLASS_II_A',
+                                    'EU_MDR_CLASS_II_B',
+                                    'EU_MDR_CLASS_III',
+                                    'EU_IVDR_IVD_CLASS_A',
+                                    'EU_IVDR_IVD_CLASS_B',
+                                    'EU_IVDR_IVD_CLASS_C',
+                                    'EU_IVDR_IVD_CLASS_D'
+                                  ]
+                                }
+                              ]
+                            },
+                            displayIf: {
+                              conditions: [
+                                {
+                                  id: 'standards',
+                                  list: [
+                                    'UK_MDR_CLASS_I',
+                                    'UK_MDR_CLASS_II_A',
+                                    'UK_MDR_CLASS_II_B',
+                                    'UK_MDR_CLASS_III',
+                                    'EU_MDR_CLASS_I',
+                                    'EU_MDR_CLASS_II_A',
+                                    'EU_MDR_CLASS_II_B',
+                                    'EU_MDR_CLASS_III',
+                                    'UKR_MDR_GENERAL_IVD',
+                                    'UKR_MDR_IVD_SELF_TEST',
+                                    'UKR_MDR_IVD_ANNEX_II_A',
+                                    'UKR_MDR_IVD_ANNEX_II_B',
+                                    'EU_IVDR_IVD_CLASS_A',
+                                    'EU_IVDR_IVD_CLASS_B',
+                                    'EU_IVDR_IVD_CLASS_C',
+                                    'EU_IVDR_IVD_CLASS_D'
+                                  ]
+                                }
+                              ]
                             }
+                          },
+                          validations: {
+                            equalToLength: { length: 50, errorMessage: 'Must be 50 characters long' }
+                          }
+                        },
+                        {
+                          id: 'UDI_DI',
+                          label: 'UDI-DI',
+                          description:
+                            'Up to 50 characters. Formats used by issuing entities vary. If your issuing body is GS1, this is the GTIN. For example, 8022057012692.',
+                          itemConditionOptions: {
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: [
+                                    'EU_MDR_CLASS_I',
+                                    'EU_MDR_CLASS_II_A',
+                                    'EU_MDR_CLASS_II_B',
+                                    'EU_MDR_CLASS_III',
+                                    'EU_IVDR_IVD_CLASS_A',
+                                    'EU_IVDR_IVD_CLASS_B',
+                                    'EU_IVDR_IVD_CLASS_C',
+                                    'EU_IVDR_IVD_CLASS_D'
+                                  ]
+                                }
+                              ]
+                            },
+                            displayIf: {
+                              conditions: [
+                                {
+                                  id: 'standards',
+                                  list: [
+                                    'UK_MDR_CLASS_I',
+                                    'UK_MDR_CLASS_II_A',
+                                    'UK_MDR_CLASS_II_B',
+                                    'UK_MDR_CLASS_III',
+                                    'EU_MDR_CLASS_I',
+                                    'EU_MDR_CLASS_II_A',
+                                    'EU_MDR_CLASS_II_B',
+                                    'EU_MDR_CLASS_III',
+                                    'UKR_MDR_GENERAL_IVD',
+                                    'UKR_MDR_IVD_SELF_TEST',
+                                    'UKR_MDR_IVD_ANNEX_II_A',
+                                    'UKR_MDR_IVD_ANNEX_II_B',
+                                    'EU_IVDR_IVD_CLASS_A',
+                                    'EU_IVDR_IVD_CLASS_B',
+                                    'EU_IVDR_IVD_CLASS_C',
+                                    'EU_IVDR_IVD_CLASS_D'
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          validations: {
+                            equalToLength: { length: 50, errorMessage: 'Must be 50 characters long' }
                           }
                         },
                         {
                           id: 'IONISING_RADIATION_CERT',
                           label: 'Ionising radiation number',
                           itemConditionOptions: {
-                            mandatoryIf: ['IONISING_RADIATION'],
-                            displayIf: ['IONISING_RADIATION']
-                          },
-                          conditional: {
-                            id: 'ionisingRadiationId',
-                            dataType: 'text',
-                            label: 'Ionising radiation number',
-                            validations: {
-                              isRequired: 'Ionising radiation number is required'
-                            }
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: ['IONISING_RADIATION']
+                                }
+                              ]
+                            },
+                            displayIf: { conditions: [{ id: 'standards', list: ['IONISING_RADIATION'] }] }
                           }
                         },
                         {
                           id: 'PRODUCT_LICENSE',
                           label: 'Product License number',
+                          description:
+                            "Up to 15 characters in the format \'PL 12345/0001\', \'PLGB 12345/0002\' or \'PLNI 12345/0003\'",
                           itemConditionOptions: {
-                            mandatoryIf: ['MARKETING_AUTHORISATION'],
-                            displayIf: ['MARKETING_AUTHORISATION']
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: ['MARKETING_AUTHORISATION']
+                                }
+                              ]
+                            },
+                            displayIf: { conditions: [{ id: 'standards', list: ['MARKETING_AUTHORISATION'] }] }
                           },
-                          conditional: {
-                            id: 'productLicenseId',
-                            dataType: 'text',
-                            label: 'Product License number',
-                            validations: {
-                              isRequired: 'Product License number is required'
-                            }
+                          validations: {
+                            equalToLength: { length: 15, errorMessage: 'Must be 15 characters long' }
                           }
                         },
                         {
                           id: 'CQC',
                           label: 'CQC registration number',
+                          description: 'Up to 10 characters',
                           itemConditionOptions: {
-                            mandatoryIf: ['CQC'],
-                            displayIf: ['CQC']
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: ['CQC']
+                                }
+                              ]
+                            },
+                            displayIf: { conditions: [{ id: 'standards', list: ['CQC'] }] }
                           },
-                          conditional: {
-                            id: 'cqcId',
-                            dataType: 'text',
-                            label: 'CQC registration number',
-                            validations: {
-                              isRequired: 'CQC registration number is required'
-                            }
+                          validations: {
+                            equalToLength: { length: 10, errorMessage: 'Must be 10 characters long' }
                           }
                         },
                         {
                           id: 'ICO',
                           label: 'ICO registration number',
+                          description: 'Up to 8 characters',
                           itemConditionOptions: {
-                            mandatoryIf: ['DTAC'],
-                            displayIf: ['DTAC']
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: ['DTAC']
+                                }
+                              ]
+                            },
+                            displayIf: { conditions: [{ id: 'standards', list: ['DTAC'] }] }
                           },
-                          conditional: {
-                            id: 'icoId',
-                            dataType: 'text',
-                            label: 'ICO Number',
-                            validations: {
-                              isRequired: 'ICO registration number is required'
-                            }
+                          validations: {
+                            equalToLength: { length: 8, errorMessage: 'Must be 8 characters long' }
+                          }
+                        },
+                        {
+                          id: 'OTHER_REG',
+                          label: 'Other registration number',
+                          itemConditionOptions: {
+                            mandatoryIf: {
+                              groupLogic: 'AND',
+                              conditions: [
+                                {
+                                  id: 'hasMet',
+                                  list: ['YES_ALL'],
+                                  logic: 'inclusive',
+                                  relation: 'sibling'
+                                },
+                                {
+                                  id: 'standards',
+                                  logic: 'inclusive',
+                                  relation: 'parent',
+                                  list: ['IONISING_RADIATION']
+                                }
+                              ]
+                            },
+                            displayIf: { conditions: [{ id: 'standards', list: ['OTHER'] }] }
                           }
                         }
                       ]

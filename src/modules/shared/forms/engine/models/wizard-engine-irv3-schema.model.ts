@@ -1,9 +1,10 @@
 import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 import {
+  AddQuestionRelatedAnswers,
   InnovationRecordConditionType,
-  InnovationRecordSchemaV3Type,
+  InnovationRecordQuestionStepType,
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
@@ -374,6 +375,13 @@ export class WizardIRV3EngineModel {
 
                 // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
                 if (q.addQuestions) {
+                  let relatedAnswers: AddQuestionRelatedAnswers = this.parseRelatedQuestionsAnswers(
+                    aq,
+                    q.id,
+                    i,
+                    itemAnswer
+                  );
+
                   addSteps.push(
                     new FormEngineModelV3({
                       parameters: [
@@ -396,7 +404,7 @@ export class WizardIRV3EngineModel {
                             q.dataType === 'checkbox-array'
                           ),
                           parentId: q.id,
-                          ...(itemAnswer && { createdFromParentAnswerId: itemAnswer })
+                          ...(relatedAnswers && { relatedAnswers: relatedAnswers })
                         }
                       ]
                     })
@@ -405,7 +413,6 @@ export class WizardIRV3EngineModel {
               });
             });
           }
-          // }
         });
         this.steps = [...this.steps, step, ...addSteps];
       } else {
@@ -705,7 +712,7 @@ export class WizardIRV3EngineModel {
         }
       }
     }
-    
+
     return {
       version: this.schema?.version ?? 0,
       data: toReturn
@@ -779,5 +786,40 @@ export class WizardIRV3EngineModel {
     }
 
     return translatedSummary;
+  }
+
+  parseRelatedQuestionsAnswers(
+    addQuestion: InnovationRecordQuestionStepType,
+    parentId: string,
+    i: number,
+    parentAnswer: string
+  ): AddQuestionRelatedAnswers {
+    const relatedAnswers: AddQuestionRelatedAnswers = [];
+
+    // add parent
+    relatedAnswers.push({ [parentId]: parentAnswer });
+
+    let siblingConditionIds: string[] = [];
+    // add siblings
+    if (addQuestion.items) {
+      siblingConditionIds = [
+        ...new Set(
+          addQuestion?.items
+            .flatMap(i => [
+              ...(i.itemConditionOptions?.mandatoryIf?.conditions ?? []),
+              ...(i.itemConditionOptions?.displayIf?.conditions ?? [])
+            ])
+            .filter(condition => condition.relation === 'sibling')
+            .map(condition => condition.id)
+            .filter((id): id is string => !!id)
+        )
+      ];
+    }
+
+    siblingConditionIds.forEach(sibling => {
+      relatedAnswers.push({ [sibling]: this.currentAnswers[parentId][i][sibling] });
+    });
+
+    return relatedAnswers;
   }
 }

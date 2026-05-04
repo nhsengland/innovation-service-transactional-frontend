@@ -19,7 +19,7 @@
   <ng-container *ngFor="let item of items; trackBy: trackByItem">
     <div *ngIf="item.itemConditionOptions && shouldShowItem(item.itemConditionOptions)" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full" *ngIf="getItemControl(item.id) as control">
-        <theme-form-input [formControl]="control" [controlName]="item.id ?? ''" [label]="getLabel(item)" [description]="'test'" [pageUniqueField]="false" />
+        <theme-form-input [formControl]="control" [controlName]="item.id ?? ''" [label]="getLabel(item)" [description]="item.description" [pageUniqueField]="false" />
       </div>
     </div>
   </ng-container>
