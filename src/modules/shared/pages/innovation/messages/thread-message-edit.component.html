@@ -4,19 +4,13 @@
         <theme-form-textarea controlName="message" [pageUniqueField]="false" lengthLimit="xxl">
           <div form-header class="d-flex justify-content-space-between align-items-end nhsuk-u-margin-bottom-1">
             <span class="nhsuk-label nhsuk-u-margin-bottom-0">Edit your message</span>
-            <div class="nhsuk-action-link nhsuk-u-margin-bottom-0" style="cursor: pointer;" (click)="toggleLinkForm()" (keydown.enter)="toggleLinkForm()" tabindex="0">
-              <a class="nhsuk-action-link__link" style="margin-bottom: 0; display: flex; align-items: center;">
-                <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="24" height="24" [style.transform]="showLinkForm ? 'rotate(90deg)' : 'none'" style="transition: transform 0.2s ease; margin-right: 8px; flex-shrink: 0;">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
-                </svg>
-                <span class="nhsuk-action-link__text nhsuk-body-s nhsuk-u-margin-bottom-0" style="text-decoration: underline;">{{ showLinkForm ? 'Cancel link insertion' : 'Insert a link' }}</span>
-              </a>
-            </div>
+            <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0" (click)="toggleLinkForm()">
+              {{ showLinkForm ? 'Cancel link insertion' : 'Insert a link' }}
+            </button>
           </div>
           
           <div form-header class="nhsuk-u-margin-bottom-4">
-            <div *ngIf="showLinkForm" class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4 nhsuk-u-padding-4 bg-color-grey" style="border-left: 4px solid #d8dde0;">
+            <div *ngIf="showLinkForm" class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4 nhsuk-u-padding-4 bg-color-grey border-left-inset-neutral">
               <ng-container [formGroup]="linkForm">
                 <theme-form-input controlName="linkText" label="Link text" description="e.g. Book a meeting with me" [pageUniqueField]="false"></theme-form-input>
                 <theme-form-input controlName="linkUrl" label="Link URL" description="e.g. https://calendly.com/your-name" [pageUniqueField]="false"></theme-form-input>
