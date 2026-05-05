@@ -1,7 +1,8 @@
-import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
-import { first, omit, isEmpty } from 'lodash';
-import { INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
+import { omit, isEmpty } from 'lodash';
+import { ItemConditionOptionsType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
 
 export class CustomFormGroupValidators {
   static mustMatch(fieldName: string, confirmationFieldName: string, errorMessage: string | null): ValidatorFn {
@@ -378,6 +379,23 @@ export class CustomValidators {
       }
 
       return null;
+    };
+  }
+
+  static conditionalRequiredValidator(
+    itemConditionOptions: ItemConditionOptionsType,
+    relativeIdsAnswers: Record<string, string>
+  ): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const isOptional = FormEngineHelperV3.isItemOptional(itemConditionOptions, relativeIdsAnswers);
+
+      const isEmpty =
+        control.value === null ||
+        control.value === undefined ||
+        control.value === '' ||
+        (Array.isArray(control.value) && control.value.length === 0);
+
+      return !isOptional && isEmpty ? { requiredConditional: true } : null;
     };
   }
 

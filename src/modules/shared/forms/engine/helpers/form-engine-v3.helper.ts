@@ -69,6 +69,36 @@ export class FormEngineHelperV3 {
     return group.groupLogic === 'OR' ? results.some(Boolean) : results.every(Boolean);
   }
 
+  static getRelativeIdsAnswers(
+    parameter: FormEngineParameterModelV3,
+    currentAnswers: Record<string, string>,
+    index?: number
+  ): Record<string, string> {
+    const answers: Record<string, string> = {};
+
+    parameter.items?.forEach(item => {
+      const conditions = [
+        ...(item.itemConditionOptions?.mandatoryIf?.conditions ?? []),
+        ...(item.itemConditionOptions?.displayIf?.conditions ?? [])
+      ];
+
+      conditions.forEach(condition => {
+        if (condition.relation === 'sibling') {
+          answers[condition.id] = currentAnswers[`${condition.id}_${index}`];
+          return;
+        }
+
+        if (condition.relation === 'parent' || !condition.relation) {
+          answers[condition.id] = parameter.parentId
+            ? (parameter.generatedFromAnswer ?? '')
+            : currentAnswers[condition.id];
+        }
+      });
+    });
+
+    return answers;
+  }
+
   static buildForm(
     parameters: FormEngineParameterModelV3[],
     values: Record<string, any> = {},
@@ -144,7 +174,17 @@ export class FormEngineHelperV3 {
           parameter.items?.forEach((item, i) => {
             if (!item.id) return;
 
-            group.addControl(item.id, new FormControl(parameterValue?.[item.id] ?? null));
+            const validators: ValidatorFn[] = [];
+
+            if (item.itemConditionOptions?.mandatoryIf) {
+              const relativeIdsAnswers = this.getRelativeIdsAnswers(parameter, values, i);
+
+              validators.push(
+                CustomValidators.conditionalRequiredValidator(item.itemConditionOptions, relativeIdsAnswers)
+              );
+            }
+
+            group.addControl(item.id, new FormControl(parameterValue?.[item.id] ?? null, validators));
           });
 
           form.addControl(parameter.id, group);

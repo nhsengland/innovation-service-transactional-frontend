@@ -375,7 +375,7 @@ export class WizardIRV3EngineModel {
 
                 // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
                 if (q.addQuestions) {
-                  let relatedAnswers: Record<string, string> = this.parseRelatedQuestionsAnswers(
+                  let relatedAnswers: Record<string, string> = this.parseSummaryRelatedQuestionsAnswers(
                     aq.items,
                     q.id,
                     i,
@@ -565,7 +565,7 @@ export class WizardIRV3EngineModel {
                     value = currentAnswers[stepId];
 
                     const parentAnswer = this.getItemAnswerByDataType(stepParams, i);
-                    let relatedAnswers: Record<string, string> = this.parseRelatedQuestionsAnswers(
+                    let relatedAnswers: Record<string, string> = this.parseSummaryRelatedQuestionsAnswers(
                       aqStepParam?.items,
                       aqStepParam?.parentId,
                       i,
@@ -749,7 +749,8 @@ export class WizardIRV3EngineModel {
   validateData(): { valid: boolean; errors: { title: string; description: string }[] } {
     const parameters = this.steps.flatMap(step => step.parameters);
     const form = FormEngineHelperV3.buildForm(parameters, this.currentAnswers);
-
+    console.log('validateData form:', form);
+    console.log('valid:', form.valid);
     return {
       valid: form.valid,
       errors: Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
@@ -825,7 +826,7 @@ export class WizardIRV3EngineModel {
         return this.currentAnswers[q.id];
     }
   }
-  parseRelatedQuestionsAnswers(
+  parseSummaryRelatedQuestionsAnswers(
     items: InnovationRecordItemsType | undefined,
     parentId: string | undefined,
     i: number,
