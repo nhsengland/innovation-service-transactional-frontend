@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
@@ -116,6 +116,11 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
             validations.push(CustomValidators.equalToLength(validation.length, validation.errorMessage));
           }
         }
+
+        if (i.validations.maxLength) {
+          validations.push(Validators.maxLength(i.validations.maxLength));
+        }
+
         itemControl.setValidators(validations);
         itemControl.updateValueAndValidity();
       }
