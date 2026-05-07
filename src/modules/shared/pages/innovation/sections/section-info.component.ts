@@ -415,7 +415,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     // add warning callout if answered YES but has not added evidence
     if (this.evidenceData.hasEvidences && !this.evidenceData.hasAddedEvidence) {
       this.setAlertError('There is a problem', {
-        message: 'In order to mark this section as complete, you need to add at least one evidence.',
+        message: 'In order to mark this section as complete, you need to add at least one piece of evidence.',
         width: 'full'
       });
     }
@@ -428,7 +428,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       }));
 
       this.setAlertError('There is a problem', {
-        message: 'You must add a supporting document for this evidence.',
+        message: 'Each piece of evidence must include a supporting document to complete this section.',
         itemsList: errorItemsList,
         width: 'full'
       });
