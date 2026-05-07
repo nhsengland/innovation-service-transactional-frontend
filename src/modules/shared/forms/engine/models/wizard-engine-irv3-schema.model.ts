@@ -281,8 +281,6 @@ export class WizardIRV3EngineModel {
   }
 
   runRules(): this {
-    console.log('^^^^^^^^^^^^');
-    console.log('runRules() begin currentAnswers', this.currentAnswers);
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
@@ -440,8 +438,6 @@ export class WizardIRV3EngineModel {
     this.summary = [];
     const currentAnswers = this.currentAnswers;
     // Parse condition step's answers
-    console.log('^^^^^^^^^^^^');
-    console.log('parseSummary() BEGIN currentAnswers', this.currentAnswers);
     for (const [i, step] of this.steps.entries()) {
       const stepParams = step.parameters[0];
       let stepId = stepParams.id;
@@ -588,8 +584,6 @@ export class WizardIRV3EngineModel {
   }
 
   runInboundParsing(): this {
-    console.log('^^^^^^^^^^^^');
-    console.log('runInboundParsing() start currentAnswers', this.currentAnswers);
     const toReturn: MappedObjectType = {};
 
     this.steps.forEach(step => {
@@ -637,9 +631,6 @@ export class WizardIRV3EngineModel {
   }
 
   runOutboundParsing(): InnovationRecordSectionUpdateType {
-    console.log('^^^^^^^^^^^^');
-    console.log('runOutboundParsing() currentAnswers', this.currentAnswers);
-    console.log('^^^^^^^^^^^^');
     const toReturn: Record<string, any> = {};
 
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
@@ -653,10 +644,8 @@ export class WizardIRV3EngineModel {
       }
       if (stepParams.dataType === 'checkbox-array') {
         // create nested object if it has addQuestions
-        console.log('currentAnswer', currentAnswer);
         if ((stepParams.addQuestions || stepParams.checkboxAnswerId) && currentAnswer) {
           toReturn[stepParams.id] = (currentAnswer as arrStringAnswer).map((answer, i) => {
-            console.log('loop answer:', answer);
             const result: Record<string, string> = {
               [this.getCheckBoxAnswerId(stepParams)]: answer
             };
@@ -668,7 +657,6 @@ export class WizardIRV3EngineModel {
                 result[addQuestion.id] = this.currentAnswers[addQuestionId];
               }
             });
-            console.log('\n\n\ncheckbox result:\n\n\n ', result);
             return result;
           });
         }
@@ -735,8 +723,6 @@ export class WizardIRV3EngineModel {
       }
     }
 
-    console.log('toReturn', toReturn);
-
     return {
       version: this.schema?.version ?? 0,
       data: toReturn
@@ -746,8 +732,6 @@ export class WizardIRV3EngineModel {
   validateData(): { valid: boolean; errors: { title: string; description: string }[] } {
     const parameters = this.steps.flatMap(step => step.parameters);
     const form = FormEngineHelperV3.buildForm(parameters, this.currentAnswers);
-    console.log('validateData form:', form);
-    console.log('valid:', form.valid);
     return {
       valid: form.valid,
       errors: Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
