@@ -69,7 +69,7 @@ export class FormEngineHelperV3 {
     return group.groupLogic === 'OR' ? results.some(Boolean) : results.every(Boolean);
   }
 
-  static getRelativeIdsAnswers(
+  static getItemsRelativeIdsAnswers(
     parameter: FormEngineParameterModelV3,
     currentAnswers: Record<string, string>,
     index?: number
@@ -89,8 +89,8 @@ export class FormEngineHelperV3 {
         }
 
         if (condition.relation === 'parent' || !condition.relation) {
-          answers[condition.id] = parameter.parentId
-            ? (parameter.generatedFromAnswer ?? '')
+          answers[condition.id] = parameter.generatedFromAnswer
+            ? parameter.generatedFromAnswer
             : currentAnswers[condition.id];
         }
       });
@@ -177,7 +177,7 @@ export class FormEngineHelperV3 {
             const validators: ValidatorFn[] = [];
 
             if (item.itemConditionOptions?.mandatoryIf) {
-              const relativeIdsAnswers = this.getRelativeIdsAnswers(parameter, values, i);
+              const relativeIdsAnswers = this.getItemsRelativeIdsAnswers(parameter, values, i);
 
               validators.push(
                 CustomValidators.conditionalRequiredValidator(item.itemConditionOptions, relativeIdsAnswers)

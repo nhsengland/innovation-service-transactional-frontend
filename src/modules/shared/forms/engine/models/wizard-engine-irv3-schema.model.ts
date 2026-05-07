@@ -281,6 +281,8 @@ export class WizardIRV3EngineModel {
   }
 
   runRules(): this {
+    console.log('^^^^^^^^^^^^');
+    console.log('runRules() begin currentAnswers', this.currentAnswers);
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
@@ -438,6 +440,8 @@ export class WizardIRV3EngineModel {
     this.summary = [];
     const currentAnswers = this.currentAnswers;
     // Parse condition step's answers
+    console.log('^^^^^^^^^^^^');
+    console.log('parseSummary() BEGIN currentAnswers', this.currentAnswers);
     for (const [i, step] of this.steps.entries()) {
       const stepParams = step.parameters[0];
       let stepId = stepParams.id;
@@ -454,7 +458,7 @@ export class WizardIRV3EngineModel {
                 value = stepAnswers.map(item => item[stepParams.field!.id]);
               }
 
-              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, value, i);
+              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
 
               // Push "parent"
               this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
@@ -475,7 +479,7 @@ export class WizardIRV3EngineModel {
                       );
                       value = stepAnswers[i][aq.id];
 
-                      const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(aq, value, i);
+                      const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(aq, i);
 
                       this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
                     });
@@ -495,8 +499,7 @@ export class WizardIRV3EngineModel {
             if (itemWithConditional && currentAnswers[itemWithConditional.conditional!.id]) {
               value = [stepAnswers, currentAnswers[itemWithConditional.conditional!.id]];
             }
-
-            const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, value, i);
+            const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
 
             // Push "parent"
             this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
@@ -511,7 +514,7 @@ export class WizardIRV3EngineModel {
                 value = typeof stepAnswers === 'string' ? stepAnswers : (stepAnswers as string[]);
               }
 
-              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, value, i);
+              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
 
               this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
             }
@@ -549,7 +552,7 @@ export class WizardIRV3EngineModel {
                 }
               }
 
-              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, value, i);
+              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
 
               this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
 
@@ -564,18 +567,7 @@ export class WizardIRV3EngineModel {
                     label = aqStepParam?.label ?? '';
                     value = currentAnswers[stepId];
 
-                    const parentAnswer = this.getItemAnswerByDataType(stepParams, i);
-                    let relatedAnswers: Record<string, string> = this.parseSummaryRelatedQuestionsAnswers(
-                      aqStepParam?.items,
-                      aqStepParam?.parentId,
-                      i,
-                      parentAnswer
-                    );
-                    const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(
-                      aqStepParam,
-                      relatedAnswers,
-                      i
-                    );
+                    const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(aqStepParam, i);
 
                     this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
                   });
@@ -585,8 +577,7 @@ export class WizardIRV3EngineModel {
 
             break;
           default: {
-            const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, value, i);
-
+            const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
             this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
             break;
           }
@@ -597,6 +588,8 @@ export class WizardIRV3EngineModel {
   }
 
   runInboundParsing(): this {
+    console.log('^^^^^^^^^^^^');
+    console.log('runInboundParsing() start currentAnswers', this.currentAnswers);
     const toReturn: MappedObjectType = {};
 
     this.steps.forEach(step => {
@@ -640,11 +633,13 @@ export class WizardIRV3EngineModel {
       }
     });
     this.currentAnswers = { ...this.currentAnswers, ...toReturn };
-
     return this;
   }
 
   runOutboundParsing(): InnovationRecordSectionUpdateType {
+    console.log('^^^^^^^^^^^^');
+    console.log('runOutboundParsing() currentAnswers', this.currentAnswers);
+    console.log('^^^^^^^^^^^^');
     const toReturn: Record<string, any> = {};
 
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
@@ -657,11 +652,11 @@ export class WizardIRV3EngineModel {
         toReturn[stepParams.id] = currentAnswer;
       }
       if (stepParams.dataType === 'checkbox-array') {
-        const conditionalQuestions = stepParams.items?.filter(i => i.conditional);
-
         // create nested object if it has addQuestions
+        console.log('currentAnswer', currentAnswer);
         if ((stepParams.addQuestions || stepParams.checkboxAnswerId) && currentAnswer) {
           toReturn[stepParams.id] = (currentAnswer as arrStringAnswer).map((answer, i) => {
+            console.log('loop answer:', answer);
             const result: Record<string, string> = {
               [this.getCheckBoxAnswerId(stepParams)]: answer
             };
@@ -673,7 +668,7 @@ export class WizardIRV3EngineModel {
                 result[addQuestion.id] = this.currentAnswers[addQuestionId];
               }
             });
-
+            console.log('\n\n\ncheckbox result:\n\n\n ', result);
             return result;
           });
         }
@@ -739,6 +734,8 @@ export class WizardIRV3EngineModel {
         }
       }
     }
+
+    console.log('toReturn', toReturn);
 
     return {
       version: this.schema?.version ?? 0,
@@ -826,6 +823,7 @@ export class WizardIRV3EngineModel {
         return this.currentAnswers[q.id];
     }
   }
+
   parseSummaryRelatedQuestionsAnswers(
     items: InnovationRecordItemsType | undefined,
     parentId: string | undefined,
@@ -861,11 +859,8 @@ export class WizardIRV3EngineModel {
     return relatedAnswers;
   }
 
-  checkIsQuestionMandatoryAndNotAnswered(
-    stepParam: FormEngineParameterModelV3 | undefined,
-    value: string | string[] | Object | undefined,
-    index?: number
-  ): boolean {
+  checkIsQuestionMandatoryAndNotAnswered(stepParam: FormEngineParameterModelV3 | undefined, index?: number): boolean {
+    const currentAnswers = this.currentAnswers;
     let isMissingAnswer = false;
     switch (stepParam?.dataType) {
       case 'input-array': {
@@ -876,11 +871,11 @@ export class WizardIRV3EngineModel {
 
           i.itemConditionOptions?.mandatoryIf?.conditions.forEach(c => {
             if (c.relation === 'parent' || !c.relation) {
-              answers[c.id] = stepParam.parentId ? stepParam.generatedFromAnswer : this.currentAnswers[c.id];
+              answers[c.id] = stepParam.parentId ? stepParam.generatedFromAnswer : currentAnswers[c.id];
             }
 
             if (c.relation === 'sibling') {
-              answers[c.id] = this.currentAnswers[`${c.id}_${index}`];
+              answers[c.id] = currentAnswers[`${c.id}_${index}`];
             }
           });
 
@@ -888,7 +883,7 @@ export class WizardIRV3EngineModel {
 
           if (isOptional) return false;
 
-          const itemAnswer = this.currentAnswers[stepParam.id]?.[i.id ?? ''];
+          const itemAnswer = currentAnswers[stepParam.id]?.[i.id ?? ''];
 
           const isMissingAnswer = itemAnswer === undefined || itemAnswer === null || itemAnswer === '';
 
@@ -897,11 +892,10 @@ export class WizardIRV3EngineModel {
       }
       default:
         const isMandatory = stepParam?.validations?.isRequired !== undefined;
+        const answer = currentAnswers[stepParam?.id ?? ''];
 
         if (!isMandatory) return false;
-
-        isMissingAnswer = value === undefined || (Array.isArray(value) && value.length === 0);
-
+        isMissingAnswer = answer === undefined || (Array.isArray(answer) && answer.length === 0);
         return isMissingAnswer;
     }
   }

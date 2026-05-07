@@ -13,7 +13,6 @@ import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stor
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
