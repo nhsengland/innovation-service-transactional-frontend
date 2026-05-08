@@ -5,7 +5,7 @@ import { CtxStore } from '@modules/stores';
 export class IrV3TranslatePipe implements PipeTransform {
   constructor(private ctx: CtxStore) {}
   transform(
-    value: string | string[] | Object | undefined,
+    value: string | string[] | object | undefined,
     type: 'sections' | 'subsections' | 'questions' | 'items',
     questionId?: string
   ): string {

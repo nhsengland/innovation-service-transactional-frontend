@@ -375,14 +375,14 @@ export class WizardIRV3EngineModel {
 
                 // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
                 if (q.addQuestions) {
-                  let relatedAnswers: Record<string, string> = this.parseSummaryRelatedQuestionsAnswers(
+                  const relatedAnswers: Record<string, string> = this.parseSummaryRelatedQuestionsAnswers(
                     aq.items,
                     q.id,
                     i,
                     itemAnswer
                   );
 
-                  let filteredQuestionItems = FormEngineHelperV3.filterQuestionItems(
+                  const filteredQuestionItems = FormEngineHelperV3.filterQuestionItems(
                     aq.dataType,
                     aq.items,
                     relatedAnswers

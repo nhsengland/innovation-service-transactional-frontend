@@ -8,7 +8,6 @@ import { Observable, of, take } from 'rxjs';
 
 import { UrlModel } from '@app/base/models';
 import { ContextSchemaType } from './schema.types';
-import { IR_SCHEMA } from './schema';
 
 @Injectable()
 export class SchemaContextService {
@@ -21,10 +20,6 @@ export class SchemaContextService {
 
   getLatestSchema(): Observable<ContextSchemaType['irSchema']> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/ir-schema');
-    // const latestSchema = of({ id: '', version: 14, schema: IR_SCHEMA });
-    // return latestSchema
-
-        return this.http.get<ContextSchemaType['irSchema']>(url.buildUrl()).pipe(take(1));
-
+    return this.http.get<ContextSchemaType['irSchema']>(url.buildUrl()).pipe(take(1));
   }
 }

@@ -28,7 +28,7 @@ export class FormEngineHelperV3 {
   ): InnovationRecordItemsType {
     switch (dataType) {
       case 'input-array':
-        let filteredItems: InnovationRecordItemsType =
+        const filteredItems: InnovationRecordItemsType =
           items?.filter(i => this.shouldShowItem(i.itemConditionOptions ?? {}, answers)) ?? [];
         return filteredItems;
 
