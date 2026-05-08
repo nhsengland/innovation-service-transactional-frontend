@@ -392,7 +392,7 @@ export class WizardIRV3EngineModel {
                     new FormEngineModelV3({
                       parameters: [
                         {
-                          id: `${aq.id}_${i}`,
+                          id: `${aq.id}_${generatedFromAnswer}`,
                           dataType: aq.dataType,
                           label: label,
                           ...(aq.description && {
@@ -554,9 +554,10 @@ export class WizardIRV3EngineModel {
 
               // Push "children" if any
               if (stepParams.addQuestions && stepAnswers) {
-                stepAnswers.forEach((item, i) => {
+                stepAnswers.forEach((answer, i) => {
                   stepParams.addQuestions?.forEach(aq => {
-                    const aqStepParam = this.steps.find(s => s.parameters[0].id === `${aq.id}_${i}`)?.parameters[0];
+                    const aqStepParam = this.steps.find(s => s.parameters[0].id === `${aq.id}_${answer}`)
+                      ?.parameters[0];
                     editStepNumber++;
 
                     stepId = aqStepParam?.id ?? '';
@@ -585,7 +586,6 @@ export class WizardIRV3EngineModel {
 
   runInboundParsing(): this {
     const toReturn: MappedObjectType = {};
-
     this.steps.forEach(step => {
       const stepParams = step.parameters[0];
       if (this.currentAnswers[stepParams.id]) {
@@ -616,7 +616,8 @@ export class WizardIRV3EngineModel {
               // add all addQuestions previous values
               (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
                 stepParams.addQuestions?.forEach(aq => {
-                  toReturn[`${aq.id}_${i}`] = answer[aq.id];
+                  const generatedFromAnswer = answer[`${stepParams.checkboxAnswerId}`];
+                  toReturn[`${aq.id}_${generatedFromAnswer}`] = answer[aq.id];
                 });
               });
             }
@@ -651,7 +652,7 @@ export class WizardIRV3EngineModel {
             };
 
             stepParams.addQuestions?.forEach(addQuestion => {
-              const addQuestionId = `${addQuestion.id}_${i}`;
+              const addQuestionId = `${addQuestion.id}_${answer}`;
 
               if (this.currentAnswers[addQuestionId]) {
                 result[addQuestion.id] = this.currentAnswers[addQuestionId];
