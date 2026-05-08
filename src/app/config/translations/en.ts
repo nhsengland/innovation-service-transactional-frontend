@@ -1093,7 +1093,8 @@ export const locale = {
             evidenceType: {
               DATA_PUBLISHED: 'Data published, but not in a peer reviewed journal',
               NON_RANDOMISED_COMPARATIVE_DATA: 'Non-randomised comparative data published in a peer reviewed journal',
-              NON_RANDOMISED_NON_COMPARATIVE_DATA: 'Non-randomised non-comparative data published in a peer reviewed journal',
+              NON_RANDOMISED_NON_COMPARATIVE_DATA:
+                'Non-randomised non-comparative data published in a peer reviewed journal',
               CONFERENCE: 'Poster or abstract presented at a conference',
               RANDOMISED_CONTROLLED_TRIAL: 'Randomised controlled trial published in a peer reviewed journal',
               UNPUBLISHED_DATA: 'Unpublished data',

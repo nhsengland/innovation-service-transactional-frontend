@@ -55,7 +55,7 @@ export class CoreComponent implements OnDestroy {
 
   public alert: AlertType = { type: null };
 
-  public warningCallout: WarningCalloutType = {title:'', description:''}
+  public warningCallout: WarningCalloutType = { title: '', description: '' };
 
   public pageStatus = computed(() => this.ctx.layout.status());
 
@@ -200,9 +200,9 @@ export class CoreComponent implements OnDestroy {
     this.ctx.layout.update({ alert: data });
   }
 
-  setWarningCallout(data: NonNullable<ContextLayoutType['warningCallout']>): void{
-    this.warningCallout = {title: data.title, description:data.description}
-    this.ctx.layout.update({warningCallout: data})
+  setWarningCallout(data: NonNullable<ContextLayoutType['warningCallout']>): void {
+    this.warningCallout = { title: data.title, description: data.description };
+    this.ctx.layout.update({ warningCallout: data });
   }
 
   setRedirectAlertSuccess(title: string, options?: AlertOptions): void {
@@ -252,8 +252,8 @@ export class CoreComponent implements OnDestroy {
       message: 'It appears that something went wrong! You can try again or contact us for further help'
     });
   }
-  setWarningCalloutMessage(title: string, description: string):void{
-    this.setWarningCallout({title, description})
+  setWarningCalloutMessage(title: string, description: string): void {
+    this.setWarningCallout({ title, description });
   }
 
   // focusBody(): void {

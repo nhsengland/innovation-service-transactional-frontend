@@ -115,7 +115,7 @@ export class FormEngineParameterModel {
 
   selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
 
-  supportingDocumentsList?: UpsertInnovationDocumentType[]
+  supportingDocumentsList?: UpsertInnovationDocumentType[];
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;

@@ -25,7 +25,7 @@ export class InnovationRegulationsListPageComponent extends CoreComponent implem
   regulationsDocuments: InnovationDocumentsListOutDTO['data'] = [];
 
   regulationsList: string[] = [];
-  allRegulationsHaveDocuments: boolean = false;
+  allRegulationsHaveDocuments = false;
 
   baseUrl: string;
 

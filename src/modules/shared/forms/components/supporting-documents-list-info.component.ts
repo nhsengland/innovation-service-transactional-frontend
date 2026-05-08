@@ -63,27 +63,18 @@ export class FormSupportingDocumentListComponent implements OnInit, DoCheck {
   }
 
   ngOnInit(): void {
-    const draftDocuments = this.evidenceDraftService.documents();
-
-    // if (draftDocuments.length) {
-    //   this.supportingDocumentsList = [
-    //     // ...(this.supportingDocumentsList ?? []),
-    //     ...this.evidenceDraftService.documents()
-    //   ];
-
-      this.fieldArrayControl.clear();
-      this.supportingDocumentsList?.forEach(d => {
-        this.fieldArrayControl.push(
-          new FormGroup({
-            id: new FormControl(''),
-            name: new FormControl(d.name),
-            size: new FormControl(d.file?.size),
-            extension: new FormControl(d.file?.extension),
-            url: new FormControl('')
-          })
-        );
-      });
-    // }
+    this.fieldArrayControl.clear();
+    this.supportingDocumentsList?.forEach(d => {
+      this.fieldArrayControl.push(
+        new FormGroup({
+          id: new FormControl(''),
+          name: new FormControl(d.name),
+          size: new FormControl(d.file?.size),
+          extension: new FormControl(d.file?.extension),
+          url: new FormControl('')
+        })
+      );
+    });
   }
 
   ngDoCheck(): void {

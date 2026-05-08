@@ -25,5 +25,5 @@ export const evidenceTypeItems: FormSelectableFieldType<catalogEvidenceType> = [
   },
   { value: 'CONFERENCE', label: evidenceTranslations.evidenceType.CONFERENCE },
   { value: 'RANDOMISED_CONTROLLED_TRIAL', label: evidenceTranslations.evidenceType.RANDOMISED_CONTROLLED_TRIAL },
-  { value: 'UNPUBLISHED_DATA', label:evidenceTranslations.evidenceType.UNPUBLISHED_DATA }
+  { value: 'UNPUBLISHED_DATA', label: evidenceTranslations.evidenceType.UNPUBLISHED_DATA }
 ];

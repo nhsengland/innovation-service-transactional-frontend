@@ -68,8 +68,11 @@ export type InnovationSectionsListDTO = {
 }[];
 
 export type DocumentInfoType = {
-  id: string; displayFileName: string; size?: number; url: string 
-}
+  id: string;
+  displayFileName: string;
+  size?: number;
+  url: string;
+};
 
 export type GetInnovationEvidenceDTO = {
   id: string;

@@ -72,7 +72,6 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('wizard supportingDocumentsList', this.supportingDocumentsList);
     this.values = this.values || {};
 
     this.buildForm();
