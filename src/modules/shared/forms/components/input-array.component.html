@@ -1,0 +1,26 @@
+<div class="{{ divCssOverride }}">
+  <ng-container *ngIf="label && pageUniqueField">
+    <h1 class="nhsuk-label-wrapper">
+      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id">
+        {{ label }}
+      </label>
+    </h1>
+  </ng-container>
+  <ng-container *ngIf="label && !pageUniqueField">
+    <label class="nhsuk-label" [for]="id">
+      {{ label }}
+    </label>
+  </ng-container>
+
+  <ng-container *ngIf="description">
+    <div id="hint-{{ id }}" class="nhsuk-hint nhsuk-u-margin-bottom-5" [innerHTML]="description"></div>
+  </ng-container>
+
+  <ng-container *ngFor="let item of items; trackBy: trackByItem">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full" *ngIf="getItemControl(item.id) as control">
+        <theme-form-input [formControl]="control" [controlName]="item.id ?? ''" [label]="getLabel(item)" [description]="item.description" [pageUniqueField]="false" />
+      </div>
+    </div>
+  </ng-container>
+</div>

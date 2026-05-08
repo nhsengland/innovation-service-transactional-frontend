@@ -149,7 +149,10 @@ export class SchemaContextStore {
       section?.steps.flatMap(st =>
         st.questions.flatMap(q => [
           { label: q.label, conditional: !!st.condition },
-          ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
+          ...(q.addQuestions?.map(aq => ({
+            label: aq.label,
+            conditional: true
+          })) ?? [])
         ])
       ) ?? [];
 

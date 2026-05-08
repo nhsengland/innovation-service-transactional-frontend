@@ -14,7 +14,7 @@ import {
   PLATFORM_ID,
   SimpleChanges
 } from '@angular/core';
-import { FormArray, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';

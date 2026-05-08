@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { EnvironmentVariablesStore } from '@modules/core';
 
-import { Observable, take } from 'rxjs';
+import { Observable, of, take } from 'rxjs';
 
 import { UrlModel } from '@app/base/models';
 import { ContextSchemaType } from './schema.types';

@@ -37,6 +37,7 @@ export type InnovationRecordQuestionStepType = {
   label: string;
   checkboxAnswerId?: string;
   parentId?: string;
+  generatedFromAnswer?: string;
   description?: string;
   field?: {
     id: string;
@@ -45,7 +46,7 @@ export type InnovationRecordQuestionStepType = {
     validations: InnovationRecordStepValidationsType;
   };
   addNewLabel?: string;
-  addQuestion?: InnovationRecordQuestionStepType;
+  addQuestions?: InnovationRecordQuestionStepType[];
   validations?: InnovationRecordStepValidationsType;
   lengthLimit?: TextareaLengthLimitType;
   items?: InnovationRecordItemsType;
@@ -64,7 +65,8 @@ export type InnovationRecordFormComponentType =
   | 'radio-group'
   | 'autocomplete-array'
   | 'checkbox-array'
-  | 'fields-group';
+  | 'fields-group'
+  | 'input-array';
 
 export type InnovationRecordStepValidationsType = {
   isRequired?: string;
@@ -75,7 +77,7 @@ export type InnovationRecordStepValidationsType = {
   postcodeFormat?: boolean;
   urlFormat?: FormatUrlValidatorType;
   pattern?: string | [string, string];
-  equalToLength?: number | [number, string];
+  equalToLength?: number | [number, string] | { length: number; errorMessage: string };
   async?: AsyncValidatorFn[];
   existsIn?: string[] | [string[], string];
   validEmail?: string;
@@ -86,6 +88,23 @@ export type InnovationRecordFieldGroupAnswerType = Record<string, string>[];
 
 export type InnovationRecordMinMaxValidationType = { length: number; errorMessage: string };
 
+export type ItemConditionOptionsType = {
+  mandatoryIf?: ConditionGroupType /* mark as mandatory if on list */;
+  displayIf?: ConditionGroupType /* show item depending on previous answer */;
+};
+
+export type ConditionType = {
+  list: string[];
+  id: string;
+  logic?: 'inclusive' | 'exclusive';
+  relation?: 'parent' | 'sibling';
+};
+
+export type ConditionGroupType = {
+  groupLogic?: 'AND' | 'OR';
+  conditions: ConditionType[];
+};
+
 export type InnovationRecordItemsType = {
   id?: string;
   label?: string;
@@ -95,6 +114,8 @@ export type InnovationRecordItemsType = {
   group?: string;
   type?: string;
   itemsFromAnswer?: string;
+  itemConditionOptions?: ItemConditionOptionsType;
+  validations?: InnovationRecordStepValidationsType;
 }[];
 
 export type InnovationRecordSectionAnswersType = Record<

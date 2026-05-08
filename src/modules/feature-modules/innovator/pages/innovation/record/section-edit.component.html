@@ -23,8 +23,10 @@
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
                     <ng-container *ngIf="!item.allowHTML">
-                      <ng-container *ngIf="(item.stepId === 'hasVideoDemonstration' || item.stepId === 'hasWebsite') && item.value && item.value[0].length > 1; else defaultTranslation">
-                        {{ item.value[0] | irv3translate: "items" : item.stepId }}<br>
+                      <ng-container
+                        *ngIf="(item.stepId === 'hasVideoDemonstration' || item.stepId === 'hasWebsite') && item.value && item.value[0].length > 1; else defaultTranslation"
+                      >
+                        {{ item.value[0] | irv3translate: "items" : item.stepId }}<br />
                         <a [href]="item.value[1]" target="_blank" rel="noopener noreferrer">{{ item.value[1] }}</a>
                       </ng-container>
                       <ng-template #defaultTranslation>
@@ -38,7 +40,12 @@
                       href="javascript:void(0)"
                       (click)="onChangeStep(item.editStepNumber, item)"
                     >
-                      Change<span class="nhsuk-u-visually-hidden"> {{ item.label }} </span>
+                      @if (!item.mandatoryAndNotAnswered) {
+                        Change
+                      } @else {
+                        Continue
+                      }
+                      <span class="nhsuk-u-visually-hidden"> {{ item.label }} </span>
                     </a>
                   </dd>
                 </div>
