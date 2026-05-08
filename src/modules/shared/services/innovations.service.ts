@@ -1002,10 +1002,7 @@ export class InnovationsService extends CoreService {
       .pipe(
         take(1),
         map(response =>
-          this.base64ToBlob(
-            response.body || '',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-          )
+          this.base64ToBlob(response.body || '', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         )
       );
   }
@@ -1024,10 +1021,7 @@ export class InnovationsService extends CoreService {
       .pipe(
         take(1),
         map(response =>
-          this.base64ToBlob(
-            response.body || '',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-          )
+          this.base64ToBlob(response.body || '', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         )
       );
   }
