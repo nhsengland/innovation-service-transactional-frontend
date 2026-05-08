@@ -1,5 +1,6 @@
 <div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <ng-container *ngIf="label && pageUniqueField">
+    <span *ngIf="hint" class="nhsuk-caption-l nhsuk-u-margin-bottom-2">{{ hint }}</span>
     <h1 class="nhsuk-label-wrapper">
       <div class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" aria-hidden="true" tabindex="-1">{{ label }} {{ uploadedFile ? "(1 file uploaded)" : "" }}</div>
     </h1>

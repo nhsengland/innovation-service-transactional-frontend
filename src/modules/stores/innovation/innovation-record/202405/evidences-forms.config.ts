@@ -1,26 +1,29 @@
+import { locale } from '@app/config/translations/en';
 import { FormSelectableFieldType } from '../ir-versions.types';
 import { catalogEvidenceSubmitType, catalogEvidenceType } from './evidences-catalog.types';
 
+const evidenceTranslations = locale.data.shared.catalog.innovation.evidence;
+
 // // Section EVIDENCE_OF_EFFECTIVENESS Evidences.
 export const evidenceSubmitTypeItems: FormSelectableFieldType<catalogEvidenceSubmitType> = [
-  { value: 'CLINICAL_OR_CARE', label: 'Evidence of clinical or care outcomes' },
-  { value: 'COST_IMPACT_OR_ECONOMIC', label: 'Evidence of cost impact, efficiency gains and/or economic modelling' },
-  { value: 'OTHER_EFFECTIVENESS', label: 'Other evidence of effectiveness (for example environmental or social)' },
-  { value: 'PRE_CLINICAL', label: 'Pre-clinical evidence' },
-  { value: 'REAL_WORLD', label: 'Real world evidence' }
+  { value: 'CLINICAL_OR_CARE', label: evidenceTranslations.evidenceSubmitType.CLINICAL_OR_CARE },
+  { value: 'COST_IMPACT_OR_ECONOMIC', label: evidenceTranslations.evidenceSubmitType.COST_IMPACT_OR_ECONOMIC },
+  { value: 'OTHER_EFFECTIVENESS', label: evidenceTranslations.evidenceSubmitType.OTHER_EFFECTIVENESS },
+  { value: 'PRE_CLINICAL', label: evidenceTranslations.evidenceSubmitType.PRE_CLINICAL },
+  { value: 'REAL_WORLD', label: evidenceTranslations.evidenceSubmitType.REAL_WORLD }
 ];
 
 export const evidenceTypeItems: FormSelectableFieldType<catalogEvidenceType> = [
-  { value: 'DATA_PUBLISHED', label: 'Data published, but not in a peer reviewed journal' },
+  { value: 'DATA_PUBLISHED', label: evidenceTranslations.evidenceType.DATA_PUBLISHED },
   {
     value: 'NON_RANDOMISED_COMPARATIVE_DATA',
-    label: 'Non-randomised comparative data published in a peer reviewed journal'
+    label: evidenceTranslations.evidenceType.NON_RANDOMISED_COMPARATIVE_DATA
   },
   {
     value: 'NON_RANDOMISED_NON_COMPARATIVE_DATA',
-    label: 'Non-randomised non-comparative data published in a peer reviewed journal'
+    label: evidenceTranslations.evidenceType.NON_RANDOMISED_NON_COMPARATIVE_DATA
   },
-  { value: 'CONFERENCE', label: 'Poster or abstract presented at a conference' },
-  { value: 'RANDOMISED_CONTROLLED_TRIAL', label: 'Randomised controlled trial published in a peer reviewed journal' },
-  { value: 'UNPUBLISHED_DATA', label: 'Unpublished data' }
+  { value: 'CONFERENCE', label: evidenceTranslations.evidenceType.CONFERENCE },
+  { value: 'RANDOMISED_CONTROLLED_TRIAL', label: evidenceTranslations.evidenceType.RANDOMISED_CONTROLLED_TRIAL },
+  { value: 'UNPUBLISHED_DATA', label: evidenceTranslations.evidenceType.UNPUBLISHED_DATA }
 ];

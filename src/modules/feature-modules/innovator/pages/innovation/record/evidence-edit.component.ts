@@ -6,6 +6,12 @@ import { FormEngineComponent } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel } from '@modules/shared/forms';
+import {
+  InnovationDocumentsService,
+  UpsertInnovationDocumentType
+} from '@modules/shared/services/innovation-documents.service';
+import { EvidenceDraftService } from '@modules/stores/ctx/evidence/evidenceDraft.store';
+import { concatMap, finalize, forkJoin, from, of } from 'rxjs';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-evidence-edit',
@@ -19,6 +25,9 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   evidenceId: string;
   baseUrl: string;
 
+  queryParams: { entrypoint: string };
+
+  isEntryPointNewDocumentFlow = false;
   wizard: WizardEngineModel;
 
   submitButton = { isActive: true, label: 'Save' };
@@ -30,13 +39,25 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     return !!this.activatedRoute.snapshot.params.evidenceId;
   }
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  isEvidenceDocumentStep(): boolean {
+    return this.wizard.currentStep().parameters[0].id === 'supportingDocuments';
+  }
+
+  supportingDocumentsList: UpsertInnovationDocumentType[] = [];
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private evidenceDraftService: EvidenceDraftService,
+    private innovationDocumentsService: InnovationDocumentsService
+  ) {
     super();
 
     this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
+
+    this.queryParams = { entrypoint: this.activatedRoute.snapshot.queryParams.entrypoint };
 
     this.wizard =
       this.ctx.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
@@ -46,24 +67,35 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       this.redirectTo(this.baseUrl);
     }
 
+    this.isEntryPointNewDocumentFlow = this.queryParams.entrypoint === 'newDocumentWizard';
+
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
   }
 
   ngOnInit(): void {
-    if (this.isCreation()) {
-      this.wizard.runRules();
+    forkJoin([
+      !this.evidenceId
+        ? of(null)
+        : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+            skip: 0,
+            take: 50,
+            order: { createdAt: 'ASC' },
+            filters: { contextTypes: ['INNOVATION_EVIDENCE'], contextId: this.evidenceId, fields: ['description'] }
+          })
+    ]).subscribe(([documents]) => {
+      this.supportingDocumentsList = documents?.data ?? [];
 
-      this.setPageTitle('New evidence', { showPage: false });
-      this.setPageStatus('READY');
-    } else {
-      this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId).subscribe(response => {
-        this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
-        this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
+      // initialize draft store, clear if not coming from documents flow
+      if (!this.isEntryPointNewDocumentFlow) {
+        this.evidenceDraftService.initDraft();
+      }
 
-        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-        this.setPageStatus('READY');
-      });
-    }
+      if (this.isCreation()) {
+        this.runCreationFlow();
+      } else {
+        this.runEditFlow();
+      }
+    });
   }
 
   onGotoStep(stepNumber: number): void {
@@ -92,8 +124,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       // Apply validation only when moving forward.
       return;
     }
-
     this.wizard.addAnswers(formData?.data || {}).runRules();
+    this.evidenceDraftService.updateEvidence(this.wizard.currentAnswers);
     this.wizard.nextStep();
 
     if (this.wizard.isQuestionStep()) {
@@ -112,11 +144,38 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       .upsertSectionEvidenceInfo$(this.innovation.id, this.wizard.runOutboundParsing(), this.evidenceId)
       .subscribe({
         next: response => {
-          this.setRedirectAlertSuccess('Your evidence has been saved', {
-            message: 'You need to submit this section for review to notify your supporting accessor(s).'
+          const evidenceId = response.id;
+
+          // add uploaded documents to the DB, if came back from new document flow, then clear draft's data
+          if (this.isEntryPointNewDocumentFlow) {
+            this.evidenceDraftService.updateAllDocumentContexts(evidenceId);
+
+            from(this.evidenceDraftService.documents())
+              .pipe(concatMap(document => this.innovationDocumentsService.createDocument(this.innovation.id, document)))
+              .subscribe({
+                complete: () => {
+                  // we submitted evidence and documents, we can clear the draft store
+                  this.evidenceDraftService.clearDraft();
+
+                  this.setRedirectAlertSuccess("You have completed section 2.2 'Evidence of impact and benefit'", {
+                    message: 'You can still add more evidence below if needed.'
+                  });
+
+                  this.redirectTo(
+                    `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`
+                  );
+                }
+              });
+
+            return;
+          }
+
+          // TODO mark section as complete and redirect to section details page
+          this.setRedirectAlertSuccess("You have completed section 2.2 'Evidence of impact and benefit'", {
+            message: 'You can still add more evidence below if needed.'
           });
           this.redirectTo(
-            `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${response.id}`
+            `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`
           );
         },
         error: () => {
@@ -127,5 +186,54 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
           );
         }
       });
+  }
+
+  runCreationFlow() {
+    this.wizard.runRules();
+
+    this.setPageTitle('New evidence', { showPage: false });
+    this.setPageStatus('READY');
+
+    // if coming from document flow, load answers & redirect to supporting documents step
+    if (this.isEntryPointNewDocumentFlow) {
+      const draftEvidence = this.evidenceDraftService.evidence();
+      this.wizard
+        .setAnswers(
+          this.wizard.runInboundParsing({
+            evidenceSubmitType: draftEvidence?.evidenceSubmitType,
+            evidenceType: draftEvidence?.evidenceType,
+            description: draftEvidence?.description,
+            summary: draftEvidence?.summary
+          })
+        )
+        .runRules();
+      this.supportingDocumentsList = [...this.supportingDocumentsList, ...this.evidenceDraftService.documents()];
+      this.wizard.gotoSummary();
+      this.setPageTitle('Check your answers', { width: 'full', size: 'l' });
+    }
+  }
+
+  runEditFlow() {
+    this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId).subscribe(response => {
+      //set evidence id on draft service
+      if (!this.evidenceDraftService.isEmpty()) {
+        this.evidenceDraftService.updateEvidenceId(this.evidenceId);
+      }
+
+      this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
+      this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
+
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+      this.setPageStatus('READY');
+    });
+  }
+
+  getDraftUploadedDocument(): UpsertInnovationDocumentType[] {
+    return this.evidenceDraftService.documents();
+  }
+
+  changeTempDocument(): void {
+    this.evidenceDraftService.clearDocuments();
+    this.onGotoStep(this.wizard.getSummary().length + 1 || 1);
   }
 }

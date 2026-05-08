@@ -23,6 +23,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
   documentInfo: null | (InnovationDocumentInfoOutDTO & { locationLink: null | string }) = null;
 
+  pageData: {
+    queryParams: {
+      evidenceId?: string;
+    };
+  };
+
   // Flags
   canDelete = false;
 
@@ -36,6 +42,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
     this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
+
+    this.pageData = {
+      queryParams: {
+        evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -51,6 +63,10 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
                   ?.label ?? '[Archived section]')
               : null
         };
+
+        if (this.pageData.queryParams.evidenceId) {
+          this.setPageTitle(this.documentInfo.name, { hint: `${this.documentInfo.context.name}`, width: 'full' });
+        }
 
         this.canDelete = response.canDelete;
 
@@ -70,13 +86,13 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
       this.setBackLink('Go back', `${this.baseUrl}/documents`);
     }
 
-    this.setPageTitle('Document details');
+    this.setPageTitle('Document details', { width: '2.thirds' });
     this.pageStep = 'INFO';
   }
 
   gotoDeletePage() {
     this.resetAlert();
-    this.setPageTitle('Are you sure you want to delete this document?');
+    this.setPageTitle('Are you sure you want to delete this document?', { width: 'full' });
     this.setBackLink('Go back', this.gotoInfoPage.bind(this));
     this.pageStep = 'DELETE';
   }

@@ -10,6 +10,7 @@ import {
   InnovationGroupedStatusEnum,
   InnovationSectionStatusEnum
 } from './innovation.enums';
+import { catalogEvidenceSubmitType } from '@modules/stores/innovation/innovation-record/202405/evidences-catalog.types';
 
 // Types.
 export type sectionType = {
@@ -66,10 +67,17 @@ export type InnovationSectionsListDTO = {
   openTasksCount: number;
 }[];
 
+export type DocumentInfoType = {
+  id: string;
+  displayFileName: string;
+  size?: number;
+  url: string;
+};
+
 export type GetInnovationEvidenceDTO = {
   id: string;
-  evidenceType: 'CLINICAL' | 'ECONOMIC' | 'OTHER';
-  clinicalEvidenceType:
+  evidenceSubmitType?: catalogEvidenceSubmitType;
+  evidenceType:
     | 'DATA_PUBLISHED'
     | 'NON_RANDOMISED_COMPARATIVE_DATA'
     | 'NON_RANDOMISED_NON_COMPARATIVE_DATA'
@@ -77,9 +85,9 @@ export type GetInnovationEvidenceDTO = {
     | 'RANDOMISED_CONTROLLED_TRIAL'
     | 'UNPUBLISHED_DATA'
     | 'OTHER';
-  description: string;
+  description?: string;
   summary: string;
-  files: { id: string; displayFileName: string; url: string }[];
+  files: DocumentInfoType[];
 };
 
 export type SectionsSummaryModel = {

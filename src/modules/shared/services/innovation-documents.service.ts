@@ -15,7 +15,8 @@ export type ContextTypeType =
   | 'INNOVATION_SECTION'
   | 'INNOVATION_EVIDENCE'
   | 'INNOVATION_PROGRESS_UPDATE'
-  | 'INNOVATION_MESSAGE';
+  | 'INNOVATION_MESSAGE'
+  | 'INNOVATION_REGULATIONS';
 
 export type InnovationDocumentsListFiltersType = {
   name?: null | string;
@@ -62,6 +63,7 @@ export type InnovationDocumentInfoOutDTO = InnovationDocumentInfoInDTO & {
 };
 
 export type UpsertInnovationDocumentType = {
+  id?: string;
   context: { type: ContextTypeType; id: string };
   name: string;
   description?: string;

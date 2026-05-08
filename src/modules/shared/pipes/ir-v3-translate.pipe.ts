@@ -1,7 +1,8 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 import { CtxStore } from '@modules/stores';
 
 @Pipe({ name: 'irv3translate' })
+@Injectable({ providedIn: 'root' })
 export class IrV3TranslatePipe implements PipeTransform {
   constructor(private ctx: CtxStore) {}
   transform(

@@ -89,6 +89,15 @@ export class FormEngineHelper {
           });
           break;
 
+        case 'elements-list-info': // Creates a FormGroup and pushes defaultValues into it.
+          form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
+          ((parameterValue as { id: string; name: string; url: string }[]) || []).forEach(v => {
+            (form.get(parameter.id) as FormArray).push(
+              new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) })
+            );
+          });
+          break;
+
         case 'select-component':
           form.addControl(
             parameter.id,

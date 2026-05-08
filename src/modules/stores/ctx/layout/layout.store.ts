@@ -14,6 +14,7 @@ export class LayoutContextStore {
   title = computed(() => this.state().title);
   pageTitle = computed(() => this.title()?.main ?? '');
   alert = computed(() => this.state().alert);
+  warningCallout = computed(() => this.state().warningCallout);
   backLink = computed(() => this.state().backLink);
   previousUrl = computed(() => this.state().previousUrl);
 

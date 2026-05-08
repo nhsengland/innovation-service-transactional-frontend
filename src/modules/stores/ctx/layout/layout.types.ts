@@ -6,6 +6,7 @@ type PageLayoutContext = {
   status: 'LOADING' | 'READY' | 'ERROR';
   title: null | TitleType;
   alert: null | AlertType;
+  warningCallout: null | WarningCalloutType;
   backLink: null | BacklinkType;
 };
 
@@ -30,6 +31,11 @@ type AlertType = {
   persistOneRedirect?: boolean;
 };
 
+type WarningCalloutType = {
+  title: string;
+  description: string;
+};
+
 type BacklinkType = {
   label: string;
   hiddenLabel?: string;
@@ -48,5 +54,6 @@ export const EMPTY_PAGE_CONTEXT: PageLayoutContext = {
   status: 'LOADING',
   title: null,
   alert: null,
+  warningCallout: null,
   backLink: null
 };

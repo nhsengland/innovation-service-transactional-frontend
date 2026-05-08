@@ -52,6 +52,8 @@
     <p>{{ alert.message }}</p>
   </theme-alert>
 
+  <theme-warning-callout *ngIf="ctx.layout.warningCallout() as warningCallout" theme-warning-callout [title]="warningCallout.title" [description]="warningCallout.description" />
+
   <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
     <div *ngIf="ctx.layout.title() as title" class="nhsuk-grid-row">
       <div [class.nhsuk-grid-column-full]="title.width === 'full'" [class.nhsuk-grid-column-two-thirds]="title.width === '2.thirds'">
@@ -92,7 +94,12 @@
           >
             <p>{{ alert.message }}</p>
           </theme-alert>
-
+          <theme-warning-callout
+            *ngIf="ctx.layout.warningCallout() as warningCallout"
+            theme-warning-callout
+            [title]="warningCallout.title"
+            [description]="warningCallout.description"
+          />
           <!-- <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5"> -->
 
           <div *ngIf="ctx.layout.title() as title" class="nhsuk-grid-row">
