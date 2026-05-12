@@ -42,17 +42,18 @@
       [maxFileSize]="dzConfig.maxFileSize"
       (change)="onChange($event)"
       [disabled]="isLoadingFile"
-      [disableClick]="true"
+      [disableClick]="false"
+      class="cursor-pointer"
     >
-      <ngx-dropzone-label>
-        <label for="{{ id }}" class="cursor-pointer">Click or drop your file here</label>
+      <ngx-dropzone-label *ngIf="!uploadedFile">
+        <p class="nhsuk-u-margin-bottom-0">Click or drop your file here</p>
       </ngx-dropzone-label>
       <theme-file-upload-preview
         *ngIf="uploadedFile"
         [removable]="true"
-        (removed)="onRemoveUploadedFile()"
-        (click)="onRemoveUploadedFile()"
-        (keypress)="onRemoveUploadedFile()"
+        (removed)="onRemoveUploadedFile($event)"
+        (click)="onRemoveUploadedFile($event)"
+        (keypress)="onRemoveUploadedFile($event)"
         attr.aria-label="Delete {{ uploadedFile.file.name }}"
         class="cursor-pointer"
         role="button"

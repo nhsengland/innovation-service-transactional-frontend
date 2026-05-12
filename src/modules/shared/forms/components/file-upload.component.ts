@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
-import { AbstractControl, ControlContainer, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
@@ -33,11 +33,15 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
           httpUploadBody?: Record<string, any>;
           acceptedFiles?: FileTypes[];
           maxFileSize?: number; // In Mb.
+          localOnly?: boolean;
+          customValidationError?: ValidationErrors;
         }
   ) {
     this.fileConfig = {
       httpUploadUrl: c?.httpUploadUrl ?? '',
-      httpUploadBody: c?.httpUploadBody
+      httpUploadBody: c?.httpUploadBody,
+      localOnly: c?.localOnly,
+      customValidationError: c?.customValidationError
     };
 
     this.dzConfig = {
@@ -58,6 +62,8 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
   fileConfig: {
     httpUploadUrl: string;
     httpUploadBody?: Record<string, any>;
+    localOnly?: boolean;
+    customValidationError?: ValidationErrors;
   } = { httpUploadUrl: '' };
 
   dzConfig: {
@@ -127,6 +133,16 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     formdata.append('file', file, file.name);
     Object.entries(this.fileConfig?.httpUploadBody || {}).forEach(([key, value]) => formdata.append(key, value));
 
+    if (this.fileConfig.localOnly) {
+      return of({
+        id: '',
+        name: file.name,
+        extension: file.type,
+        url: '',
+        file: file
+      });
+    }
+
     return this.http.post<FileUploadType>(this.fileConfig?.httpUploadUrl || '', formdata).pipe(
       take(1),
       map(response => response)
@@ -137,7 +153,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     this.hasError = false;
     this.hasUploadError = false;
 
-    if (!this.fileConfig.httpUploadUrl) {
+    if (!this.fileConfig.httpUploadUrl && !this.fileConfig.localOnly) {
       console.error('No httpUploadUrl provided for file upload.');
       return;
     }
@@ -153,6 +169,10 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       if (wrongFormat) {
         this.hasUploadError = true;
         this.error = FormEngineHelper.getValidationMessage({ wrongFileFormat: 'true' });
+
+        if (this.fileConfig.localOnly && this.fileConfig.customValidationError) {
+          this.error = FormEngineHelper.getValidationMessage(this.fileConfig.customValidationError);
+        }
       }
 
       event.rejectedFiles.forEach(file => {
@@ -186,6 +206,9 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
             this.fieldGroupControl.addControl('size', new FormControl(response.size));
             this.fieldGroupControl.addControl('extension', new FormControl(response.extension));
             this.fieldGroupControl.addControl('url', new FormControl(response.url));
+            if (response.file) {
+              this.fieldGroupControl.addControl('file', new FormControl(response.file));
+            }
 
             this.evaluateDropZoneTabIndex();
             this.setAuxMessageAndFocus(`${file.name} added.`);
@@ -209,13 +232,17 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     }
   }
 
-  onRemoveUploadedFile(): void {
+  onRemoveUploadedFile(event?: unknown): void {
+    if (event instanceof Event) {
+      event.stopPropagation();
+    }
     this.uploadedFile = null;
     this.fieldGroupControl.removeControl('id');
     this.fieldGroupControl.removeControl('name');
     this.fieldGroupControl.removeControl('size');
     this.fieldGroupControl.removeControl('extension');
     this.fieldGroupControl.removeControl('url');
+    this.fieldGroupControl.removeControl('file');
     this.cdr.detectChanges();
   }
 
@@ -226,6 +253,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     this.fieldGroupControl.removeControl('size');
     this.fieldGroupControl.removeControl('extension');
     this.fieldGroupControl.removeControl('url');
+    this.fieldGroupControl.removeControl('file');
     this.cdr.detectChanges();
   }
 

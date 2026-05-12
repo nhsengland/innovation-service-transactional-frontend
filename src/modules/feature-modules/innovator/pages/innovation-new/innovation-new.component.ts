@@ -2,13 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { cloneDeep } from 'lodash';
 
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent } from '@app/base/forms';
+import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { InnovatorService } from '../../services/innovator.service';
+import { InnovationImportResponseType, InnovatorService } from '../../services/innovator.service';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { InnovationErrorsEnum } from '@app/base/enums';
-import { getNewInnovationQuestionsWizard } from './innovation-new.config';
+import { getImportInnovationQuestionsWizard, getNewInnovationQuestionsWizard } from './innovation-new.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 @Component({
   selector: 'app-innovator-pages-innovation-new',
@@ -17,11 +18,22 @@ import { getNewInnovationQuestionsWizard } from './innovation-new.config';
 export class InnovationNewComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  wizard = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
+  wizard: WizardEngineModel = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
 
   isCreatingInnovation = false;
+  isImportingInnovation = false;
+  isImportingExcel = false;
+  importSuccess = false;
+  sectionsToFillAfterImport: string[] = [];
 
-  constructor(private innovatorService: InnovatorService) {
+  createdInnovationId: undefined | string = undefined;
+
+  baseUrl = '/innovator';
+
+  constructor(
+    private innovatorService: InnovatorService,
+    private innovationsService: InnovationsService
+  ) {
     super();
 
     this.setPageTitle('', { showPage: false });
@@ -33,6 +45,13 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
+    if (action === 'previous' && this.importSuccess) {
+      this.importSuccess = false;
+      this.resetAlert();
+      this.navigateTo(action);
+      return;
+    }
+
     const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
 
     if (action === 'next' && !formData.valid) {
@@ -41,6 +60,8 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     }
 
     this.wizard.addAnswers(formData.data).runRules();
+
+    this.resetAlert();
 
     this.navigateTo(action);
   }
@@ -63,8 +84,9 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
 
     this.innovatorService.createInnovation(body).subscribe({
       next: response => {
+        this.createdInnovationId = response.id;
         this.setRedirectAlertSuccess(`You have successfully registered the innovation '${body.name}'`);
-        this.redirectTo(`innovator/innovations/${response.id}/registered`);
+        this.redirectTo(`innovator/innovations/${this.createdInnovationId}/registered`);
       },
       error: ({ error: err }: HttpErrorResponse) => {
         if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
@@ -94,5 +116,113 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       default:
         break; // Should NOT happen!
     }
+  }
+
+  downloadExcelTemplate(): void {
+    this.innovationsService.getInnovationRecordExcelTemplate().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Innovation-Record-Template.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.setAlertError('Unable to download the template. Please try again.');
+      }
+    });
+  }
+
+  onImportInnovation(): void {
+    this.isCreatingInnovation = false;
+    this.importSuccess = false;
+    this.wizard = cloneDeep(getImportInnovationQuestionsWizard());
+    this.onSubmitStep('next');
+    this.setUploadConfiguration();
+  }
+
+  onStartInnovation(): void {
+    this.isCreatingInnovation = true;
+    this.wizard = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
+    this.onSubmitStep('next');
+  }
+
+  onUploadTemplate(): void {
+    this.isImportingExcel = true;
+
+    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
+    const file = formData.data.file?.file;
+
+    if (!file) {
+      this.isImportingExcel = false;
+      this.setAlertError('Please select a file to import');
+      return;
+    }
+
+    this.fileToBase64(file)
+      .then(fileAsBase64 => {
+        this.innovatorService.createInnovationFromExcel(fileAsBase64).subscribe({
+          next: response => {
+            this.createdInnovationId = response.id;
+            this.sectionsToFillAfterImport = this.getNotCompletedSections(response);
+
+            this.importSuccess = true;
+            this.isImportingExcel = false;
+            this.setAlertSuccess('Your innovation has been imported');
+          },
+          error: ({ error: err }: HttpErrorResponse) => {
+            if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
+              this.setAlertError('An innovation with that name already exists. Try again with a new name');
+            } else if (err.error === InnovationErrorsEnum.INNOVATION_INFO_EMPTY_INPUT) {
+              // TODO: confirm error copy
+              this.setAlertError('Import failed as some mandatory fields are missing. Please try again.');
+            } else {
+              this.setAlertError(
+                'An error occurred when importing the innovation. Please try again or contact us for further help'
+              );
+            }
+
+            this.isImportingExcel = false;
+          }
+        });
+      })
+      .catch(() => {
+        this.isImportingExcel = false;
+        this.setAlertError('An error occurred when processing the file. Please try again.');
+      });
+  }
+
+  private setUploadConfiguration(): void {
+    if (this.wizard.currentStep().parameters[0].dataType === 'file-upload') {
+      this.wizard.currentStep().parameters[0].fileUploadConfig = {
+        httpUploadUrl: '',
+        acceptedFiles: [FileTypes.XLSX],
+        localOnly: true,
+        customValidationError: { wrongTemplateFileFormat: true }
+      };
+    }
+  }
+
+  private fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  private getNotCompletedSections(res: InnovationImportResponseType): string[] {
+    const withErrors = Object.keys(res.validationIssues).filter(id => id !== 'GLOBAL_WARNING');
+    const empty = res.emptySections;
+
+    const sections = [...new Set([...withErrors, ...empty])];
+
+    const numberedSections = sections.map(s => this.ctx.schema.getNumberedTranslatedSection(s));
+
+    return numberedSections;
   }
 }
