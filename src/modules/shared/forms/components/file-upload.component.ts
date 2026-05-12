@@ -206,7 +206,9 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
             this.fieldGroupControl.addControl('size', new FormControl(response.size));
             this.fieldGroupControl.addControl('extension', new FormControl(response.extension));
             this.fieldGroupControl.addControl('url', new FormControl(response.url));
-            response.file && this.fieldGroupControl.addControl('file', new FormControl(response.file));
+            if (response.file) {
+              this.fieldGroupControl.addControl('file', new FormControl(response.file));
+            }
 
             this.evaluateDropZoneTabIndex();
             this.setAuxMessageAndFocus(`${file.name} added.`);
@@ -230,13 +232,17 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     }
   }
 
-  onRemoveUploadedFile(): void {
+  onRemoveUploadedFile(event?: unknown): void {
+    if (event instanceof Event) {
+      event.stopPropagation();
+    }
     this.uploadedFile = null;
     this.fieldGroupControl.removeControl('id');
     this.fieldGroupControl.removeControl('name');
     this.fieldGroupControl.removeControl('size');
     this.fieldGroupControl.removeControl('extension');
     this.fieldGroupControl.removeControl('url');
+    this.fieldGroupControl.removeControl('file');
     this.cdr.detectChanges();
   }
 
@@ -247,6 +253,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     this.fieldGroupControl.removeControl('size');
     this.fieldGroupControl.removeControl('extension');
     this.fieldGroupControl.removeControl('url');
+    this.fieldGroupControl.removeControl('file');
     this.cdr.detectChanges();
   }
 

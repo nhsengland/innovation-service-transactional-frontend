@@ -45,6 +45,13 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
+    if (action === 'previous' && this.importSuccess) {
+      this.importSuccess = false;
+      this.resetAlert();
+      this.navigateTo(action);
+      return;
+    }
+
     const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
 
     if (action === 'next' && !formData.valid) {
@@ -129,6 +136,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
 
   onImportInnovation(): void {
     this.isCreatingInnovation = false;
+    this.importSuccess = false;
     this.wizard = cloneDeep(getImportInnovationQuestionsWizard());
     this.onSubmitStep('next');
     this.setUploadConfiguration();
@@ -146,31 +154,43 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
     const file = formData.data.file?.file;
 
-    this.fileToBase64(file).then(fileAsBase64 => {
-      this.innovatorService.createInnovationFromExcel(fileAsBase64).subscribe({
-        next: response => {
-          this.createdInnovationId = response.id;
-          this.sectionsToFillAfterImport = this.getNotCompletedSections(response);
+    if (!file) {
+      this.isImportingExcel = false;
+      this.setAlertError('Please select a file to import');
+      return;
+    }
 
-          this.importSuccess = true;
-          this.setAlertSuccess('Your innovation has been imported');
-        },
-        error: ({ error: err }: HttpErrorResponse) => {
-          if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
-            this.setAlertError('An innovation with that name already exists. Try again with a new name');
-          } else if (err.error === InnovationErrorsEnum.INNOVATION_INFO_EMPTY_INPUT) {
-            // TODO: confirm error copy
-            this.setAlertError('Import failed as some mandatory fields are missing. Please try again.');
-          } else {
-            this.setAlertError(
-              'An error occurred when importing the innovation. Please try again or contact us for further help'
-            );
+    this.fileToBase64(file)
+      .then(fileAsBase64 => {
+        this.innovatorService.createInnovationFromExcel(fileAsBase64).subscribe({
+          next: response => {
+            this.createdInnovationId = response.id;
+            this.sectionsToFillAfterImport = this.getNotCompletedSections(response);
+
+            this.importSuccess = true;
+            this.isImportingExcel = false;
+            this.setAlertSuccess('Your innovation has been imported');
+          },
+          error: ({ error: err }: HttpErrorResponse) => {
+            if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
+              this.setAlertError('An innovation with that name already exists. Try again with a new name');
+            } else if (err.error === InnovationErrorsEnum.INNOVATION_INFO_EMPTY_INPUT) {
+              // TODO: confirm error copy
+              this.setAlertError('Import failed as some mandatory fields are missing. Please try again.');
+            } else {
+              this.setAlertError(
+                'An error occurred when importing the innovation. Please try again or contact us for further help'
+              );
+            }
+
+            this.isImportingExcel = false;
           }
-
-          this.isImportingExcel = false;
-        }
+        });
+      })
+      .catch(() => {
+        this.isImportingExcel = false;
+        this.setAlertError('An error occurred when processing the file. Please try again.');
       });
-    });
   }
 
   private setUploadConfiguration(): void {
