@@ -22,9 +22,8 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     this.filteredGI = (value || []).map(groupItem => {
       if (groupItem.items.length === 1) {
         const childUnit = groupItem.items[0];
-        const displayLabel = childUnit.label === groupItem.label 
-          ? groupItem.label 
-          : `${groupItem.label} | ${childUnit.label}`;
+        const displayLabel =
+          childUnit.label === groupItem.label ? groupItem.label : `${groupItem.label} | ${childUnit.label}`;
 
         return {
           gItem: {

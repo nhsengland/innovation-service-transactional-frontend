@@ -116,11 +116,21 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           this.previousOrganisationsSuggestions
         );
 
-        this.organisationItems = this.organisationsToSuggest.map(org => ({
-          value: org.id,
-          label: `${org.name}`,
-          description: org.description
-        }));
+        this.organisationItems = this.organisationsToSuggest.map(org => {
+          let displayLabel = org.name;
+          if (org.organisationUnits?.length === 1) {
+            const singleUnit = org.organisationUnits[0];
+            if (singleUnit.name !== org.name) {
+              displayLabel = `${org.name} | ${singleUnit.name}`;
+            }
+          }
+
+          return {
+            value: org.id,
+            label: displayLabel,
+            description: org.description
+          };
+        });
 
         this.organisationItems.unshift({ value: 'Select an organisation:', label: 'HEADING' });
 
