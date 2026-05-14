@@ -21,14 +21,19 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     // If Group Item has only one child item, then show the child only.
     this.filteredGI = (value || []).map(groupItem => {
       if (groupItem.items.length === 1) {
+        const childUnit = groupItem.items[0];
+        const displayLabel = childUnit.label === groupItem.label 
+          ? groupItem.label 
+          : `${groupItem.label} | ${childUnit.label}`;
+
         return {
           gItem: {
             // TODO:
             // When there's only one child, this is overriding the parente with the child information.
             // It's NOT this component responsibility to do this!
             // Change this behavior when possible.
-            ...groupItem.items[0],
-            label: groupItem.label,
+            ...childUnit,
+            label: displayLabel,
             items: []
           },
           showHideStatus: 'hidden',

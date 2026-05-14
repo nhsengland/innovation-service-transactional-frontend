@@ -138,4 +138,32 @@ describe('FormGroupCheckboxArrayComponent', () => {
 
     expect(hostComponent.childComponent?.filteredGI[2].showHideStatus).toBe('opened');
   });
+
+  it('should format label as Parent Name | Unit Name when single unit has different name', () => {
+    hostComponent.groupedItems = [
+      {
+        value: 'org1',
+        label: 'Parent Org',
+        items: [{ value: 'unit1', label: 'Different Unit Name' }]
+      }
+    ];
+    hostFixture.detectChanges();
+
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.label).toBe('Parent Org | Different Unit Name');
+    expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('hidden');
+  });
+
+  it('should format label as Parent Name when single unit has same name', () => {
+    hostComponent.groupedItems = [
+      {
+        value: 'org2',
+        label: 'Same Name Org',
+        items: [{ value: 'unit2', label: 'Same Name Org' }]
+      }
+    ];
+    hostFixture.detectChanges();
+
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.label).toBe('Same Name Org');
+    expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('hidden');
+  });
 });
