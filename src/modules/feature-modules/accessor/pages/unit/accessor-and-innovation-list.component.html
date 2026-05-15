@@ -47,7 +47,9 @@
               <td class="nhsuk-table__cell width-40">
                 <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("accessor") }}</span>
                 <span class="d-block text-word-break">{{ item.accessor.name }},</span>
-                <span class="d-block">{{ item.accessor.role | serviceRoleTranslate }}<span *ngIf="item.accessor.jobTitle"> ({{ item.accessor.jobTitle }})</span></span>
+                <span class="d-block"
+                  >{{ item.accessor.role | serviceRoleTranslate }}<span *ngIf="item.accessor.jobTitle"> ({{ item.accessor.jobTitle }})</span></span
+                >
               </td>
               <td class="nhsuk-table__cell width-15">
                 <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovationsCount") }}</span>

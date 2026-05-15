@@ -41,7 +41,7 @@
           <div form-header class="d-flex justify-content-space-between align-items-end nhsuk-u-margin-bottom-1">
             <span class="nhsuk-label nhsuk-u-margin-bottom-0">Enter your message</span>
             <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0" (click)="toggleLinkForm()">
-              {{ showLinkForm ? 'Cancel link insertion' : 'Insert a link' }}
+              {{ showLinkForm ? "Cancel link insertion" : "Insert a link" }}
             </button>
           </div>
 
@@ -50,7 +50,7 @@
               <ng-container [formGroup]="linkForm">
                 <theme-form-input controlName="linkText" label="Link text" description="e.g. Book a meeting with me" [pageUniqueField]="false"></theme-form-input>
                 <theme-form-input controlName="linkUrl" label="Link URL" description="e.g. https://calendly.com/your-name" [pageUniqueField]="false"></theme-form-input>
-                
+
                 <div class="nhsuk-u-margin-top-4 d-flex align-items-center">
                   <button type="button" class="nhsuk-button nhsuk-u-margin-bottom-0 nhsuk-u-margin-right-4" (click)="onInsertLink()">Insert</button>
                   <a href="javascript:void(0)" (click)="toggleLinkForm()" class="nhsuk-link nhsuk-link--no-visited-state">Cancel</a>
