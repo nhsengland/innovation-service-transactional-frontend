@@ -242,8 +242,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           this.innovationCardsData = [];
 
           response.data.forEach(result => {
-            const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
-            const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
+            const translatedAacInvolvement = result.involvedAACProgrammes?.map((item: string) =>
+              item === 'No' ? 'None' : item
+            );
+            const engagingUnits = result.engagingUnits ? result.engagingUnits.map((unit: any) => unit.acronym) : [];
 
             const translations = this.ctx.schema.getIrSchemaTranslationsMap();
             const innovationData: InnovationCardData = {
@@ -389,7 +391,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       });
   }
 
-  private getPermittedQueryFields(fields: string[]): string[] {
+  private getPermittedQueryFields(fields: any[]): any[] {
     let queryFields = [...fields];
 
     if (this.ctx.user.isAdmin()) {
