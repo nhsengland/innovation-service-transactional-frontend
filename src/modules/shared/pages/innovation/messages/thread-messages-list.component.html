@@ -55,7 +55,7 @@
               <div form-header class="d-flex justify-content-space-between align-items-end nhsuk-u-margin-bottom-1">
                 <span class="nhsuk-hint nhsuk-u-margin-bottom-0">Write a message</span>
                 <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0" (click)="toggleLinkForm()">
-                  {{ showLinkForm ? 'Cancel link insertion' : 'Insert a link' }}
+                  {{ showLinkForm ? "Cancel link insertion" : "Insert a link" }}
                 </button>
               </div>
 
@@ -122,7 +122,9 @@
 
             <p class="nhsuk-u-margin-bottom-2 text-pre-line text-word-break">
               <span [innerHTML]="message.message | linkify"></span>
-              <span *ngIf="message.updatedAt && message.updatedAt !== message.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2 d-inline-block nhsuk-u-margin-left-2"
+              <span
+                *ngIf="message.updatedAt && message.updatedAt !== message.createdAt"
+                class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2 d-inline-block nhsuk-u-margin-left-2"
                 >(last edited at {{ message.updatedAt | date: ("app.date_formats.long_date_time" | translate) }})</span
               >
             </p>
