@@ -12,10 +12,11 @@ import { ENVIRONMENT } from '../../config/constants.config';
 import {
   CSVGeneratorSectionsNotFoundError,
   DocumentGeneratorInnovationInfoError,
+  DocumentGeneratorProgressInfoError,
   PDFGeneratorParserError,
   PDFGeneratorSchemaGetError
 } from '../errors';
-import { getIRDocumentExportData, getInnovationInfo, getSchema, getSections } from '../pdf/parser';
+import { getIRDocumentExportData, getInnovationInfo, getProgressInfo, getSchema, getSections } from '../pdf/parser';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 
@@ -33,11 +34,18 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
   let content: AllSectionsOutboundPayloadType;
   let sections: { section: sectionType; data: MappedObjectType }[];
   let innovationInfo: InnovationInfoDTO;
+  let progressInfo: any;
 
   try {
     innovationInfo = await getInnovationInfo(innovationId, config);
   } catch (error: any) {
     throw new DocumentGeneratorInnovationInfoError(error);
+  }
+
+  try {
+    progressInfo = await getProgressInfo(innovationId, config);
+  } catch (error: any) {
+    throw new DocumentGeneratorProgressInfoError(error);
   }
 
   try {
@@ -60,7 +68,7 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
 
   const response = await generateCSVHandler(
     innovationId,
-    getIRDocumentExportData('CSV', content, innovationInfo.owner?.organisation),
+    getIRDocumentExportData('CSV', content, innovationInfo.owner?.organisation, progressInfo),
     config
   );
 

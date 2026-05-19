@@ -201,7 +201,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.filtersModel.handleStateChanges();
 
-    let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
+    const queryFields = this.getPermittedQueryFields([
       'id',
       'uniqueId',
       'name',
@@ -231,32 +231,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'assessment.finishedAt',
       'assessment.maturityLevel',
       'progressAreas'
-    ];
-
-    if (this.ctx.user.isAdmin()) {
-      // filter out unavailable fields if Admin
-      queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closeReason', 'archiveReason'].includes(item)
-      );
-    } else if (this.ctx.user.isAccessorType()) {
-      // filter out unavailable fields for QA/A
-      queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
-    } else if (this.ctx.user.isAssessment()) {
-      // filter out unavailable fields for Assessment
-      queryFields = queryFields.filter(
-        item =>
-          ![
-            'support.status',
-            'support.updatedAt',
-            'support.closeReason',
-            'involvedAACProgrammes',
-            'keyHealthInequalities',
-            'archiveReason',
-            'assessment.finishedAt',
-            'assessment.maturityLevel'
-          ].includes(item)
-      );
-    }
+    ]);
 
     this.innovationsService
       .getInnovationsSearch(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
@@ -267,8 +242,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           this.innovationCardsData = [];
 
           response.data.forEach(result => {
-            const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
-            const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
+            const translatedAacInvolvement = result.involvedAACProgrammes?.map((item: string) =>
+              item === 'No' ? 'None' : item
+            );
+            const engagingUnits = result.engagingUnits ? result.engagingUnits.map((unit: any) => unit.acronym) : [];
 
             const translations = this.ctx.schema.getIrSchemaTranslationsMap();
             const innovationData: InnovationCardData = {
@@ -333,7 +310,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     // code from getInnovationList could probably be reused here but mostly duplicated for simplicity
     this.filtersModel.handleStateChanges();
 
-    let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
+    const queryFields = this.getPermittedQueryFields([
       'uniqueId',
       'name',
       'description',
@@ -358,8 +335,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.status',
       'support.closeReason',
       'assessment.finishedAt',
-      'assessment.maturityLevel'
-    ];
+      'assessment.maturityLevel',
+      'progressAreas'
+    ]);
 
     const queryFieldsMap = {
       uniqueId: 'Innovation ID',
@@ -390,31 +368,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       progressAreas: 'Progress Areas'
     } as const;
 
-    if (this.ctx.user.isAdmin()) {
-      // filter out unavailable fields if Admin
-      queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
-      );
-    } else if (this.ctx.user.isAccessorType()) {
-      // filter out unavailable fields for QA/A
-      queryFields = queryFields.filter(
-        item => !['involvedAACProgrammes', 'keyHealthInequalities', 'archiveReason'].includes(item)
-      );
-    } else if (this.ctx.user.isAssessment()) {
-      // filter out unavailable fields for Assessment
-      queryFields = queryFields.filter(
-        item =>
-          ![
-            'support.status',
-            'support.updatedAt',
-            'support.closeReason',
-            'involvedAACProgrammes',
-            'keyHealthInequalities',
-            'archiveReason'
-          ].includes(item)
-      );
-    }
-
     this.innovationsService
       .getInnovationsSearchCSV(queryFields, this.filtersModel.getAPIQueryParams())
       .subscribe(response => {
@@ -436,6 +389,40 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         window.URL.revokeObjectURL(url);
         this.exportingCSV = false;
       });
+  }
+
+  private getPermittedQueryFields(fields: any[]): any[] {
+    let queryFields = [...fields];
+
+    if (this.ctx.user.isAdmin()) {
+      // filter out unavailable fields if Admin
+      queryFields = queryFields.filter(
+        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
+      );
+    } else if (this.ctx.user.isAccessorType()) {
+      // filter out unavailable fields for QA/A
+      queryFields = queryFields.filter(
+        item => !['involvedAACProgrammes', 'keyHealthInequalities', 'archiveReason'].includes(item)
+      );
+    } else if (this.ctx.user.isAssessment()) {
+      // filter out unavailable fields for Assessment
+      queryFields = queryFields.filter(
+        item =>
+          ![
+            'support.status',
+            'support.updatedAt',
+            'support.closeReason',
+            'involvedAACProgrammes',
+            'keyHealthInequalities',
+            'archiveReason',
+            'assessment.finishedAt',
+            'assessment.maturityLevel',
+            'progressAreas'
+          ].includes(item)
+      );
+    }
+
+    return queryFields;
   }
 
   onFormChange(): void {
