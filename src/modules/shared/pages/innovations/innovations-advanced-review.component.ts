@@ -397,7 +397,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (this.ctx.user.isAdmin()) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closeReason', 'archiveReason'].includes(item)
+        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
       );
     } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
