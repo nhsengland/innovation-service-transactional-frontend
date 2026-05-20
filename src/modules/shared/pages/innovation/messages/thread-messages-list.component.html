@@ -51,8 +51,28 @@
           <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
           <form *ngIf="canCreateMessage" [formGroup]="form" (ngSubmit)="onSubmit()">
-            <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
+            <theme-form-textarea controlName="message" [pageUniqueField]="false" lengthLimit="xxl">
+              <div form-header class="d-flex justify-content-space-between align-items-end nhsuk-u-margin-bottom-1">
+                <span class="nhsuk-hint nhsuk-u-margin-bottom-0">Write a message</span>
+                <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0" (click)="toggleLinkForm()">
+                  {{ showLinkForm ? "Cancel link insertion" : "Insert a link" }}
+                </button>
+              </div>
 
+              <div form-header class="nhsuk-u-margin-bottom-4">
+                <div *ngIf="showLinkForm" class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4 nhsuk-u-padding-4 bg-color-grey border-left-inset-neutral">
+                  <ng-container [formGroup]="linkForm">
+                    <theme-form-input controlName="linkText" label="Link text" description="e.g. Book a meeting with me" [pageUniqueField]="false"></theme-form-input>
+                    <theme-form-input controlName="linkUrl" label="Link URL" description="e.g. https://calendly.com/your-name" [pageUniqueField]="false"></theme-form-input>
+
+                    <div class="nhsuk-u-margin-top-4 d-flex align-items-center">
+                      <button type="button" class="nhsuk-button nhsuk-u-margin-bottom-0 nhsuk-u-margin-right-4" (click)="onInsertLink()">Insert</button>
+                      <a href="javascript:void(0)" (click)="toggleLinkForm()" class="nhsuk-link nhsuk-link--no-visited-state">Cancel</a>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </theme-form-textarea>
             <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
 
             <theme-form-file-upload-descriptive
@@ -101,8 +121,10 @@
             </div>
 
             <p class="nhsuk-u-margin-bottom-2 text-pre-line text-word-break">
-              {{ message.message }}
-              <span *ngIf="message.updatedAt && message.updatedAt !== message.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2"
+              <span [innerHTML]="message.message | linkify"></span>
+              <span
+                *ngIf="message.updatedAt && message.updatedAt !== message.createdAt"
+                class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2 d-inline-block nhsuk-u-margin-left-2"
                 >(last edited at {{ message.updatedAt | date: ("app.date_formats.long_date_time" | translate) }})</span
               >
             </p>

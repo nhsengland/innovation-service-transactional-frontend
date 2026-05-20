@@ -1,6 +1,5 @@
 <nav *ngIf="totalRows > pageSize" class="pagination" aria-label="Pagination">
   <ul class="nhsuk-list">
-
     <li *ngIf="currentPage !== 1">
       <a href="javascript:void(0)" (click)="onPreviousPage()" aria-label="Previous page">« Prev</a>
     </li>
@@ -11,17 +10,24 @@
     </ng-container>
 
     <li *ngFor="let page of getPages()" [ngClass]="{ active: currentPage === page }">
-      <a href="javascript:void(0)" (click)="onPageChange(page)" [attr.aria-label]="currentPage === page ? 'Current page, page ' + page : 'Page ' + page" [attr.aria-current]="currentPage === page ? 'page' : null">{{ page }}</a>
+      <a
+        href="javascript:void(0)"
+        (click)="onPageChange(page)"
+        [attr.aria-label]="currentPage === page ? 'Current page, page ' + page : 'Page ' + page"
+        [attr.aria-current]="currentPage === page ? 'page' : null"
+        >{{ page }}</a
+      >
     </li>
 
     <ng-container *ngIf="getPages().includes(totalPages) === false">
       <li><span>...</span></li>
-      <li><a href="javascript:void(0)" (click)="onPageChange(totalPages)" [attr.aria-label]="'Page ' + totalPages + ' (last page)'">{{ totalPages }}</a></li>
+      <li>
+        <a href="javascript:void(0)" (click)="onPageChange(totalPages)" [attr.aria-label]="'Page ' + totalPages + ' (last page)'">{{ totalPages }}</a>
+      </li>
     </ng-container>
 
     <li *ngIf="currentPage !== totalPages">
       <a href="javascript:void(0)" (click)="onNextPage()" aria-label="Next page">Next »</a>
     </li>
-
   </ul>
 </nav>
