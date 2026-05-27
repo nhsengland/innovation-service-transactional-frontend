@@ -34,20 +34,13 @@ describe('InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [InnovationSupportOrganisationsSupportStatusSuggestComponent],
-      imports: [
-        HttpClientTestingModule,
-        RouterModule.forRoot([]),
-        CoreModule,
-        StoresModule,
-        TranslateModule.forRoot()
-      ],
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, TranslateModule.forRoot()],
       providers: [
         { provide: OrganisationsService, useValue: orgsServiceMock },
         { provide: InnovationsService, useValue: innoServiceMock },
         { provide: AccessorService, useValue: accessorServiceMock }
       ]
     }).compileComponents();
-
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
@@ -70,7 +63,7 @@ describe('InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
         getItem: jest.fn().mockReturnValue(null),
         setItem: jest.fn(),
         removeItem: jest.fn(),
-        clear: jest.fn(),
+        clear: jest.fn()
       },
       writable: true
     });
@@ -147,4 +140,3 @@ describe('InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
     expect(mappedItem?.label).toBe('Multiple Units Org');
   });
 });
-
