@@ -37,37 +37,9 @@
           ></theme-form-textarea>
         </div>
 
-        <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
-          <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ p.id }}-hint">
-            <legend *ngIf="p.label" class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
-              <ng-container *ngIf="onlyOneField">
-                <h1 class="nhsuk-fieldset__heading">{{ p.label }}</h1>
-              </ng-container>
-              <ng-container *ngIf="!onlyOneField"> {{ p.label }} </ng-container>
-            </legend>
-
-            <ng-container *ngIf="p.description">
-              <div class="nhsuk-hint" id="{{ p.id }}-hint" [innerHTML]="p.description"></div>
-            </ng-container>
-
-            <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy: trackFieldGroupRowsChanges" class="nhsuk-grid-row">
-              <div [formGroupName]="i" class="nhsuk-grid-column-full">
-                <ng-container *ngIf="p.field">
-                  <div [ngSwitch]="p.field.dataType">
-                    <div *ngSwitchDefault>
-                      <theme-form-input [controlName]="p.field.id" label="{{ p.field.label }} {{ i + 1 }}" [pageUniqueField]="false">
-                        <ng-container append>
-                          <button type="button" class="nhsuk-button nhsuk-button--secondary form-input-appended-button" (click)="removeFieldGroupRow(p.id, i)">Remove</button>
-                        </ng-container>
-                      </theme-form-input>
-                    </div>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-
-            <a href="javascript:void(0)" (click)="addFieldGroupRow(p)"> {{ p.addNewLabel || "Add new" }} </a>
-          </fieldset>
+        <div *ngSwitchCase="'fields-group'" class="nhsuk-u-margin-bottom-5">
+          <theme-form-fields-group-v3 [fieldArrayControl]="getFieldArray(p.id)" [parameter]="p" [addNewLabel]="p.addNewLabel" [onlyOneField]="onlyOneField">
+          </theme-form-fields-group-v3>
         </div>
 
         <div *ngSwitchDefault>

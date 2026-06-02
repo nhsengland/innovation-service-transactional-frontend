@@ -33,6 +33,7 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
 import { FormIRSelectableFiltersFilterComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters-filter.component';
 import { ThemeModule } from '../../theme/theme.module';
 import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters.component';
+import { FormFieldsGroupV3Component } from './components/fields-group-v3.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
+    FormFieldsGroupV3Component,
     FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
@@ -91,6 +93,7 @@ import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
+    FormFieldsGroupV3Component,
     FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
