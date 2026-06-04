@@ -139,7 +139,7 @@ describe('FormGroupCheckboxArrayComponent', () => {
     expect(hostComponent.childComponent?.filteredGI[2].showHideStatus).toBe('opened');
   });
 
-  it('should format label as Parent Name | Unit Name when single unit has different name', () => {
+  it('should keep a single unit grouped when its name differs from the parent organisation', () => {
     hostComponent.groupedItems = [
       {
         value: 'org1',
@@ -149,11 +149,15 @@ describe('FormGroupCheckboxArrayComponent', () => {
     ];
     hostFixture.detectChanges();
 
-    expect(hostComponent.childComponent?.filteredGI[0].gItem.label).toBe('Parent Org | Different Unit Name');
-    expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('hidden');
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.label).toBe('Parent Org');
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.items).toEqual([
+      { value: 'unit1', label: 'Different Unit Name' }
+    ]);
+    expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('closed');
+    expect(hostComponent.childComponent?.filteredGI[0].showHideText).toBe('Show 1 units');
   });
 
-  it('should format label as Parent Name when single unit has same name', () => {
+  it('should collapse a single unit when its name matches the parent organisation', () => {
     hostComponent.groupedItems = [
       {
         value: 'org2',
@@ -164,6 +168,7 @@ describe('FormGroupCheckboxArrayComponent', () => {
     hostFixture.detectChanges();
 
     expect(hostComponent.childComponent?.filteredGI[0].gItem.label).toBe('Same Name Org');
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.items).toEqual([]);
     expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('hidden');
   });
 });
