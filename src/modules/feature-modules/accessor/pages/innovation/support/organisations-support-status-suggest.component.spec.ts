@@ -77,7 +77,7 @@ describe('InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should format radio button label as Parent Name | Unit Name when single unit has different name', () => {
+  it('should keep the organisation radio label as Parent Name when single unit has different name', () => {
     const mockOrgs = [
       {
         id: 'org1',
@@ -94,7 +94,7 @@ describe('InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
     fixture.detectChanges();
 
     const mappedItem = component.organisationItems.find(i => i.value === 'org1');
-    expect(mappedItem?.label).toBe('Parent Org | Different Unit Name');
+    expect(mappedItem?.label).toBe('Parent Org');
   });
 
   it('should format radio button label as Parent Name when single unit has same name', () => {
@@ -138,5 +138,54 @@ describe('InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
 
     const mappedItem = component.organisationItems.find(i => i.value === 'org3');
     expect(mappedItem?.label).toBe('Multiple Units Org');
+  });
+
+  it('should show the unit selection step when a single unit has a different name from the parent organisation', () => {
+    const mockOrgs = [
+      {
+        id: 'org1',
+        name: 'Parent Org',
+        acronym: 'PO',
+        isActive: true,
+        organisationUnits: [{ id: 'u1', name: 'Different Unit Name', acronym: 'DUN', isActive: true }]
+      }
+    ];
+
+    (organisationsService.getOrganisationsList as jest.Mock).mockReturnValue(of(mockOrgs));
+
+    component.ngOnInit();
+    component.form.get('organisation')?.setValue('org1');
+
+    component.onSubmitStep();
+
+    expect(component.stepNumber).toBe(2);
+    expect(component.unitsItems).toEqual([
+      { value: 'Select the organisation units you want to suggest:', label: 'HEADING' },
+      { value: 'u1', label: 'Different Unit Name' }
+    ]);
+    expect(component.chosenUnits.values).toEqual([]);
+  });
+
+  it('should skip the unit selection step when a single unit has the same name as the parent organisation', () => {
+    const mockOrgs = [
+      {
+        id: 'org2',
+        name: 'Same Name Org',
+        acronym: 'SNO',
+        isActive: true,
+        organisationUnits: [{ id: 'u2', name: 'Same Name Org', acronym: 'SNO', isActive: true }]
+      }
+    ];
+
+    (organisationsService.getOrganisationsList as jest.Mock).mockReturnValue(of(mockOrgs));
+
+    component.ngOnInit();
+    component.form.get('organisation')?.setValue('org2');
+
+    component.onSubmitStep();
+
+    expect(component.stepNumber).toBe(3);
+    expect(component.chosenUnits.values).toEqual(['u2']);
+    expect(component.chosenUnits.unitsNames).toEqual([]);
   });
 });

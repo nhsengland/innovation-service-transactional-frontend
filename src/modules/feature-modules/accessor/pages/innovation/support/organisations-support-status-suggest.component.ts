@@ -116,21 +116,11 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           this.previousOrganisationsSuggestions
         );
 
-        this.organisationItems = this.organisationsToSuggest.map(org => {
-          let displayLabel = org.name;
-          if (org.organisationUnits?.length === 1) {
-            const singleUnit = org.organisationUnits[0];
-            if (singleUnit.name !== org.name) {
-              displayLabel = `${org.name} | ${singleUnit.name}`;
-            }
-          }
-
-          return {
-            value: org.id,
-            label: displayLabel,
-            description: org.description
-          };
-        });
+        this.organisationItems = this.organisationsToSuggest.map(org => ({
+          value: org.id,
+          label: `${org.name}`,
+          description: org.description
+        }));
 
         this.organisationItems.unshift({ value: 'Select an organisation:', label: 'HEADING' });
 
@@ -181,9 +171,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           }
 
           const totalUnits = organisationData.organisationUnits?.length || 0;
+          const shouldSelectUnit =
+            totalUnits > 1 ||
+            (totalUnits === 1 && organisationData.organisationUnits[0].name !== chosenOrganisation.name);
 
           const units = this.form.get('units');
-          if (totalUnits > 1) {
+          if (shouldSelectUnit) {
             if (!units) {
               this.form.addControl(
                 'units',

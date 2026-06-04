@@ -20,10 +20,8 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() set groupedItems(value: FormEngineParameterModel['groupedItems']) {
     // If Group Item has only one child item, then show the child only.
     this.filteredGI = (value || []).map(groupItem => {
-      if (groupItem.items.length === 1) {
+      if (groupItem.items.length === 1 && groupItem.items[0].label === groupItem.label) {
         const childUnit = groupItem.items[0];
-        const displayLabel =
-          childUnit.label === groupItem.label ? groupItem.label : `${groupItem.label} | ${childUnit.label}`;
 
         return {
           gItem: {
@@ -32,7 +30,7 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
             // It's NOT this component responsibility to do this!
             // Change this behavior when possible.
             ...childUnit,
-            label: displayLabel,
+            label: groupItem.label,
             items: []
           },
           showHideStatus: 'hidden',
