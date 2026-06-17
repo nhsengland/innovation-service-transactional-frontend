@@ -154,7 +154,7 @@ describe('FormGroupCheckboxArrayComponent', () => {
       { value: 'unit1', label: 'Different Unit Name' }
     ]);
     expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('closed');
-    expect(hostComponent.childComponent?.filteredGI[0].showHideText).toBe('Show 1 units');
+    expect(hostComponent.childComponent?.filteredGI[0].showHideText).toBe('Show 1 unit');
   });
 
   it('should collapse a single unit when its name matches the parent organisation', () => {

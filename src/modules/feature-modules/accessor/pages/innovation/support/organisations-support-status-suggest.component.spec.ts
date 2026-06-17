@@ -160,7 +160,7 @@ describe('InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
 
     expect(component.stepNumber).toBe(2);
     expect(component.unitsItems).toEqual([
-      { value: 'Select the organisation units you want to suggest:', label: 'HEADING' },
+      { value: 'Select the organisation unit you want to suggest:', label: 'HEADING' },
       { value: 'u1', label: 'Different Unit Name' }
     ]);
     expect(component.chosenUnits.values).toEqual([]);
