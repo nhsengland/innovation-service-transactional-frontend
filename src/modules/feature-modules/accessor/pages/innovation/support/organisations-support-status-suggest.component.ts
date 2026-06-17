@@ -190,7 +190,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
             }));
 
             this.unitsItems.unshift({
-              value: 'Select the organisation units you want to suggest:',
+              value: `Select the organisation unit${totalUnits === 1 ? '' : 's'} you want to suggest:`,
               label: 'HEADING'
             });
 

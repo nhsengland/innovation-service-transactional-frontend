@@ -42,7 +42,7 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
         return {
           gItem: groupItem,
           showHideStatus: 'closed',
-          showHideText: `Show ${groupItem.items.length} units`,
+          showHideText: `Show ${groupItem.items.length} unit${groupItem.items.length === 1 ? '' : 's'}`,
           showHideDescription: `that belong to the ${groupItem.label}`,
           selectedChildren: groupItem.items.filter(a => this.fieldArrayValues.includes(a.value)).length
         };
@@ -131,12 +131,12 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     switch (filteredGI?.showHideStatus) {
       case 'opened':
         filteredGI.showHideStatus = 'closed';
-        filteredGI.showHideText = `Show ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideText = `Show ${filteredGI.gItem.items.length} unit${filteredGI.gItem.items.length === 1 ? '' : 's'}`;
         filteredGI.showHideDescription = `that belong to the ${filteredGI.gItem.label}`;
         break;
       case 'closed':
         filteredGI.showHideStatus = 'opened';
-        filteredGI.showHideText = `Hide ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideText = `Hide ${filteredGI.gItem.items.length} unit${filteredGI.gItem.items.length === 1 ? '' : 's'}`;
         filteredGI.showHideDescription = `that belong to the ${filteredGI.gItem.label}`;
         break;
       default:
