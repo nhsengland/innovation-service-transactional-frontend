@@ -1,4 +1,4 @@
-import { AsyncValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
@@ -109,6 +109,8 @@ export class FormEngineParameterModel {
     acceptedFiles?: FileTypes[];
     maxFileSize?: number; // In Mb.
     previousUploadedFiles?: { id: string; name: string }[];
+    localOnly?: boolean;
+    customValidationError?: ValidationErrors;
   };
 
   selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
@@ -159,15 +161,6 @@ export class FormEngineModelV3 {
 export class FormEngineParameterModelV3 {
   id: string;
   dataType: InnovationRecordFormComponentType;
-  // | 'number'
-  // | 'password'
-  // | 'hidden'
-  // | 'date'
-  // | 'checkbox-group'
-  // | 'grouped-checkbox-array'
-  // | 'file-upload'
-  // | 'file-upload-array'
-  // | 'select-component';
   label?: string;
   description?: string;
   checkboxAnswerId?: string;

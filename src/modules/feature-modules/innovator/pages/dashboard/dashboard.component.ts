@@ -203,6 +203,22 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     this.announcements = this.announcements.filter(a => a.id !== announcementId);
   }
 
+  downloadExcelTemplate(): void {
+    this.innovationsService.getInnovationRecordExcelTemplate().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Innovation-Record-Template.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.setAlertError('Unable to download the template. Please try again.');
+      }
+    });
+  }
+
   private buildDescriptionString(
     statistics: Pick<InnovationListFullDTO['statistics'], 'messages' | 'tasks'>
   ): string | null {
