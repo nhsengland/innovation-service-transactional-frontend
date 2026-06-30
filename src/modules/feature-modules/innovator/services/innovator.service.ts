@@ -38,7 +38,7 @@ export type GetOwnedInnovations = {
 };
 
 export enum InnovationArchiveReasonEnum {
-    // User archive reasons
+  // User archive reasons
   DEVELOP_FURTHER = 'DEVELOP_FURTHER',
   HAVE_ALL_SUPPORT = 'HAVE_ALL_SUPPORT',
   DECIDED_NOT_TO_PURSUE = 'DECIDED_NOT_TO_PURSUE',
@@ -46,7 +46,7 @@ export enum InnovationArchiveReasonEnum {
   OTHER_DONT_WANT_TO_SAY = 'OTHER_DONT_WANT_TO_SAY',
   // Automatic archive reasons
   SIX_MONTHS_INACTIVITY = 'SIX_MONTHS_INACTIVITY',
-  OWNER_ACCOUNT_DELETED = 'OWNER_ACCOUNT_DELETED',
+  OWNER_ACCOUNT_DELETED = 'OWNER_ACCOUNT_DELETED'
 }
 
 export type SurveyType = {
