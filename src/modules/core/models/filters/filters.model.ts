@@ -183,7 +183,6 @@ export class FiltersModel {
     if (!this.#state) {
       return {};
     }
-
     const qp = {
       ...this.#state.filters,
       dateFilters:
