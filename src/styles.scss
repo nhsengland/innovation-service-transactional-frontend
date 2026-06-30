@@ -52,6 +52,9 @@ $service-manual-container-size: 1100px; // Container width variable.
 .align-items-center {
   align-items: center;
 }
+.align-items-end {
+  align-items: flex-end;
+}
 .align-items-baseline {
   align-items: baseline;
 }

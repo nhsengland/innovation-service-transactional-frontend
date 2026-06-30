@@ -49,6 +49,7 @@ export type InnovationListSelectType =
   | 'status'
   | 'statusUpdatedAt'
   | 'groupedStatus'
+  | 'archiveReason'
   | 'submittedAt'
   | 'lastAssessmentRequestAt'
   | 'updatedAt'
@@ -80,6 +81,7 @@ export type InnovationListSelectType =
   | 'support.updatedBy'
   | 'support.closeReason'
   | 'support.isShared'
+  | 'lastSupportGivenAt'
   | 'assessment.id'
   | 'assessment.majorVersion'
   | 'assessment.minorVersion'
@@ -103,6 +105,7 @@ export type InnovationListFullDTO = {
   status: InnovationStatusEnum;
   statusUpdatedAt: DateISOType;
   groupedStatus: InnovationGroupedStatusEnum;
+  archiveReason: InnovationArchiveReasonEnum;
   submittedAt: DateISOType | null;
   lastAssessmentRequestAt: DateISOType | null;
   updatedAt: DateISOType;
@@ -134,6 +137,7 @@ export type InnovationListFullDTO = {
     closeReason: InnovationSupportCloseReasonEnum | null;
     isShared: boolean;
   } | null;
+  lastSupportGivenAt: DateISOType;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
   assessment: {
     id: string;

@@ -23,7 +23,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: ContextInnovationType & {
     archiveReason?: InnovationArchiveReasonEnum | null;
   };
-
   qaSuggestions: InnovationUnitSuggestionsType = [];
 
   innovationSummary: { label: string; value: null | string; copy?: boolean }[] = [];

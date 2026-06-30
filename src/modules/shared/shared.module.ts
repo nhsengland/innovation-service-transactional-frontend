@@ -76,6 +76,7 @@ import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-w
 import { BytesPrettyPrintPipe } from './pipes/bytes-pretty-print.pipe';
 import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 import { JoinArrayPipe } from './pipes/join-array.pipe';
+import { LinkifyPipe } from './pipes/linkify.pipe';
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
 import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
@@ -248,6 +249,7 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     IrV3TranslatePipe,
     ServiceRoleTranslatePipe,
     StrategicRoleTranslatePipe,
+    LinkifyPipe,
 
     // Components
     OrganisationSuggestionsCardComponent,
@@ -290,6 +292,7 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     PluralTranslatePipe,
     IrV3TranslatePipe,
     JoinArrayPipe,
+    LinkifyPipe,
     ServiceRoleTranslatePipe,
     StrategicRoleTranslatePipe,
 

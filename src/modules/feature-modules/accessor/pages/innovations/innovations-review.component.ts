@@ -76,6 +76,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         };
         isShared: boolean;
       } | null;
+      lastSupportGivenAt: DateISOType | null;
       suggestion: {
         suggestedBy: string[];
         suggestedOn: DateISOType;
@@ -117,7 +118,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.updatedAt',
             'statistics.notifications',
             'engagingOrganisations',
-            'engagingUnits'
+            'engagingUnits',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -143,7 +145,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.isShared',
             'support.closeReason',
             'statistics.notifications',
-            'engagingOrganisations'
+            'engagingOrganisations',
+            'lastSupportGivenAt'
           ],
           notifications: null
         }
@@ -169,7 +172,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'assessment.id',
             'assessment.finishedAt',
             'support.status',
-            'statistics.notifications'
+            'statistics.notifications',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -196,7 +200,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'statistics.notifications',
             'engagingOrganisations',
             'suggestion.suggestedOn',
-            'suggestion.suggestedBy'
+            'suggestion.suggestedBy',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -219,7 +224,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.updatedAt',
             'statistics.notifications',
             'engagingOrganisations',
-            'engagingUnits'
+            'engagingUnits',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -242,7 +248,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.status',
             'support.updatedAt',
             'statistics.notifications',
-            'engagingOrganisations'
+            'engagingOrganisations',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -266,7 +273,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.updatedAt',
             'support.isShared',
             'statistics.notifications',
-            'engagingOrganisations'
+            'engagingOrganisations',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -292,7 +300,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.closeReason',
             'support.isShared',
             'statistics.notifications',
-            'engagingOrganisations'
+            'engagingOrganisations',
+            'lastSupportGivenAt'
           ],
           notifications: null
         }
@@ -327,7 +336,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.setPageStatus('LOADING');
 
     const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
-
     this.innovationsService.getInnovationsList(this.currentTab.queryFields, filters, { take, skip, order }).subscribe({
       next: response => {
         this.innovationsList.setData(
@@ -365,6 +373,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
                 },
                 isShared: item.support.isShared ?? true // Not asking for the tabs where it is true, shouldn't be used anyway
               },
+              lastSupportGivenAt: item.lastSupportGivenAt,
               suggestion: item.suggestion && {
                 suggestedBy: item.suggestion.suggestedBy,
                 suggestedOn: item.suggestion.suggestedOn
@@ -418,12 +427,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            'support.updatedAt': { label: 'Support updated', orderable: true },
+            lastSupportGivenAt: { label: 'Support updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             accessors: { label: 'Accessor', orderable: false },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('support.updatedAt', 'descending');
+          .setOrderBy('lastSupportGivenAt', 'descending');
         break;
 
       case InnovationSupportStatusEnum.WAITING:
@@ -438,12 +447,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            'support.updatedAt': { label: 'Support updated', orderable: true },
+            lastSupportGivenAt: { label: 'Support updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             countryName: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('support.updatedAt', 'descending');
+          .setOrderBy('lastSupportGivenAt', 'descending');
         break;
 
       case InnovationSupportStatusEnum.CLOSED:
