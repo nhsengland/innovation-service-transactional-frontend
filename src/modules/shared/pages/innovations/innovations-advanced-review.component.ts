@@ -402,31 +402,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       progressAreas: 'Progress Areas'
     } as const;
 
-    if (this.ctx.user.isAdmin()) {
-      // filter out unavailable fields if Admin
-      queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
-      );
-    } else if (this.ctx.user.isAccessorType()) {
-      // filter out unavailable fields for QA/A
-      queryFields = queryFields.filter(
-        item => !['involvedAACProgrammes', 'keyHealthInequalities', 'archiveReason'].includes(item)
-      );
-    } else if (this.ctx.user.isAssessment()) {
-      // filter out unavailable fields for Assessment
-      queryFields = queryFields.filter(
-        item =>
-          ![
-            'support.status',
-            'support.updatedAt',
-            'support.closeReason',
-            'involvedAACProgrammes',
-            'keyHealthInequalities',
-            'archiveReason'
-          ].includes(item)
-      );
-    }
-
     this.innovationsService
       .getInnovationsSearchCSV(queryFields, this.filtersModel.getAPIQueryParams())
       .subscribe(response => {

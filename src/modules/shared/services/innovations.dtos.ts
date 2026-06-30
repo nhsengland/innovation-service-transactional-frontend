@@ -150,7 +150,6 @@ export type InnovationListFullDTO = {
     maturityLevel: string | null;
   } | null;
   progressAreas: string[] | null;
-  archiveReason: string[] | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
