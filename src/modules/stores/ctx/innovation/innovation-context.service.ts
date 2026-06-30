@@ -108,6 +108,7 @@ export class InnovationContextService {
           countryName: response.countryName,
           description: response.description,
           postCode: response.postCode,
+          archiveReason: response.archiveReason,
           expiryAt: Date.now() + 10000
         };
       })
