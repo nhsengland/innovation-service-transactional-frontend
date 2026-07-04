@@ -15,7 +15,5 @@
     <p>You can leave this page and come back later. Your progress will be saved automatically.</p>
   </div>
 
-  <button type="button" class="nhsuk-button nhsuk-button" [routerLink]="[baseUrl, 'documents', 'new']" [queryParams]="{ entrypoint: 'EVIDENCE_OF_EFFECTIVENESS' }">
-    Add document
-  </button>
+  <button type="button" class="nhsuk-button nhsuk-button" [routerLink]="[baseUrl, 'documents', 'new']" [queryParams]="addDocumentQueryParams">Add document</button>
 </div>

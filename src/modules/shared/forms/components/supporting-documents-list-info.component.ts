@@ -23,6 +23,14 @@ export class FormSupportingDocumentListComponent implements OnInit, DoCheck {
 
   baseUrl: string;
   innovationId: string;
+  evidenceId?: string;
+
+  get addDocumentQueryParams(): { entrypoint: string; evidenceId?: string } {
+    return {
+      entrypoint: 'EVIDENCE_OF_EFFECTIVENESS',
+      ...(this.evidenceId && { evidenceId: this.evidenceId })
+    };
+  }
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null {
@@ -59,6 +67,7 @@ export class FormSupportingDocumentListComponent implements OnInit, DoCheck {
     private evidenceDraftService: EvidenceDraftService
   ) {
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
   }
 
