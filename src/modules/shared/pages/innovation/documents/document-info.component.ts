@@ -101,12 +101,24 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationDocumentsService.deleteDocument(this.innovationId, this.documentId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The document was deleted');
-        this.redirectTo(this.ctx.layout.previousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
+        this.redirectTo(this.deletedDocumentRedirectUrl(), { action: 'deleted' });
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
     });
+  }
+
+  private deletedDocumentRedirectUrl(): string {
+    if (this.documentInfo?.context.descriptionUrl) {
+      return this.documentInfo.context.descriptionUrl;
+    }
+
+    if (this.documentInfo?.context.type === 'INNOVATION_REGULATIONS') {
+      return `${this.baseUrl}/record/sections/REGULATIONS_AND_STANDARDS/regulations/${this.documentInfo.context.id}`;
+    }
+
+    return `${this.baseUrl}/documents`;
   }
 }

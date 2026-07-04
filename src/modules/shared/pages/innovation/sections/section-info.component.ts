@@ -424,7 +424,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     if (this.evidenceData.hasAddedEvidence && !this.evidenceData.allEvidencesHaveDocuments) {
       const errorItemsList = this.evidenceData.evidencesWithoutDocuments.map(e => ({
         title: e.label,
-        callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${e.evidenceId})`
+        callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${e.evidenceId}`
       }));
 
       this.setAlertError('There is a problem', {
