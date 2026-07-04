@@ -23,7 +23,7 @@ export class InnovationEvidenceListComponent extends CoreComponent implements On
 
   ngOnInit(): void {
     // Redirect to overview if user should not have access to this page
-    if (!this.ctx.user.isInnovator) {
+    if (!this.ctx.user.isInnovator()) {
       this.redirectTo(this.baseUrl);
       return;
     }
