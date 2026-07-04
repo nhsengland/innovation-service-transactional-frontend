@@ -143,11 +143,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     const sectionIdentification = this.getSectionMetadata(this.sectionId);
 
     this.sectionLabel = sectionIdentification.label;
-    this.setPageTitle(sectionIdentification.title),
-      {
-        width: 'full',
-        hint: sectionIdentification.hint
-      };
+    this.setPageTitle(sectionIdentification.title, {
+      width: 'full',
+      hint: sectionIdentification.hint
+    });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
     const section = this.ctx.schema.getIrSchemaSectionV3(this.sectionId);
