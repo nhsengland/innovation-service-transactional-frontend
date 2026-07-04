@@ -291,6 +291,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   handleMandatoryDocumentsSections() {
     const sectionData = this.sectionInfo?.data;
+    this.allowMarkSectionAsComplete = true;
+    this.summaryRedirectUrl = this.baseUrl;
+
     // redirect to documents flows depending on section answers
     switch (this.sectionId) {
       case innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS:
