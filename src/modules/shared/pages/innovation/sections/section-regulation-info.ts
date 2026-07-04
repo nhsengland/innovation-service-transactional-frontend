@@ -33,7 +33,7 @@ export class PageInnovationSectionRegulationInfoComponent extends CoreComponent 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.regulationId = this.activatedRoute.snapshot.params.regulationId;
 
-    this.baseUrl = `/innovator/innovations/${this.innovation.id}`;
+    this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
   }
 
   ngOnInit(): void {
@@ -55,7 +55,7 @@ export class PageInnovationSectionRegulationInfoComponent extends CoreComponent 
           width: 'full'
         });
 
-        this.setBackLink('Go back');
+        this.setBackLink('Go back', `${this.baseUrl}/record/sections/REGULATIONS_AND_STANDARDS/regulations`);
         this.setPageStatus('READY');
       });
   }

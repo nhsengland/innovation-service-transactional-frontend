@@ -9,7 +9,12 @@
       </p>
     </dd>
     <dd class="nhsuk-summary-list__actions">
-      <a *ngIf="certificationsHasDocuments(item)" routerLink="regulations/{{ item }}" attr.aria-label="View {{ item }} details">More details</a>
+      <a
+        *ngIf="certificationsHasDocuments(item)"
+        [routerLink]="baseUrl + '/record/sections/REGULATIONS_AND_STANDARDS/regulations/' + item"
+        attr.aria-label="View {{ item }} details"
+        >More details</a
+      >
       <a
         *ngIf="!certificationsHasDocuments(item) && ctx.user.isInnovator()"
         routerLink="{{ baseUrl }}/documents/new"
