@@ -131,7 +131,7 @@ export class InnovationDocumentsService extends CoreService {
             ...item,
             context: {
               ...item.context,
-              label: this.translate(`shared.catalog.documents.contextType.${item.context.type}`),
+              label: this.documentContextLabel(item.context.type),
               description
             },
             createdBy: { ...item.createdBy, description: userDescription }
@@ -190,7 +190,7 @@ export class InnovationDocumentsService extends CoreService {
           ...item,
           context: {
             ...item.context,
-            label: this.translate(`shared.catalog.documents.contextType.${item.context.type}`),
+            label: this.documentContextLabel(item.context.type),
             ...(description && { description }),
             ...(descriptionUrl && { descriptionUrl })
           },
@@ -234,5 +234,13 @@ export class InnovationDocumentsService extends CoreService {
       .addPath('v1/:innovationId/files/:documentId')
       .setPathParams({ innovationId, documentId });
     return this.http.delete<void>(url.buildUrl()).pipe(take(1));
+  }
+
+  private documentContextLabel(type: ContextTypeType): string {
+    if (type === 'INNOVATION_REGULATIONS') {
+      return this.translate('shared.catalog.innovation.innovation_sections.REGULATIONS_AND_STANDARDS');
+    }
+
+    return this.translate(`shared.catalog.documents.contextType.${type}`);
   }
 }

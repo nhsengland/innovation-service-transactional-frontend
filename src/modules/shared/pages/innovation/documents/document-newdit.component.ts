@@ -256,6 +256,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
           );
         }
       });
+      return;
     }
 
     const draftDocument: UpsertInnovationDocumentType = {
