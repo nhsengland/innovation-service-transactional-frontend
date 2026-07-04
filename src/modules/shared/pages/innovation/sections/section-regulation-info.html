@@ -20,7 +20,7 @@
               <p *ngIf="doc.description">{{ doc.description }}</p>
             </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a routerLink="{{baseUrl}}/documents/{{doc.id}}" attr.aria-label="View {{ doc.name }} details">More details</a>
+              <a [routerLink]="baseUrl + '/documents/' + doc.id" attr.aria-label="View {{ doc.name }} details">More details</a>
             </dd>
           </div>
         </dl>
@@ -29,12 +29,12 @@
   </ng-container>
   <div *ngIf="ctx.user.isInnovator()" class="nhsuk-u-margin-bottom-6">
     <a
-      routerLink="/{{ baseUrl }}/documents/new"
+      [routerLink]="baseUrl + '/documents/new'"
       [queryParams]="{ regulationId: regulationId }"
       [attr.aria-label]="'Continue'"
       class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-right-4"
       >Add another document</a
     >
-    <a routerLink="/{{ baseUrl }}/record/sections/REGULATIONS_AND_STANDARDS/regulations" routerLinkActive="router-link-active" class="nhsuk-button">Save and continue</a>
+    <a [routerLink]="baseUrl + '/record/sections/REGULATIONS_AND_STANDARDS/regulations'" routerLinkActive="router-link-active" class="nhsuk-button">Save and continue</a>
   </div>
 </theme-content-wrapper>
