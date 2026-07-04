@@ -278,9 +278,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           } else {
             this.summaryRedirectUrl = `${this.baseUrl}/submitted`;
           }
+
+          this.redirectTo(this.summaryRedirectUrl);
         },
         error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
       });
+      return;
     }
 
     this.redirectTo(this.summaryRedirectUrl);
