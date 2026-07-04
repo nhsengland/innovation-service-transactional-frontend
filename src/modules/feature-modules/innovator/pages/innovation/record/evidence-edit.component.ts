@@ -164,7 +164,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
                   this.redirectTo(
                     `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`
                   );
-                }
+                },
+                error: () => this.handleEvidenceDocumentCreationError()
               });
 
             return;
@@ -186,6 +187,14 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
           );
         }
       });
+  }
+
+  private handleEvidenceDocumentCreationError(): void {
+    this.submitButton = { isActive: true, label: 'Save' };
+    this.setAlertError(
+      'Your evidence was saved, but we could not save one or more supporting documents. Please try again or contact us for further help.',
+      { width: '2.thirds' }
+    );
   }
 
   runCreationFlow() {
