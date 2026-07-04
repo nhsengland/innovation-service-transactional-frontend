@@ -20,7 +20,7 @@
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Location</dt>
             <dd class="nhsuk-summary-list__value">
-              {{ "shared.catalog.documents.contextType." + documentInfo.context.type | translate }}
+              {{ documentInfo.context.label }}
               <br />
               <span *ngIf="!documentInfo.context.descriptionUrl">{{ documentInfo.context.description }}</span>
               <span *ngIf="documentInfo.context.descriptionUrl"
