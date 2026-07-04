@@ -23,6 +23,14 @@ export class EvidenceDraftService {
 
   readonly isEmpty = computed(() => !this._draft());
 
+  private emptyDraft(): EvidenceDraftType {
+    return {
+      evidence: {},
+      documents: [],
+      createdAt: Date.now()
+    };
+  }
+
   initDraft(initial?: Partial<GetInnovationEvidenceDTO>) {
     this._draft.set({
       evidence: initial ?? {},
@@ -43,24 +51,32 @@ export class EvidenceDraftService {
   }
 
   updateEvidence(partial: Partial<GetInnovationEvidenceDTO>) {
+    const draft = this._draft() ?? this.emptyDraft();
+
     this._draft.update(d => ({
-      ...d!,
+      ...(d ?? draft),
       evidence: partial
     }));
   }
 
   addDocument(doc: UpsertInnovationDocumentType) {
+    const draft = this._draft() ?? this.emptyDraft();
+
     this._draft.update(d => ({
-      ...d!,
-      documents: [...d!.documents, doc]
+      ...(d ?? draft),
+      documents: [...(d ?? draft).documents, doc]
     }));
   }
 
   removeDocument(index: number) {
-    this._draft.update(d => ({
-      ...d!,
-      documents: d!.documents.filter((_, i) => i !== index)
-    }));
+    this._draft.update(d =>
+      d
+        ? {
+            ...d,
+            documents: d.documents.filter((_, i) => i !== index)
+          }
+        : null
+    );
   }
 
   clearDraft() {
@@ -68,22 +84,30 @@ export class EvidenceDraftService {
   }
 
   clearDocuments() {
-    this._draft.update(d => ({
-      ...d!,
-      documents: []
-    }));
+    this._draft.update(d =>
+      d
+        ? {
+            ...d,
+            documents: []
+          }
+        : null
+    );
   }
 
   updateAllDocumentContexts(evidenceId: string) {
-    this._draft.update(d => ({
-      ...d!,
-      documents: d!.documents.map(doc => ({
-        ...doc,
-        context: {
-          ...doc.context,
-          id: evidenceId
-        }
-      }))
-    }));
+    this._draft.update(d =>
+      d
+        ? {
+            ...d,
+            documents: d.documents.map(doc => ({
+              ...doc,
+              context: {
+                ...doc.context,
+                id: evidenceId
+              }
+            }))
+          }
+        : null
+    );
   }
 }
