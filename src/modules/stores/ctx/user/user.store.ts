@@ -236,7 +236,9 @@ export class UserContextStore {
       }
     }
     this.updateInfo({
-      displayName: body.displayName,
+      givenName: body.givenName,
+      surname: body.surname,
+      displayName: `${body.givenName} ${body.surname}`,
       contactByPhone: body.contactByPhone,
       contactByEmail: body.contactByEmail,
       contactByPhoneTimeframe: body.contactByPhoneTimeframe,

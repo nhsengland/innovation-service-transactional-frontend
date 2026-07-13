@@ -101,10 +101,20 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMo
     new FormEngineModel({
       parameters: [
         {
-          id: 'innovatorName',
+          id: 'givenName',
           dataType: 'text',
-          label: 'What is your name?',
+          label: 'What is your given name?',
           validations: { isRequired: [true, 'Name is required'], maxLength: 100 }
+        }
+      ]
+    }),
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'surname',
+          dataType: 'text',
+          label: 'What is your surname?',
+          validations: { isRequired: [true, 'Surname is required'], maxLength: 100 }
         }
       ]
     }),

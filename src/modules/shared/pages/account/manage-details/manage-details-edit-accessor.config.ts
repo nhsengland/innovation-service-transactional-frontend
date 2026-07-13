@@ -5,12 +5,14 @@ import { UserContextType } from '@modules/stores';
 type InboundPayloadType = Required<UserContextType>['user'];
 
 type StepPayloadType = {
-  displayName: string;
+  givenName: string;
+  surname: string;
   jobTitle: string | null;
 };
 
 type OutboundPayloadType = {
-  displayName: string;
+  givenName: string;
+  surname: string;
   jobTitle: string | null;
 };
 
@@ -19,10 +21,16 @@ export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel
     new FormEngineModel({
       parameters: [
         {
-          id: 'displayName',
+          id: 'givenName',
           dataType: 'text',
-          label: "What's your full name?",
-          validations: { isRequired: [true, 'Name is required'] }
+          label: 'What is your given name?',
+          validations: { isRequired: [true, 'Given name is required'], maxLength: 100 }
+        },
+        {
+          id: 'surname',
+          dataType: 'text',
+          label: 'What is your surname?',
+          validations: { isRequired: [true, 'Surname is required'], maxLength: 100 }
         },
         {
           id: 'jobTitle',
@@ -40,14 +48,16 @@ export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
-    displayName: data.displayName,
+    givenName: data.givenName,
+    surname: data.surname,
     jobTitle: data.jobTitle
   };
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-    displayName: data.displayName,
+    givenName: data.givenName,
+    surname: data.surname,
     jobTitle: data.jobTitle
   };
 }
@@ -56,7 +66,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
-    { label: 'Name', value: data.displayName, editStepNumber: 1 },
+    { label: 'Given name', value: data.givenName, editStepNumber: 1 },
+    { label: 'Surname', value: data.surname, editStepNumber: 1 },
     { label: 'Job title', value: data.jobTitle, editStepNumber: 1 }
   );
 
