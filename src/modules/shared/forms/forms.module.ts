@@ -36,6 +36,7 @@ import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin
 import { RouterModule } from '@angular/router';
 import { BytesPrettyPrintPipeModule } from '../pipes/bytes-pretty-print.module';
 import { FormSupportingDocumentListComponent } from './components/supporting-documents-list-info.component';
+import { FormFieldsGroupV3Component } from './components/fields-group-v3.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { FormSupportingDocumentListComponent } from './components/supporting-doc
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
+    FormFieldsGroupV3Component,
     FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
@@ -99,6 +101,7 @@ import { FormSupportingDocumentListComponent } from './components/supporting-doc
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
+    FormFieldsGroupV3Component,
     FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,

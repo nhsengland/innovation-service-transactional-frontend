@@ -171,9 +171,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           }
 
           const totalUnits = organisationData.organisationUnits?.length || 0;
+          const shouldSelectUnit =
+            totalUnits > 1 ||
+            (totalUnits === 1 && organisationData.organisationUnits[0].name !== chosenOrganisation.name);
 
           const units = this.form.get('units');
-          if (totalUnits > 1) {
+          if (shouldSelectUnit) {
             if (!units) {
               this.form.addControl(
                 'units',
@@ -187,7 +190,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
             }));
 
             this.unitsItems.unshift({
-              value: 'Select the organisation units you want to suggest:',
+              value: `Select the organisation unit${totalUnits === 1 ? '' : 's'} you want to suggest:`,
               label: 'HEADING'
             });
 
