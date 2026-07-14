@@ -89,6 +89,7 @@ export type InnovationRecordMinMaxValidationType = { length: number; errorMessag
 export type InnovationRecordItemsType = {
   id?: string;
   label?: string;
+  isLegacy?: boolean;
   description?: string;
   exclusive?: boolean;
   conditional?: FormEngineParameterModelV3;
