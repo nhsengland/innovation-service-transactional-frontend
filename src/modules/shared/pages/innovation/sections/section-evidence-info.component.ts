@@ -18,12 +18,14 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   innovation: ContextInnovationType;
   sectionId: string;
   evidenceId: string;
+  pageStep: 'INFO' | 'DELETE' = 'INFO';
   baseUrl: string;
+  sectionUrl: string;
 
   wizard: WizardEngineModel;
 
-  summaryList: WizardSummaryType[] = [];
-  documentsList: InnovationDocumentsListOutDTO['data'] = [];
+  summaryList: null | WizardSummaryType[] = null;
+  documentsList: null | InnovationDocumentsListOutDTO['data'] = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,6 +37,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
     this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
+    this.sectionUrl = `${this.baseUrl}/record/sections/${this.sectionId}`;
 
     this.wizard =
       this.ctx.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
@@ -46,6 +49,8 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   ngOnInit(): void {
+    this.setBackLink('Go back', `${this.baseUrl}/record/sections/${this.sectionId}`);
+
     forkJoin([
       this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
       this.innovationDocumentsService.getDocumentList(this.innovation.id, {
@@ -56,9 +61,26 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
       })
     ]).subscribe(([evidenceInfo, documents]) => {
       this.summaryList = this.wizard.runSummaryParsing(evidenceInfo);
+
       this.documentsList = documents.data;
 
-      this.setPageTitle(this.summaryList[1].value ?? '');
+      // add error if any evidence is missing document
+      if (this.documentsList.length === 0) {
+        this.setAlertError('There is a problem', {
+          message: 'You must add a supporting document for this evidence.',
+          itemsList: [
+            {
+              title: 'Add document',
+              callback: `${this.baseUrl}/documents/new?evidenceId=${this.evidenceId}`
+            }
+          ],
+          width: 'full'
+        });
+      }
+      this.setPageTitle(this.summaryList[1].value ?? '', {
+        hint: this.summaryList[0].value?.split('(')[0] ?? '',
+        width: '2.thirds'
+      });
       this.setPageStatus('READY');
     });
   }
@@ -81,5 +103,23 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
         );
       }
     });
+  }
+
+  gotoDeletePage() {
+    this.resetAlert();
+    this.setPageTitle('Are you sure you want to delete this evidence?', { width: '2.thirds' });
+    this.setBackLink('Go back', this.gotoInfoPage.bind(this));
+    this.pageStep = 'DELETE';
+  }
+
+  gotoInfoPage() {
+    if (['/sections', '/support-summary'].some(i => this.ctx.layout.previousUrl()?.includes(i))) {
+      this.setBackLink('Go back');
+    } else {
+      this.setBackLink('Go back', `${this.baseUrl}/record/sections/${this.sectionId}`);
+    }
+
+    this.setPageTitle('Document details', { width: '2.thirds' });
+    this.pageStep = 'INFO';
   }
 }

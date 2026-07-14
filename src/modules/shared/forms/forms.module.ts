@@ -33,6 +33,9 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
 import { FormIRSelectableFiltersFilterComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters-filter.component';
 import { ThemeModule } from '../../theme/theme.module';
 import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters.component';
+import { RouterModule } from '@angular/router';
+import { BytesPrettyPrintPipeModule } from '../pipes/bytes-pretty-print.module';
+import { FormSupportingDocumentListComponent } from './components/supporting-documents-list-info.component';
 import { FormFieldsGroupV3Component } from './components/fields-group-v3.component';
 
 @NgModule({
@@ -44,7 +47,11 @@ import { FormFieldsGroupV3Component } from './components/fields-group-v3.compone
     NgxDropzoneModule,
     // Angular Material.
     MatAutocompleteModule,
-    ThemeModule
+    ThemeModule,
+    RouterModule,
+
+    // Pipes
+    BytesPrettyPrintPipeModule
   ],
   declarations: [
     FormEngineComponent,
@@ -67,6 +74,7 @@ import { FormFieldsGroupV3Component } from './components/fields-group-v3.compone
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
     FormTextareaComponent,
+    FormSupportingDocumentListComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
     FormSelectComponent,
@@ -98,6 +106,7 @@ import { FormFieldsGroupV3Component } from './components/fields-group-v3.compone
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
     FormTextareaComponent,
+    FormSupportingDocumentListComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
     FormSelectComponent,

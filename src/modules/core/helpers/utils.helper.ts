@@ -7,8 +7,11 @@ import {
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
+import { EvidenceV3Type } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
 import { PhoneUserPreferenceEnum, SchemaContextStore } from '@modules/stores';
+import { GetInnovationEvidenceDTO } from '@modules/stores/ctx/innovation/innovation.models';
 
 export class UtilsHelper {
   static isEmpty(value: any) {
@@ -148,5 +151,21 @@ export class UtilsHelper {
 
   static getAssessmentVersion(majorVersion = 1, minorVersion = 0): string {
     return `${majorVersion}.${minorVersion}`;
+  }
+
+  static evidenceWithoutDocuments(
+    evidenceList: EvidenceV3Type[],
+    supportingDocumentsList: InnovationDocumentsListOutDTO['data']
+  ): EvidenceV3Type[] {
+    const docContextIds = new Set(supportingDocumentsList.map(d => d.context.id));
+    return evidenceList.filter(e => !docContextIds.has(e.evidenceId)).map(e => e);
+  }
+
+  static regulationsWithoutDocuments(
+    regulationsList: string[],
+    regulationsDocumentsList: InnovationDocumentsListOutDTO['data']
+  ) {
+    const docContextIds = new Set(regulationsDocumentsList.map(d => d.context.id));
+    return regulationsList.filter(e => !docContextIds.has(e)).map(e => e);
   }
 }

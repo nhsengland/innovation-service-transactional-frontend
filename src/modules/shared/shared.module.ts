@@ -73,7 +73,6 @@ import { PageTermsOfUseAcceptanceComponent } from './pages/terms-of-use/terms-of
 import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-with-confirm-step.component';
 
 // Pipes.
-import { BytesPrettyPrintPipe } from './pipes/bytes-pretty-print.pipe';
 import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 import { JoinArrayPipe } from './pipes/join-array.pipe';
 import { LinkifyPipe } from './pipes/linkify.pipe';
@@ -135,6 +134,9 @@ import { InnovationRecordProgressComponent } from './pages/innovation/record/inn
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/notification-step.component';
 
 import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/strategic-roles-list.component';
+import { BytesPrettyPrintPipeModule } from './pipes/bytes-pretty-print.module';
+import { InnovationRegulationsDocumentsTableComponent } from './components/regulations-table/section-regulations-documents-table.component';
+import { PageInnovationSectionRegulationInfoComponent } from './pages/innovation/sections/section-regulation-info';
 @NgModule({
   imports: [
     RouterModule,
@@ -150,7 +152,10 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     // Standalone
     PluralTranslatePipe,
     InnovationRecordProgressComponent,
-    InnovationSubmissionReadyComponent
+    InnovationSubmissionReadyComponent,
+
+    // Pipe Modules
+    BytesPrettyPrintPipeModule
   ],
   declarations: [
     // Pages.
@@ -200,6 +205,7 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     PageInnovationRecordWrapperComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
+    PageInnovationSectionRegulationInfoComponent,
     PageInnovationAllSectionsInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
     PageInnovationStatusListComponent,
@@ -226,6 +232,7 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     WizardInnovationSupportSummaryProgressUpdateDocumentFileStepComponent,
     WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent,
 
+    InnovationRegulationsDocumentsTableComponent,
     InnovationSectionSummaryComponent,
     KeyProgressAreasPageComponent,
     // // Innovations.
@@ -242,7 +249,6 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     WizardSummaryWithConfirmStepComponent,
 
     // Pipes.
-    BytesPrettyPrintPipe,
     JoinArrayPipe,
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
@@ -288,7 +294,7 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     FormsModule,
 
     // Pipes.
-    BytesPrettyPrintPipe,
+    BytesPrettyPrintPipeModule,
     PluralTranslatePipe,
     IrV3TranslatePipe,
     JoinArrayPipe,
@@ -297,7 +303,10 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     StrategicRoleTranslatePipe,
 
     InnovationAssessmentDetailsComponent,
-    PageStrategicRolesListComponent
+    PageStrategicRolesListComponent,
+
+    InnovationRegulationsDocumentsTableComponent,
+    PageInnovationSectionRegulationInfoComponent
   ]
 })
 export class SharedModule {}
