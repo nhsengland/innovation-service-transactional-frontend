@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, computed } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, computed } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -17,7 +16,7 @@ export type HeaderNotificationsType = Record<string, number>;
   templateUrl: './header-admin.component.html',
   styleUrls: ['./header-admin.component.scss']
 })
-export class HeaderAdminComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderAdminComponent implements OnInit, OnDestroy {
   @Input() showUserInformation = false;
   @Input() showSignOut = false;
   @Input() leftMenuBarItems: HeaderMenuBarItemType[] = [];
@@ -28,6 +27,11 @@ export class HeaderAdminComponent implements OnInit, AfterViewInit, OnDestroy {
 
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
+  navigationOpen = false;
+
+  get hasNavigation(): boolean {
+    return this.leftMenuBarItems.length > 0 || this.rightMenuBarItems.length > 0 || this.showSignOut;
+  }
 
   userDescription = computed(() =>
     this.ctx.user.isAccessorType()
@@ -44,7 +48,6 @@ export class HeaderAdminComponent implements OnInit, AfterViewInit, OnDestroy {
   URLS: typeof URLS;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private coockiesService: CookiesService,
     protected ctx: CtxStore
@@ -64,50 +67,26 @@ export class HeaderAdminComponent implements OnInit, AfterViewInit, OnDestroy {
       right: this.rightMenuBarItems,
       isChildrenOpened: false
     };
-    console.log('admin menuBarItems', this.menuBarItems)
-  }
-
-  ngAfterViewInit(): void {
-    // Behaviour for header menu on mobile.
-    // Copied from NHS design system framework scripts.
-    if (isPlatformBrowser(this.platformId)) {
-      const t = document.querySelector('#toggle-menu');
-      const m = document.querySelector('#close-menu');
-      const n = document.querySelector('#header-navigation');
-
-      if (t && m && n) {
-        [t, m].forEach(e => {
-          e.addEventListener('click', r => {
-            console.log('clicked');
-            r.preventDefault();
-            const nTemp = 'true' === t.getAttribute('aria-expanded') ? 'false' : 'true';
-            t.setAttribute('aria-expanded', nTemp);
-            t.classList.toggle('is-active');
-            n.classList.toggle('js-show');
-          });
-        });
-      }
-    }
   }
 
   private onRouteChange(event: NavigationEnd): void {
     // Only show cookies banner if NOT on policies pages.
     this.showCookiesBanner = this.coockiesService.shouldAskForCookies() && !event.url.startsWith('/policies');
-
-    // // Always reset focus to body.
-    // if (isPlatformBrowser(this.platformId)) {
-    //   setTimeout(() => {
-    //     document.body.setAttribute('tabindex', '-1');
-    //     document.body.focus();
-    //     document.body.removeAttribute('tabindex');
-    //   });
-    // }
+    this.closeNavigation();
   }
 
   onSaveCookies(useCookies: boolean): void {
     this.coockiesService.setConsentCookie(useCookies);
     this.showCookiesBanner = false;
     this.showCookiesSaveSuccess = true;
+  }
+
+  toggleNavigation(): void {
+    this.navigationOpen = !this.navigationOpen;
+  }
+
+  closeNavigation(): void {
+    this.navigationOpen = false;
   }
 
   handleSkipLinkClick(event: Event): void {
@@ -126,7 +105,6 @@ export class HeaderAdminComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onHeaderMenuClick(menuItem: HeaderMenuBarItemType): void {
-    console.log('header menu click');
     [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(
       i => (i.isOpen = menuItem.label !== i.label && i.isOpen ? false : i.isOpen)
     );

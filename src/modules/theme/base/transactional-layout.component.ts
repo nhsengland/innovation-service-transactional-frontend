@@ -80,7 +80,7 @@ export class TransactionalLayoutComponent implements OnDestroy {
 
     this.header = routeData.header;
 
-    this.adminHeader = routeData.adminHeader
+    this.adminHeader = routeData.adminHeader;
 
     this.routeLayoutInfo = {
       type: routeData.layout?.type ?? 'full',

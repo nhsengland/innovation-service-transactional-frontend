@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { ActivatedRoute } from '@angular/router';
 import { InnovatorService, SurveyAnswersType } from '@modules/feature-modules/innovator/services/innovator.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { InnovationErrorsEnum } from '@app/base/enums';
 import { UtilsHelper } from '@app/base/helpers';
 

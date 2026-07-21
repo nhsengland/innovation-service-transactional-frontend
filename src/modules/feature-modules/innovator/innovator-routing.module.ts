@@ -106,10 +106,10 @@ import { ShareInnovationsWithOrgComponent } from './pages/share-innovations-with
 
 const header: RoutesDataType['header'] = {
   menuBarItems: [
-      { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard', align:'left' },
-      { id: 'notifications', label: 'Notifications', url: '/innovator/notifications', align:'left'  },
-      { id: 'account', label: 'Your account', url: '/innovator/account/manage-details', align:'left'  }
-    ],
+    { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard', align: 'left' },
+    { id: 'notifications', label: 'Notifications', url: '/innovator/notifications', align: 'left' },
+    { id: 'account', label: 'Your account', url: '/innovator/account/manage-details', align: 'left' }
+  ]
 };
 
 const routes: Routes = [

@@ -14,7 +14,7 @@ import {
   GetInnovationsByInnovatorIdDTO
 } from '../../services/users.service';
 import { TableModel } from '@app/base/models';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 type AssignedInnovationData = AssignedInnovationsList['data'][0];
 

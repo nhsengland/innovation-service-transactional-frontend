@@ -37,12 +37,12 @@ export type HeaderMenuBarItemType = {
 
 export type HeaderNotificationsType = Record<string, number>;
 
-export interface NhsHeaderNavItem {
+export type NhsHeaderNavItem = {
   label: string;
   href?: string;
   routerLink?: string | any[];
   current?: boolean;
-}
+};
 
 @Component({
   selector: 'theme-header',
@@ -113,7 +113,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.updateCurrentTab();
     this.cdr.detectChanges();
-    
+
     setTimeout(() => this.updateNavigation());
   }
 
@@ -307,19 +307,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateCurrentTab(): void {
-  // check all items for the current one and update all logic's arrays
-  
-  const currentUrl = this.router.url;
+    // check all items for the current one and update all logic's arrays
 
-  const markCurrent = (item: HeaderMenuBarItemType): HeaderMenuBarItemType => ({
-    ...item,
-    isCurrent: !!item.url && currentUrl.includes(item.url)
-  });
+    const currentUrl = this.router.url;
 
-  this.menuBarItems = this.menuBarItems.map(markCurrent);
-  this.visibleItems = this.visibleItems.map(markCurrent);
-  this.overflowItems = this.overflowItems.map(markCurrent);
+    const markCurrent = (item: HeaderMenuBarItemType): HeaderMenuBarItemType => ({
+      ...item,
+      isCurrent: !!item.url && currentUrl.includes(item.url)
+    });
 
-  this.cdr.detectChanges();
-}
+    this.menuBarItems = this.menuBarItems.map(markCurrent);
+    this.visibleItems = this.visibleItems.map(markCurrent);
+    this.overflowItems = this.overflowItems.map(markCurrent);
+
+    this.cdr.detectChanges();
+  }
 }

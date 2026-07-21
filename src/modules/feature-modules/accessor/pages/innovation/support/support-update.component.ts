@@ -14,7 +14,7 @@ import { AccessorService } from '../../../services/accessor.service';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { switchMap } from 'rxjs/operators';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { ObservableInput, forkJoin } from 'rxjs';
 import { UsersListDTO } from '@modules/shared/dtos/users.dto';
 import { InnovationSupportInfoDTO } from '@modules/shared/services/innovations.dtos';

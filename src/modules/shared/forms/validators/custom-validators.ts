@@ -1,6 +1,8 @@
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
-import { first, omit, isEmpty } from 'lodash';
+import first from 'lodash/first';
+import omit from 'lodash/omit';
+import isEmpty from 'lodash/isEmpty';
 import { INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
 
 export class CustomFormGroupValidators {

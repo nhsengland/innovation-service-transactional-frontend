@@ -7,7 +7,7 @@ import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@a
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { CreateSupportSummaryProgressUpdateType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { switchMap } from 'rxjs/operators';
 import { SUPPORT_SUMMARY_MILESTONES } from './constants';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './steps/categories-step.component';

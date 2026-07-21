@@ -84,11 +84,11 @@ import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/
 
 const header: RoutesDataType['header'] = {
   menuBarItems: [
-      { id: 'innovations', label: 'Innovations', url: '/assessment/innovations', align:'left'  },
-      { id: 'tasks', label: 'Tasks', url: '/assessment/tasks', align:'left'  },
-      { id: 'notifications', label: 'Notifications', url: '/assessment/notifications', align:'left'  },
-      { id: 'account', label: 'Your account', url: '/assessment/account/manage-details', align:'left'  }
-    ]
+    { id: 'innovations', label: 'Innovations', url: '/assessment/innovations', align: 'left' },
+    { id: 'tasks', label: 'Tasks', url: '/assessment/tasks', align: 'left' },
+    { id: 'notifications', label: 'Notifications', url: '/assessment/notifications', align: 'left' },
+    { id: 'account', label: 'Your account', url: '/assessment/account/manage-details', align: 'left' }
+  ]
 };
 
 const routes: Routes = [
