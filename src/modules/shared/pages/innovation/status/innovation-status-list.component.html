@@ -14,10 +14,12 @@
           <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">Status</span>
-              <theme-tag
-                type="{{ 'shared.catalog.innovation.grouped_status.' + status + '.cssColorClass' | translate }}"
-                label="{{ 'shared.catalog.innovation.grouped_status.' + status + '.name' | translate }}"
-              ></theme-tag>
+              <span>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.grouped_status.' + status + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.grouped_status.' + status + '.name' | translate }}"
+                ></theme-tag>
+              </span>
             </td>
             <td class="nhsuk-table__cell">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">Definition</span>

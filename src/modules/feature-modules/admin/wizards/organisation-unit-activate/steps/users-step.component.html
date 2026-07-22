@@ -69,8 +69,12 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("isActive") }}</span>
-                <theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
-                <div *ngIf="!item.isActive" class="nhsuk-body-s nhsuk-hint nhsuk-u-margin-0">Locked at {{ item.lockedAt | date: ("app.date_formats.long_date" | translate) }}</div>
+                <div>
+                  <theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                  <div *ngIf="!item.isActive" class="nhsuk-body-s nhsuk-hint nhsuk-u-margin-0">
+                    Locked at {{ item.lockedAt | date: ("app.date_formats.long_date" | translate) }}
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>

@@ -22,11 +22,13 @@
             <tr *ngFor="let item of announcementsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">Announcements</span>
-                <a routerLink="{{ item.id }}" attr.aria-label="View announcement named {{ item.title }}">{{ item.title }}</a>
-                <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
-                  Live from {{ item.startsAt | date: ("app.date_formats.long_date" | translate)
-                  }}{{ item.expiresAt ? " to " + (item.expiresAt | date: ("app.date_formats.long_date" | translate)) : "" }}
-                </p>
+                <div>
+                  <a routerLink="{{ item.id }}" attr.aria-label="View announcement named {{ item.title }}">{{ item.title }}</a>
+                  <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
+                    Live from {{ item.startsAt | date: ("app.date_formats.long_date" | translate)
+                    }}{{ item.expiresAt ? " to " + (item.expiresAt | date: ("app.date_formats.long_date" | translate)) : "" }}
+                  </p>
+                </div>
               </td>
 
               <td class="nhsuk-table__cell">
@@ -36,10 +38,12 @@
 
               <td class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">Status</span>
-                <theme-tag
-                  type="{{ 'shared.catalog.announcements.status.' + item.status + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.announcements.status.' + item.status + '.name' | translate }}"
-                ></theme-tag>
+                <span>
+                  <theme-tag
+                    type="{{ 'shared.catalog.announcements.status.' + item.status + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.announcements.status.' + item.status + '.name' | translate }}"
+                  ></theme-tag>
+                </span>
               </td>
             </tr>
           </tbody>

@@ -136,18 +136,24 @@
                 </td>
                 <td class="nhsuk-table__cell">
                   <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("createdAt") }}</span>
-                  <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ("app.date_formats.medium_date" | translate) }}</div>
-                  <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">by {{ item.createdBy.description }}</div>
+                  <div>
+                    <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ("app.date_formats.medium_date" | translate) }}</div>
+                    <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">by {{ item.createdBy.description }}</div>
+                  </div>
                 </td>
                 <td class="nhsuk-table__cell">
                   <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("contextType") }}</span>
-                  <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.context.label }}</div>
-                  <div *ngIf="item.context.description" class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.context.description }}</div>
+                  <div>
+                    <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.context.label }}</div>
+                    <div *ngIf="item.context.description" class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.context.description }}</div>
+                  </div>
                 </td>
                 <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
                   <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("actions") }}</span>
-                  <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
-                  <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
+                  <div>
+                    <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
+                    <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
+                  </div>
                 </td>
               </tr>
             </tbody>

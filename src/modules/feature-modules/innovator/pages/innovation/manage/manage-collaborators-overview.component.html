@@ -58,7 +58,9 @@
             </td>
             <td class="nhsuk-table__cell text-align-right">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel("actions") }} </span>
-              <a *ngIf="item.action" [routerLink]="item.action.url">{{ item.action.label }}</a>
+              <span
+                ><a *ngIf="item.action" [routerLink]="item.action.url">{{ item.action.label }}</a></span
+              >
             </td>
           </tr>
         </tbody>
@@ -93,7 +95,9 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ historyCollaborators.getColumnLabel("actions") }} </span>
-                <a *ngIf="item.action" [routerLink]="item.action.url">{{ item.action.label }}</a>
+                <span
+                  ><a *ngIf="item.action" [routerLink]="item.action.url">{{ item.action.label }}</a></span
+                >
               </td>
             </tr>
           </tbody>

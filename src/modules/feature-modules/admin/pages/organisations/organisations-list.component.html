@@ -40,7 +40,7 @@
               </td>
               <td role="cell" class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">Status </span>
-                <theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                <span><theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag></span>
               </td>
             </tr>
           </tbody>
@@ -65,11 +65,13 @@
             <tr *ngFor="let item of teams" role="row" class="nhsuk-table__row">
               <td role="cell" class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">Team </span>
-                <a [routerLink]="item.link">{{ item.name }}</a>
+                <span
+                  ><a [routerLink]="item.link">{{ item.name }}</a></span
+                >
               </td>
               <td role="cell" class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">Status </span>
-                <theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                <span><theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag></span>
               </td>
             </tr>
           </tbody>

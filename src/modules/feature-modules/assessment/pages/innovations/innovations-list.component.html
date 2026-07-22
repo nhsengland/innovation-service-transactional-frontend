@@ -87,34 +87,38 @@
             <tr *ngFor="let innovation of innovationsList.getRecords()" class="nhsuk-table__row" role="row">
               <td class="nhsuk-table__cell fixed-width-300 text-word-break">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }}</span>
-                <a *ngIf="!innovation.assessment?.id" routerLink="/assessment/innovations/{{ innovation.id }}" attr.aria-label="View {{ innovation.name }} innovation">
-                  {{ innovation.name }}</a
-                >
-                <a
-                  *ngIf="innovation.assessment?.id"
-                  routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id }}"
-                  attr.aria-label="View {{ innovation.name }} innovation assessment details"
-                  >{{ innovation.name }}</a
-                >
+                <div>
+                  <a *ngIf="!innovation.assessment?.id" routerLink="/assessment/innovations/{{ innovation.id }}" attr.aria-label="View {{ innovation.name }} innovation">
+                    {{ innovation.name }}</a
+                  >
+                  <a
+                    *ngIf="innovation.assessment?.id"
+                    routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id }}"
+                    attr.aria-label="View {{ innovation.name }} innovation assessment details"
+                    >{{ innovation.name }}</a
+                  >
+                </div>
               </td>
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("lastAssessmentRequestAt") }}</span>
-                <span>{{ innovation.lastAssessmentRequestAt | date: ("app.date_formats.medium_date" | translate) }}</span>
-                <span *ngIf="innovation.assessment?.daysFromSubmittedAtToToday" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
-                  <span class="nhsuk-u-visually-hidden">Innovation was last submitted: </span>
-                  {{
-                    innovation.assessment?.daysFromSubmittedAtToToday +
-                      " " +
-                      ("dictionary.day" | pluralTranslate: innovation.assessment?.daysFromSubmittedAtToToday | translate) +
-                      " ago"
-                  }}
-                </span>
-                <theme-tag
-                  class="d-block"
-                  *ngIf="innovation.assessment?.overdueStatus"
-                  type="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.assessment?.overdueStatus + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.assessment?.overdueStatus + '.label' | translate }}"
-                ></theme-tag>
+                <div>
+                  <span>{{ innovation.lastAssessmentRequestAt | date: ("app.date_formats.medium_date" | translate) }}</span>
+                  <span *ngIf="innovation.assessment?.daysFromSubmittedAtToToday" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
+                    <span class="nhsuk-u-visually-hidden">Innovation was last submitted: </span>
+                    {{
+                      innovation.assessment?.daysFromSubmittedAtToToday +
+                        " " +
+                        ("dictionary.day" | pluralTranslate: innovation.assessment?.daysFromSubmittedAtToToday | translate) +
+                        " ago"
+                    }}
+                  </span>
+                  <theme-tag
+                    class="d-block"
+                    *ngIf="innovation.assessment?.overdueStatus"
+                    type="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.assessment?.overdueStatus + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.assessment?.overdueStatus + '.label' | translate }}"
+                  ></theme-tag>
+                </div>
               </td>
               <td class="nhsuk-table__cell fixed-width-200 text-word-break">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("assessedBy") }}</span>
@@ -122,16 +126,18 @@
               </td>
               <td class="nhsuk-table__cell text-align-right fixed-width-175">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("groupedStatus") }}</span>
-                <theme-tag
-                  type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"
-                  class="text-pre-wrap"
-                ></theme-tag>
-                <div class="d-flex flex-direction-column nhsuk-u-margin-top-1">
-                  <span class="nhsuk-u-font-size-14 font-color-secondary nhsuk-u-margin-bottom-0">Last updated:</span>
-                  <span class="nhsuk-u-font-size-14 font-color-secondary nhsuk-u-margin-bottom-0">{{
-                    innovation.statusUpdatedAt | date: ("app.date_formats.medium_date" | translate)
-                  }}</span>
+                <div>
+                  <theme-tag
+                    type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"
+                    class="text-pre-wrap"
+                  ></theme-tag>
+                  <div class="d-flex flex-direction-column nhsuk-u-margin-top-1">
+                    <span class="nhsuk-u-font-size-14 font-color-secondary nhsuk-u-margin-bottom-0">Last updated:</span>
+                    <span class="nhsuk-u-font-size-14 font-color-secondary nhsuk-u-margin-bottom-0">{{
+                      innovation.statusUpdatedAt | date: ("app.date_formats.medium_date" | translate)
+                    }}</span>
+                  </div>
                 </div>
               </td>
             </tr>

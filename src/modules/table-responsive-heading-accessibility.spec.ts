@@ -39,4 +39,23 @@ describe('responsive table heading accessibility', () => {
 
     expect(visibleToScreenReaders).toEqual([]);
   });
+
+  it('groups complex responsive cell content inside one inner element', () => {
+    const complexCells = htmlFilesIn(sourceDirectory).flatMap(file => {
+      const html = readFileSync(file, 'utf8');
+      return [...html.matchAll(/<(?:td|th)\b[^>]*>([\s\S]*?)<\/(?:td|th)>/gi)]
+        .filter(([, cell]) => /nhsuk-table-responsive__heading/.test(cell))
+        .flatMap(([, cell]) => {
+          const afterHeading = cell
+            .replace(/^[\s\S]*?<span\b[^>]*nhsuk-table-responsive__heading[^>]*>[\s\S]*?<\/span>/i, '')
+            .trim();
+          const hasComplexContent = /<(?:a|button|div|p|ul|ol|li|theme-|app-)\b/i.test(afterHeading);
+          const hasSingleWrapper = /^<(?:span|div)\b[^>]*>[\s\S]*<\/(?:span|div)\s*>$/i.test(afterHeading);
+
+          return hasComplexContent && !hasSingleWrapper ? [{ file, cell: cell.trim() }] : [];
+        });
+    });
+
+    expect(complexCells).toEqual([]);
+  });
 });

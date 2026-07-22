@@ -40,8 +40,10 @@
             <tr *ngFor="let item of pendingTable.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ pendingTable.getColumnLabel("requestedBy") }}</span>
-                <p class="nhsuk-u-margin-bottom-0">{{ item.createdBy.displayTeam }}</p>
-                <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item.createdBy.name }}</span>
+                <div>
+                  <p class="nhsuk-u-margin-bottom-0">{{ item.createdBy.displayTeam }}</p>
+                  <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item.createdBy.name }}</span>
+                </div>
               </td>
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ pendingTable.getColumnLabel("requestedOn") }}</span>
@@ -53,7 +55,7 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ pendingTable.getColumnLabel("actions") }}</span>
-                <a routerLink="../{{ item.id }}" class="nhsuk-link nhsuk-link--no-visited-state">View details</a>
+                <span><a routerLink="../{{ item.id }}" class="nhsuk-link nhsuk-link--no-visited-state">View details</a></span>
               </td>
             </tr>
           </tbody>
@@ -83,8 +85,10 @@
             <tr *ngFor="let item of historyTable.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ historyTable.getColumnLabel("requestedBy") }}</span>
-                <p class="nhsuk-u-margin-bottom-0">{{ item.createdBy.displayTeam }}</p>
-                <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item.createdBy.name }}</span>
+                <div>
+                  <p class="nhsuk-u-margin-bottom-0">{{ item.createdBy.displayTeam }}</p>
+                  <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item.createdBy.name }}</span>
+                </div>
               </td>
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ historyTable.getColumnLabel("requestedOn") }}</span>
@@ -96,7 +100,7 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ historyTable.getColumnLabel("actions") }}</span>
-                <a routerLink="../{{ item.id }}" class="nhsuk-link nhsuk-link--no-visited-state">View details</a>
+                <span><a routerLink="../{{ item.id }}" class="nhsuk-link nhsuk-link--no-visited-state">View details</a></span>
               </td>
             </tr>
           </tbody>

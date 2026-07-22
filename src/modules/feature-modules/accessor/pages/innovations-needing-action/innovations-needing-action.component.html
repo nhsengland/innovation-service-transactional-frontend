@@ -31,35 +31,43 @@
             <td class="nhsuk-table__cell fixed-width-300 text-word-break">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("name") }}</span>
 
-              <a routerLink="/accessor/innovations/{{ innovation.id }}" attr.aria-label="View {{ innovation.name }} innovation"> {{ innovation.name }}</a>
+              <span
+                ><a routerLink="/accessor/innovations/{{ innovation.id }}" attr.aria-label="View {{ innovation.name }} innovation"> {{ innovation.name }}</a></span
+              >
             </td>
 
             <td class="nhsuk-table__cell fixed-width-125">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("dueDate") }}</span>
-              <span>{{ innovation.dueDate | date: ("app.date_formats.medium_date" | translate) }}</span>
+              <div>
+                <span>{{ innovation.dueDate | date: ("app.date_formats.medium_date" | translate) }}</span>
 
-              <span *ngIf="innovation.dueDays > 0" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
-                <span class="nhsuk-u-visually-hidden">Innovation last update: </span>
-                {{ innovation.dueDays + " " + ("dictionary.day" | pluralTranslate: innovation.dueDays | translate) + " ago" }}
-              </span>
+                <span *ngIf="innovation.dueDays > 0" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
+                  <span class="nhsuk-u-visually-hidden">Innovation last update: </span>
+                  {{ innovation.dueDays + " " + ("dictionary.day" | pluralTranslate: innovation.dueDays | translate) + " ago" }}
+                </span>
+              </div>
             </td>
 
             <td class="nhsuk-table__cell fixed-width-175">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("dueDays") }}</span>
-              <theme-tag
-                type="{{ this.getActionColor(innovation.dueDays) }}"
-                label="{{ this.getActionText(innovation.dueDays, innovation.supportStatus) }}"
-                class="text-pre-wrap"
-              ></theme-tag>
+              <div>
+                <theme-tag
+                  type="{{ this.getActionColor(innovation.dueDays) }}"
+                  label="{{ this.getActionText(innovation.dueDays, innovation.supportStatus) }}"
+                  class="text-pre-wrap"
+                ></theme-tag>
+              </div>
             </td>
 
             <td class="nhsuk-table__cell text-align-right">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("supportStatus") }}</span>
-              <theme-tag
-                type="{{ 'shared.catalog.innovation.support_status.' + innovation.supportStatus + '.cssColorClass' | translate }}"
-                label="{{ 'shared.catalog.innovation.support_status.' + innovation.supportStatus + '.name' | translate }}"
-                class="text-pre-wrap"
-              ></theme-tag>
+              <div>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.support_status.' + innovation.supportStatus + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + innovation.supportStatus + '.name' | translate }}"
+                  class="text-pre-wrap"
+                ></theme-tag>
+              </div>
             </td>
           </tr>
         </tbody>

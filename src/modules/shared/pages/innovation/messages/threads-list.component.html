@@ -111,11 +111,12 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("latestMessageCreatedAt") }}</span>
-
-                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.lastMessage.createdAt | date: ("app.date_formats.short_date_time" | translate) }}</p>
-                <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
-                  by <ng-container *ngTemplateOutlet="userInfo; context: { user: item.lastMessage.createdBy }"></ng-container>
-                </p>
+                <div>
+                  <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.lastMessage.createdAt | date: ("app.date_formats.short_date_time" | translate) }}</p>
+                  <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
+                    by <ng-container *ngTemplateOutlet="userInfo; context: { user: item.lastMessage.createdBy }"></ng-container>
+                  </p>
+                </div>
               </td>
             </tr>
           </tbody>

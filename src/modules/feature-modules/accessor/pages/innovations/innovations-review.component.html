@@ -87,9 +87,9 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
-                    <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
                     <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || !item.support?.isShared; else hasLink">
                       <span> {{ item.name }} </span>
                     </ng-container>
@@ -154,10 +154,12 @@
 
               <td *ngIf="innovationsList.getColumnLabel('support.status')" class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("supportStatus") }}</span>
-                <theme-tag
-                  type="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.name' | translate }}"
-                ></theme-tag>
+                <div>
+                  <theme-tag
+                    type="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.name' | translate }}"
+                  ></theme-tag>
+                </div>
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('support.updatedBy')" class="nhsuk-table__cell">
@@ -172,14 +174,16 @@
 
               <td *ngIf="innovationsList.getColumnLabel('engagingOrganisations')" class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("engagingOrganisations") }}</span>
-                <ng-container *ngFor="let org of item.engagingOrganisations; let i = index">
-                  <ng-container *ngIf="i < 2">
-                    <strong class="nhsuk-tag nhsuk-tag--white nhsuk-u-margin-left-1">{{ org }}</strong>
+                <div>
+                  <ng-container *ngFor="let org of item.engagingOrganisations; let i = index">
+                    <ng-container *ngIf="i < 2">
+                      <strong class="nhsuk-tag nhsuk-tag--white nhsuk-u-margin-left-1">{{ org }}</strong>
+                    </ng-container>
+                    <ng-container *ngIf="i === 2 && item.engagingOrganisations.length > 2">
+                      <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.engagingOrganisations.length - 2 }}</strong>
+                    </ng-container>
                   </ng-container>
-                  <ng-container *ngIf="i === 2 && item.engagingOrganisations.length > 2">
-                    <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.engagingOrganisations.length - 2 }}</strong>
-                  </ng-container>
-                </ng-container>
+                </div>
               </td>
             </tr>
           </tbody>

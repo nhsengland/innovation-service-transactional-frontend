@@ -49,9 +49,11 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("actions") }} </span>
-                <a routerLink="/innovator/innovations/{{ innovation.id }}"
-                  >Go to innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span></a
-                >
+                <span>
+                  <a routerLink="/innovator/innovations/{{ innovation.id }}"
+                    >Go to innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span></a
+                  >
+                </span>
               </td>
             </tr>
           </tbody>

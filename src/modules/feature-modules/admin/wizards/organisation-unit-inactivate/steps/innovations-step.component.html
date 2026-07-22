@@ -68,10 +68,12 @@
             </td>
             <td class="nhsuk-table__cell">
               <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("status") }}</span>
-              <theme-tag
-                type="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.support) + '.cssColorClass' | translate }}"
-                label="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.support) + '.name' | translate }}"
-              ></theme-tag>
+              <span>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.support) + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + getUnitStatusSupport(item.support) + '.name' | translate }}"
+                ></theme-tag>
+              </span>
             </td>
           </tr>
         </tbody>

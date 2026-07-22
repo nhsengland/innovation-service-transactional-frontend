@@ -46,10 +46,12 @@
             <tr *ngFor="let item of accessorList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell width-40">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("accessor") }}</span>
-                <span class="d-block text-word-break">{{ item.accessor.name }},</span>
-                <span class="d-block"
-                  >{{ item.accessor.role | serviceRoleTranslate }}<span *ngIf="item.accessor.jobTitle"> ({{ item.accessor.jobTitle }})</span></span
-                >
+                <div>
+                  <span class="d-block text-word-break">{{ item.accessor.name }},</span>
+                  <span class="d-block"
+                    >{{ item.accessor.role | serviceRoleTranslate }}<span *ngIf="item.accessor.jobTitle"> ({{ item.accessor.jobTitle }})</span></span
+                  >
+                </div>
               </td>
               <td class="nhsuk-table__cell width-15">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovationsCount") }}</span>
@@ -58,13 +60,15 @@
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovations") }}</span>
 
-                <ul class="nhsuk-list">
-                  <li *ngFor="let innovation of item.innovations">
-                    <a class="text-word-break" routerLink="/accessor/innovations/{{ innovation.id }}">{{ innovation.name }}</a>
-                  </li>
-                </ul>
+                <div>
+                  <ul class="nhsuk-list">
+                    <li *ngFor="let innovation of item.innovations">
+                      <a class="text-word-break" routerLink="/accessor/innovations/{{ innovation.id }}">{{ innovation.name }}</a>
+                    </li>
+                  </ul>
 
-                <span *ngIf="item.innovations.length === 0" class="nhsuk-u-visually-hidden">There are no assigned innovations.</span>
+                  <span *ngIf="item.innovations.length === 0" class="nhsuk-u-visually-hidden">There are no assigned innovations.</span>
+                </div>
               </td>
             </tr>
           </tbody>
