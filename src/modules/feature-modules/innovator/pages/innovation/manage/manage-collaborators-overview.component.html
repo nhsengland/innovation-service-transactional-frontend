@@ -49,15 +49,15 @@
         <tbody class="nhsuk-table__body">
           <tr *ngFor="let item of activeCollaborators.getRecords()" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
-              <span class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel("user") }}</span>
+              <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel("user") }}</span>
               <span>{{ item.name }}</span>
             </td>
             <td class="nhsuk-table__cell">
-              <span class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel("role") }}</span>
+              <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel("role") }}</span>
               {{ item.role }}
             </td>
             <td class="nhsuk-table__cell text-align-right">
-              <span class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel("actions") }} </span>
+              <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ activeCollaborators.getColumnLabel("actions") }} </span>
               <a *ngIf="item.action" [routerLink]="item.action.url">{{ item.action.label }}</a>
             </td>
           </tr>
@@ -84,15 +84,15 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of historyCollaborators.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ historyCollaborators.getColumnLabel("user") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ historyCollaborators.getColumnLabel("user") }}</span>
                 <span>{{ item.name }}</span>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ historyCollaborators.getColumnLabel("role") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ historyCollaborators.getColumnLabel("role") }}</span>
                 {{ item.role }}
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ historyCollaborators.getColumnLabel("actions") }} </span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ historyCollaborators.getColumnLabel("actions") }} </span>
                 <a *ngIf="item.action" [routerLink]="item.action.url">{{ item.action.label }}</a>
               </td>
             </tr>

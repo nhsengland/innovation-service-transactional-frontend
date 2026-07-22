@@ -173,11 +173,11 @@
             <tbody class="nhsuk-table__body">
               <tr *ngFor="let item of assignedInnovations.getRecords()" class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("innovation") }}</span>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("innovation") }}</span>
                   <a class="text-word-break" routerLink="/admin/innovations/{{ item.innovation.id }}">{{ item.innovation.name }}</a>
                 </td>
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("supportedBy") }}</span>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("supportedBy") }}</span>
 
                   <ul class="nhsuk-list">
                     <li *ngFor="let user of item.supportedBy">
@@ -186,7 +186,7 @@
                   </ul>
                 </td>
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("unit") }}</span>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("unit") }}</span>
                   {{ item.unit }}
                 </td>
               </tr>

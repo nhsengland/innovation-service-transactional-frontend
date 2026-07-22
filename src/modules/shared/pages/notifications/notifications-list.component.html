@@ -46,7 +46,7 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of notificationsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell nhsuk-body-s">
-                <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("notification") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("notification") }}</span>
 
                 <ng-container *ngIf="!item.link">
                   {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}
@@ -67,11 +67,11 @@
                 <theme-notification-tag label="dot" *ngIf="item.readAt === null"></theme-notification-tag>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("createdAt") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("createdAt") }}</span>
                 {{ item.createdAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
               <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
-                <span class="nhsuk-table-responsive__heading">Action</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">Action</span>
                 <a href="javascript:void(0)" (click)="onDeleteNotification(item.id, item.readAt)">
                   Clear
                   <span class="nhsuk-u-visually-hidden">

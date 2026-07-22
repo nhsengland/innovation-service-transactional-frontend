@@ -40,15 +40,15 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let innovation of innovations.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("innovation") }} </span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("innovation") }} </span>
                 <span>{{ innovation.name }}</span>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("statusUpdatedAt") }} </span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("statusUpdatedAt") }} </span>
                 {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("actions") }} </span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("actions") }} </span>
                 <a routerLink="/innovator/innovations/{{ innovation.id }}"
                   >Go to innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span></a
                 >

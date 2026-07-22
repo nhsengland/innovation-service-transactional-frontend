@@ -96,7 +96,7 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("subject") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("subject") }}</span>
                 <div>
                   <a routerLink="{{ item.id }}" attr.aria-label="View {{ item.subject }} conversation"> {{ item.subject }} </a>
                   <theme-notification-tag label="dot" *ngIf="item.hasUnreadNotifications"></theme-notification-tag>
@@ -106,11 +106,11 @@
                 </div>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("messageCount") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("messageCount") }}</span>
                 {{ item.messageCount }} messages
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("latestMessageCreatedAt") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("latestMessageCreatedAt") }}</span>
 
                 <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.lastMessage.createdAt | date: ("app.date_formats.short_date_time" | translate) }}</p>
                 <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
