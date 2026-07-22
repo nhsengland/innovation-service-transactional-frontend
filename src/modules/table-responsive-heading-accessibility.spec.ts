@@ -59,3 +59,21 @@ describe('responsive table heading accessibility', () => {
     expect(complexCells).toEqual([]);
   });
 });
+
+describe('conditional form control accessibility', () => {
+  it('uses data-aria-controls for conditionally revealed fields', () => {
+    const conditionalControlTemplates = [
+      'src/modules/shared/forms/components/radio-group.component.html',
+      'src/modules/shared/forms/components/radio-group-v3.component.html',
+      'src/modules/shared/forms/components/checkbox-array.component.html',
+      'src/modules/shared/forms/components/checkbox-array-v3.component.html'
+    ];
+
+    conditionalControlTemplates.forEach(file => {
+      const html = readFileSync(join(sourceDirectory, '..', file), 'utf8');
+
+      expect(html).toContain('[attr.data-aria-controls]');
+      expect(html).not.toContain('[attr.aria-controls]');
+    });
+  });
+});
