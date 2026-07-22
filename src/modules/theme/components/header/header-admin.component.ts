@@ -106,7 +106,7 @@ export class HeaderAdminComponent implements OnInit, OnDestroy {
 
   onHeaderMenuClick(menuItem: HeaderMenuBarItemType): void {
     [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(
-      i => (i.isOpen = menuItem.label !== i.label && i.isOpen ? false : i.isOpen)
+      i => (i.isOpen = menuItem.id !== i.id && i.isOpen ? false : i.isOpen)
     );
 
     this.menuBarItems.isChildrenOpened = menuItem.isOpen = !menuItem.isOpen;

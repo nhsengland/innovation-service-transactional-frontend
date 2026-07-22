@@ -15,6 +15,21 @@
 // Angular Material.
 @import "node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 
+.cookie-success-banner {
+  padding: 8px 0;
+  color: #fff;
+  background: var(--success-color);
+
+  a,
+  a:visited {
+    color: #fff;
+  }
+
+  a:focus {
+    color: #212b32;
+  }
+}
+
 // Variables. (https://service-manual.nhs.uk/design-system/styles)
 $service-manual-container-size: 960px; // Container width variable.
 

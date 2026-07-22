@@ -30,7 +30,10 @@ describe('Theme/Components/Header/HeaderAdminComponent', () => {
       imports: [RouterTestingModule],
       declarations: [HeaderAdminComponent, NotificationTagStubComponent],
       providers: [
-        { provide: CookiesService, useValue: { shouldAskForCookies: jest.fn().mockReturnValue(false), setConsentCookie: jest.fn() } },
+        {
+          provide: CookiesService,
+          useValue: { shouldAskForCookies: jest.fn().mockReturnValue(false), setConsentCookie: jest.fn() }
+        },
         { provide: CtxStore, useValue: { user } }
       ]
     });
@@ -95,9 +98,12 @@ describe('Theme/Components/Header/HeaderAdminComponent', () => {
     const links = Array.from(fixture.nativeElement.querySelectorAll('a')) as HTMLAnchorElement[];
     const linkByText = (text: string) => links.find(link => link.textContent?.trim() === text);
 
-    expect(fixture.nativeElement.querySelector('.nhsuk-header__service-name').textContent).toContain('Innovation Service');
-    expect(fixture.nativeElement.textContent).toContain('Test User ( Innovator )');
-    expect(linkByText('Change role')?.getAttribute('ng-reflect-router-link')).toBe('/switch-user-context');
+    expect(fixture.nativeElement.querySelector('.nhsuk-header__service-name').textContent).toContain(
+      'Innovation Service'
+    );
+    expect(fixture.nativeElement.textContent).toContain('Test User');
+    expect(fixture.nativeElement.textContent).toContain('Innovator');
+    expect(linkByText('Switch profile')?.getAttribute('ng-reflect-router-link')).toBe('/switch-user-context');
     expect(linkByText('Sign out')).toBeTruthy();
     expect(linkByText('Router link')?.getAttribute('ng-reflect-router-link')).toBe('/router-link');
     expect(linkByText('Full reload link')?.getAttribute('href')).toBe('/full-reload-link');
