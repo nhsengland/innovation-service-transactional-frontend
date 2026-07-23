@@ -7,7 +7,6 @@ import { StoresModule } from '@modules/stores/stores.module';
 import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
-import { VisitedRoutesService } from '@modules/core/services/visited-routes.service';
 
 import { ApplicationinsightsAngularpluginErrorService } from '@microsoft/applicationinsights-angularplugin-js';
 import { AppRoutingModule } from './app-routing.module';
@@ -37,10 +36,7 @@ import { AppComponent } from './app.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(
-    injector: Injector,
-    private visitedRoutesService: VisitedRoutesService
-  ) {
+  constructor(injector: Injector) {
     AppInjector.setInjector(injector);
   }
 }
