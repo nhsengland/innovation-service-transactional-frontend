@@ -19,7 +19,7 @@ export const ACCOUNT_DETAILS_ADMIN: WizardEngineModel = new WizardEngineModel({
           id: 'givenName',
           dataType: 'text',
           label: 'What is your given name?',
-          validations: { isRequired: [true, 'Given name is required'], maxLength: 100 }
+          validations: { isRequired: [true, 'Given name is required'], maxLength: 64 }
         }
       ]
     }),
@@ -29,7 +29,7 @@ export const ACCOUNT_DETAILS_ADMIN: WizardEngineModel = new WizardEngineModel({
           id: 'surname',
           dataType: 'text',
           label: 'What is your surname?',
-          validations: { isRequired: [true, 'Surname is required'], maxLength: 100 }
+          validations: { isRequired: [true, 'Surname is required'], maxLength: 64 }
         }
       ]
     })

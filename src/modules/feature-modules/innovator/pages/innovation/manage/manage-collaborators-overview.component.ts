@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
+import { StringsHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType, InnovationCollaboratorStatusEnum } from '@modules/stores';
@@ -32,7 +33,11 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
     this.innovation = this.ctx.innovation.info();
 
     const user = this.ctx.user.getUserInfo();
-    this.user = { id: user.id, name: user.displayName, email: user.email };
+    this.user = {
+      id: user.id,
+      name: StringsHelper.getUserDisplayName(user.givenName, user.surname, user.displayName),
+      email: user.email
+    };
 
     this.setPageTitle('Invite or manage collaborators');
     this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage/innovation`);

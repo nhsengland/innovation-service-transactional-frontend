@@ -16,7 +16,7 @@ import {
 } from 'rxjs';
 import { DomainUserContext, EMPTY_USER_INFO, UserContextType, UserInfo } from './user.types';
 import { UpdateUserInfo, UserContextService } from './user.service';
-import { LocalStorageHelper } from '@app/base/helpers';
+import { LocalStorageHelper, StringsHelper } from '@app/base/helpers';
 import { UserRoleEnum } from '@app/base/enums';
 import { isPlatformBrowser } from '@angular/common';
 import { EnvironmentVariablesStore } from '@modules/core';
@@ -46,7 +46,10 @@ export class UserContextStore {
   getUserId = computed(() => this.getUserInfo().id);
   getUserType = computed(() => this.getUserContext()?.type); // TODO: Change this to be role instead of type.
   getUserRoleTranslation = computed(() => this.getRoleDescription(this.getUserType() ?? ''));
-  getDisplayName = computed(() => this.getUserInfo().displayName);
+  getDisplayName = computed(() => {
+    const user = this.getUserInfo();
+    return StringsHelper.getUserDisplayName(user.givenName, user.surname, user.displayName);
+  });
   hasMultipleRoles = computed(() => this.getUserInfo().roles.length > 1);
   getAccessorUnitName = computed(() => this.getUserContext()?.organisationUnit?.name);
 

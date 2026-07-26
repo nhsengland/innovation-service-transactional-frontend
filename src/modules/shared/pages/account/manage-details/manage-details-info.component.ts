@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { UtilsHelper } from '@app/base/helpers';
+import { StringsHelper, UtilsHelper } from '@app/base/helpers';
 import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 import { UserContextType } from '@modules/stores';
 
@@ -31,7 +31,10 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent {
     const summary = [
       { label: 'Given name', value: user.givenName, editStepNumber: ++editStep },
       { label: 'Surname', value: user.surname, editStepNumber: ++editStep },
-      { label: 'Display name', value: user.displayName },
+      {
+        label: 'Display name',
+        value: StringsHelper.getUserDisplayName(user.givenName, user.surname, user.displayName)
+      },
       { label: 'Email address', value: user.email },
       {
         label: 'Contact preference',

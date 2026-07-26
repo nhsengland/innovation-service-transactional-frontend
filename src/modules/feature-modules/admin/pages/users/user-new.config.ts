@@ -12,13 +12,13 @@ import { UserContextStore } from '@modules/stores/ctx/user/user.store';
 const stepsLabels = {
   l1: { label: "What is the new user's email?", description: 'Enter an email with a maximum of 100 characters.' },
   l2: {
-    label: 'What is the name of the new user?',
-    description: 'Enter the first name and surname. This is how their name will appear on the service.'
+    label: 'What is the new user’s given name?'
   },
-  l3: { label: 'What is their role?' },
-  l4: { label: 'Which organisation is the user associated to?' },
-  l5: { label: 'Which unit is the user associated to?' },
-  l6: { label: 'Are there any strategic roles?' }
+  l3: { label: 'What is the new user’s surname?' },
+  l4: { label: 'What is their role?' },
+  l5: { label: 'Which organisation is the user associated to?' },
+  l6: { label: 'Which unit is the user associated to?' },
+  l7: { label: 'Are there any strategic roles?' }
 };
 
 // Types.
@@ -40,7 +40,8 @@ type LogicFieldsType = {
 };
 type QuestionFieldsType = {
   email?: string;
-  name?: string;
+  givenName?: string;
+  surname?: string;
   role?: UserRoleEnum.QUALIFYING_ACCESSOR | UserRoleEnum.ACCESSOR | UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN;
   organisationId?: string;
   unitIds?: string[];
@@ -55,7 +56,12 @@ type CreateRolesType =
       organisationId: string;
       unitIds: string[];
     };
-type CreateUserType = { email: string; name: string; strategicRoles?: StrategicRoleEnum[] } & CreateRolesType;
+type CreateUserType = {
+  email: string;
+  givenName: string;
+  surname: string;
+  strategicRoles?: StrategicRoleEnum[];
+} & CreateRolesType;
 export type OutboundPayloadType = CreateUserType;
 
 // consts.
@@ -85,13 +91,25 @@ export const WIZARD_CREATE_USER: WizardEngineModel = new WizardEngineModel({
     new FormEngineModel({
       parameters: [
         {
-          id: 'name',
+          id: 'givenName',
           dataType: 'text',
           label: stepsLabels.l2.label,
-          description: stepsLabels.l2.description,
           validations: {
-            isRequired: [true, 'Name is required'],
-            maxLength: 100
+            isRequired: [true, 'Given name is required'],
+            maxLength: 64
+          }
+        }
+      ]
+    }),
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'surname',
+          dataType: 'text',
+          label: stepsLabels.l3.label,
+          validations: {
+            isRequired: [true, 'Surname is required'],
+            maxLength: 64
           }
         }
       ]
@@ -105,7 +123,7 @@ export const WIZARD_CREATE_USER: WizardEngineModel = new WizardEngineModel({
 });
 
 function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): void {
-  steps.splice(2);
+  steps.splice(3);
 
   if (data.contextType === 'BASE' || data.contextType === 'UNIT') {
     steps.push(
@@ -114,7 +132,7 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
           {
             id: 'role',
             dataType: 'radio-group',
-            label: stepsLabels.l3.label,
+            label: stepsLabels.l4.label,
             validations: { isRequired: [true, 'Choose one role'] },
             items:
               data.contextType === 'BASE'
@@ -138,7 +156,7 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
           {
             id: 'organisationId',
             dataType: 'radio-group',
-            label: stepsLabels.l4.label,
+            label: stepsLabels.l5.label,
             validations: { isRequired: [true, 'Organisation is required'] },
             items: (data.organisations ?? []).map(o => ({
               value: o.id,
@@ -162,7 +180,7 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
               {
                 id: 'unitIds',
                 dataType: 'checkbox-array',
-                label: stepsLabels.l5.label,
+                label: stepsLabels.l6.label,
                 validations: { isRequired: [true, 'Unit is required'] },
                 items: units.sort((a, b) => a.label.localeCompare(b.label))
               }
@@ -180,7 +198,7 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
           {
             id: 'strategicRoles',
             dataType: 'checkbox-array',
-            label: stepsLabels.l6.label,
+            label: stepsLabels.l7.label,
             items: [
               { value: StrategicRoleEnum.CHAMPION, label: 'Champion' },
               { value: StrategicRoleEnum.SENIOR_SPONSOR, label: 'Senior sponsor' }
@@ -207,7 +225,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-    name: data.name ?? '',
+    givenName: data.givenName ?? '',
+    surname: data.surname ?? '',
     email: data.email ?? '',
     role: data.role ?? UserRoleEnum.ASSESSMENT, // This can't happen, since role is required.
     strategicRoles: data.strategicRoles ?? [],
@@ -225,7 +244,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     { label: 'Email', value: data.email, editStepNumber: editStepNumber++ },
-    { label: 'Name', value: data.name, editStepNumber: editStepNumber++ }
+    { label: 'Given name', value: data.givenName, editStepNumber: editStepNumber++ },
+    { label: 'Surname', value: data.surname, editStepNumber: editStepNumber++ }
   );
 
   const role = userCtx.getRoleDescription(data.role ?? UserRoleEnum.ASSESSMENT); // Reaching this point role will be defined
