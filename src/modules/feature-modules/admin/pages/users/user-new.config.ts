@@ -119,7 +119,7 @@ export const WIZARD_CREATE_USER: WizardEngineModel = new WizardEngineModel({
   runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType) => wizardRuntimeRules(steps, currentValues)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+  summaryParsing: (data: StepPayloadType, steps?: WizardStepType[]) => summaryParsing(data, steps ?? [])
 });
 
 function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): void {
@@ -237,7 +237,11 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   };
 }
 
-function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
+export function getStrategicRolesEditStep(steps: WizardStepType[]): number {
+  return steps.findIndex(step => step.parameters.some(parameter => parameter.id === 'strategicRoles')) + 1;
+}
+
+function summaryParsing(data: StepPayloadType, steps: WizardStepType[]): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
   let editStepNumber = 1;
@@ -273,7 +277,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       value: data.strategicRoles
         .map(r => (r === StrategicRoleEnum.CHAMPION ? 'Champion' : 'Senior sponsor'))
         .join(', '),
-      editStepNumber: toReturn.length + 1
+      editStepNumber: getStrategicRolesEditStep(steps)
     });
   }
 

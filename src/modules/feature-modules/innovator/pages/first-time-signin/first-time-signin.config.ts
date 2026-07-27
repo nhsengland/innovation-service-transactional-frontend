@@ -69,7 +69,8 @@ export type HowDidYouFindUsAnswersType = {
 };
 
 type StepPayloadType = {
-  innovatorName: string;
+  givenName: string;
+  surname: string;
   isCompanyOrOrganisation: 'YES' | 'NO';
   organisationName: string;
   organisationDescription: null | (typeof organisationDescriptions)[number];
@@ -84,7 +85,8 @@ type StepPayloadType = {
   howDidYouFindUsOther?: string;
 };
 type OutboundPayloadType = {
-  innovatorName: string;
+  givenName: string;
+  surname: string;
   mobilePhone: null | string;
   organisation?: {
     name: string;
@@ -153,7 +155,7 @@ export const FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineMo
 });
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
-  steps.splice(2);
+  steps.splice(3);
 
   if (data.isCompanyOrOrganisation === 'NO') {
     data.organisationName = '';
@@ -307,7 +309,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
 function inboundParsing(): StepPayloadType {
   return {
-    innovatorName: '',
+    givenName: '',
+    surname: '',
     isCompanyOrOrganisation: 'NO',
     organisationName: '',
     organisationSize: null,
@@ -321,7 +324,8 @@ function inboundParsing(): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-    innovatorName: data.innovatorName,
+    givenName: data.givenName,
+    surname: data.surname,
     mobilePhone: data.mobilePhone,
     ...(data.isCompanyOrOrganisation === 'YES' && {
       organisation: {
@@ -342,11 +346,12 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
-    { label: 'What is your name?', value: data.innovatorName, editStepNumber: 1 },
+    { label: 'Given name', value: data.givenName, editStepNumber: 1 },
+    { label: 'Surname', value: data.surname, editStepNumber: 2 },
     {
       label: 'Are you signing up to the service as part of a company or organisation?',
       value: data.isCompanyOrOrganisation === 'YES' ? `Yes, ${data.organisationName}` : 'No',
-      editStepNumber: 2
+      editStepNumber: 3
     }
   );
 
@@ -357,17 +362,17 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
       {
         label: 'How would you describe your company or organisation?',
         value: data.organisationDescription,
-        editStepNumber: 3
+        editStepNumber: 4
       },
-      { label: 'What is the size of your company or organisation?', value: data.organisationSize, editStepNumber: 4 },
+      { label: 'What is the size of your company or organisation?', value: data.organisationSize, editStepNumber: 5 },
       {
         label: 'Do you have a UK company registration number?',
         value: data.hasRegistrationNumber === 'YES' ? `Yes, ${data.organisationRegistrationNumber}` : 'No',
-        editStepNumber: 5
+        editStepNumber: 6
       }
     );
 
-    lastMarkStep = 5;
+    lastMarkStep = 6;
   }
 
   toReturn.push({

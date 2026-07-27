@@ -13,6 +13,8 @@ import { AdminUsersService } from '@modules/feature-modules/admin/services/users
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { PageUserNewComponent } from './user-new.component';
 import { UserContextStore } from '@modules/stores/ctx/user/user.store';
+import { getStrategicRolesEditStep } from './user-new.config';
+import { UserRoleEnum } from '@app/base/enums';
 
 describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () => {
   let component: PageUserNewComponent;
@@ -66,5 +68,22 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should calculate the strategic roles summary edit step from runtime steps', () => {
+    fixture = TestBed.createComponent(PageUserNewComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.wizard
+      .setAnswers({
+        contextType: 'BASE',
+        role: UserRoleEnum.ACCESSOR,
+        organisationId: 'orgId',
+        organisations: [{ id: 'orgId', name: 'Org name 01', units: [{ id: 'orgId', name: 'Unit name' }] }]
+      })
+      .runRules();
+
+    expect(getStrategicRolesEditStep(component.wizard.steps)).toBe(6);
   });
 });

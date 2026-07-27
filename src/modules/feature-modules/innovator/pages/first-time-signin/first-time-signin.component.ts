@@ -72,7 +72,6 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
             {
               givenName: wizardData.givenName,
               surname: wizardData.surname,
-              // displayName: wizardData.innovatorName,
               mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
 
               organisation: wizardData.organisation

@@ -95,7 +95,6 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
     let body: UpdateUserInfo = {
       givenName: wizardData.givenName,
       surname: wizardData.surname,
-      // displayName: wizardData.displayName,
       jobTitle: wizardData.jobTitle
     };
 
@@ -103,7 +102,6 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       body = {
         givenName: wizardData.givenName,
         surname: wizardData.surname,
-        // displayName: wizardData.displayName,
         contactByPhone: wizardData.contactByPhone,
         contactByEmail: wizardData.contactByEmail,
         contactByPhoneTimeframe: wizardData.contactByPhoneTimeframe || null,
