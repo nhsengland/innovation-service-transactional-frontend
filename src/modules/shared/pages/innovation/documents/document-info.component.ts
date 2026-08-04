@@ -23,6 +23,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
   documentInfo: null | (InnovationDocumentInfoOutDTO & { locationLink: null | string }) = null;
 
+  pageData: {
+    queryParams: {
+      evidenceId?: string;
+    };
+  };
+
   // Flags
   canDelete = false;
 
@@ -36,6 +42,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
     this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
+
+    this.pageData = {
+      queryParams: {
+        evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId
+      }
+    };
   }
 
   ngOnInit(): void {
@@ -51,6 +63,10 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
                   ?.label ?? '[Archived section]')
               : null
         };
+
+        if (this.pageData.queryParams.evidenceId) {
+          this.setPageTitle(this.documentInfo.name, { hint: `${this.documentInfo.context.name}`, width: 'full' });
+        }
 
         this.canDelete = response.canDelete;
 
@@ -70,13 +86,13 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
       this.setBackLink('Go back', `${this.baseUrl}/documents`);
     }
 
-    this.setPageTitle('Document details');
+    this.setPageTitle('Document details', { width: '2.thirds' });
     this.pageStep = 'INFO';
   }
 
   gotoDeletePage() {
     this.resetAlert();
-    this.setPageTitle('Are you sure you want to delete this document?');
+    this.setPageTitle('Are you sure you want to delete this document?', { width: 'full' });
     this.setBackLink('Go back', this.gotoInfoPage.bind(this));
     this.pageStep = 'DELETE';
   }
@@ -85,12 +101,24 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationDocumentsService.deleteDocument(this.innovationId, this.documentId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The document was deleted');
-        this.redirectTo(this.ctx.layout.previousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
+        this.redirectTo(this.deletedDocumentRedirectUrl(), { action: 'deleted' });
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
     });
+  }
+
+  private deletedDocumentRedirectUrl(): string {
+    if (this.documentInfo?.context.descriptionUrl) {
+      return this.documentInfo.context.descriptionUrl;
+    }
+
+    if (this.documentInfo?.context.type === 'INNOVATION_REGULATIONS') {
+      return `${this.baseUrl}/record/sections/REGULATIONS_AND_STANDARDS/regulations/${this.documentInfo.context.id}`;
+    }
+
+    return `${this.baseUrl}/documents`;
   }
 }

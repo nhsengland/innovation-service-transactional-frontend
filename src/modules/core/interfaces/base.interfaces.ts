@@ -14,6 +14,11 @@ export type AlertType = {
   setFocus?: boolean;
 };
 
+export type WarningCalloutType = {
+  title: string;
+  description: string;
+};
+
 export type NotificationValueType = null | 'dot' | 'new' | number;
 
 // Date's custom types.

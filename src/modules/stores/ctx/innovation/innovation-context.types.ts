@@ -2,6 +2,7 @@ import { NotificationCategoryTypeEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 import { PhoneUserPreferenceEnum } from '../user/user.types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
 
 export type ContextInnovationType = {
   id: string;
@@ -43,6 +44,7 @@ export type ContextInnovationType = {
   notifications?: Partial<Record<NotificationCategoryTypeEnum, number>>;
   collaboratorId?: string;
   createdAt?: DateISOType;
+  archiveReason?: InnovationArchiveReasonEnum | null;
   expiryAt: number;
 };
 

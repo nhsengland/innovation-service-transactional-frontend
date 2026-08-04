@@ -3,7 +3,7 @@ import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from '
 import { ValidatorFn } from '@angular/forms';
 import {
   InnovationRecordConditionType,
-  InnovationRecordSchemaV3Type,
+  InnovationRecordQuestionStepType,
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
@@ -276,6 +276,10 @@ export class WizardIRV3EngineModel {
     return description;
   }
 
+  private getQuestionItems(question: InnovationRecordQuestionStepType): InnovationRecordQuestionStepType['items'] {
+    return question.items?.filter(item => !item.isLegacy || item.id === this.currentAnswers[question.id]);
+  }
+
   runRules(): this {
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
@@ -294,7 +298,7 @@ export class WizardIRV3EngineModel {
             ...(q.description && { description: this.translateDescriptionUrls(q.description) }),
             ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
             ...(q.validations && { validations: q.validations }),
-            ...(q.items && { items: q.items.map(i => i) }),
+            ...(q.items && { items: this.getQuestionItems(q) }),
             ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
             ...(q.addQuestion && { addQuestion: q.addQuestion }),
             ...(q.field && { field: q.field }),
