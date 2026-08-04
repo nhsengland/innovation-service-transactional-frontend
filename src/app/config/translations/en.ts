@@ -1064,7 +1064,8 @@ export const locale = {
               DECIDED_NOT_TO_PURSUE: 'I have decided not to pursue this innovation',
               ALREADY_LIVE_NHS: 'My innovation is already live in the NHS',
               OTHER_DONT_WANT_TO_SAY: 'Other reason or I do not want to say',
-              SIX_MONTHS_INACTIVITY: 'Innovation without interaction for more than 6 months'
+              SIX_MONTHS_INACTIVITY: 'Innovation without interaction for more than 6 months',
+              OWNER_ACCOUNT_DELETED: 'The owner has deleted their account.'
             }
           },
           export_request_status: {
@@ -1079,6 +1080,25 @@ export const locale = {
               PREVIOUSLY_ARCHIVED:
                 'My innovation was previously archived or I stopped working on it for a period of time',
               HAS_PROGRESSED_SIGNIFICANTLY: 'My innovation has progressed significantly since my last needs assessment'
+            }
+          },
+          evidence: {
+            evidenceSubmitType: {
+              CLINICAL_OR_CARE: 'Evidence of clinical or care outcomes',
+              COST_IMPACT_OR_ECONOMIC: 'Evidence of cost impact, efficiency gains and/or economic modelling',
+              OTHER_EFFECTIVENESS: 'Other evidence of effectiveness (for example environmental or social)',
+              PRE_CLINICAL: 'Pre-clinical evidence',
+              REAL_WORLD: 'Real world evidence'
+            },
+            evidenceType: {
+              DATA_PUBLISHED: 'Data published, but not in a peer reviewed journal',
+              NON_RANDOMISED_COMPARATIVE_DATA: 'Non-randomised comparative data published in a peer reviewed journal',
+              NON_RANDOMISED_NON_COMPARATIVE_DATA:
+                'Non-randomised non-comparative data published in a peer reviewed journal',
+              CONFERENCE: 'Poster or abstract presented at a conference',
+              RANDOMISED_CONTROLLED_TRIAL: 'Randomised controlled trial published in a peer reviewed journal',
+              UNPUBLISHED_DATA: 'Unpublished data',
+              OTHER: 'Other'
             }
           }
         },

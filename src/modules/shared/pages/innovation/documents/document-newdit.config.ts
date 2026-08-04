@@ -6,7 +6,10 @@ import {
   UpsertInnovationDocumentType
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
-import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import {
+  getAllSectionsListV3,
+  innovationsSubSections
+} from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 // Labels.
 const stepsLabels = {
@@ -27,6 +30,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = Partial<InnovationDocumentInfoOutDTO> & {
   innovationId: string;
+  regulation?: string;
   wizardType: 'WIZARD_BASE_QUESTIONS' | 'WIZARD_EDIT_QUESTIONS' | 'WIZARD_WITH_LOCATION_QUESTIONS';
   schema: InnovationRecordSchemaInfoType;
 };
@@ -38,6 +42,7 @@ type StepPayloadType = {
   // evidencesList?: { id: string, name: string, summary: string }[],
   section?: string;
   evidence?: string;
+  regulation?: string;
   progressUpdate?: string;
   // Questions fields.
   relatedWithSection?: 'YES' | 'NO';
@@ -194,12 +199,17 @@ function wizardWithLocationRuntimeRules(
             label: stepsLabels.l2.label,
             description: `If you want to upload evidence of impact and benefit, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>`,
             validations: { isRequired: [true, 'Choose one option'] },
-            items: innovationSectionsItems.map(item => ({
-              ...item
-              // ...(item.value === evidencesSectionId && (data.evidencesList ?? []).length > 0 && {
-              //   description: `There's ${data.evidencesList?.length} evidence${data.evidencesList?.length === 1 ? '' : 's'}. Choosing this section we'll ask you more information on the next question.`
-              // })
-            }))
+            items: innovationSectionsItems
+              .filter(
+                s =>
+                  ![
+                    innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS,
+                    innovationsSubSections.REGULATIONS_AND_STANDARDS
+                  ].includes(s.value)
+              )
+              .map(item => ({
+                ...item
+              }))
           }
         ]
       })
@@ -280,6 +290,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     ...(data.context?.type === 'INNOVATION_SECTION' && { section: data.context.id }),
     ...(data.context?.type === 'INNOVATION_EVIDENCE' && { evidence: data.context.id }),
     ...(data.context?.type === 'INNOVATION_PROGRESS_UPDATE' && { progressUpdate: data.context.id }),
+    ...(data.context?.type === 'INNOVATION_REGULATIONS' && { regulation: data.context.id }),
     name: data.name,
     description: data.description,
     file: data.file
@@ -301,6 +312,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     case 'INNOVATION_PROGRESS_UPDATE':
       contextId = data.progressUpdate ?? '';
       break;
+    case 'INNOVATION_REGULATIONS':
+      contextId = data.regulation ?? '';
   }
 
   return {

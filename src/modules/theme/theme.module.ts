@@ -48,6 +48,7 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
 import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
 import { TagComponent } from './components/tag/tag.component';
 import { HeaderAdminComponent } from './components/header/header-admin.component';
+import { WarningCalloutComponent } from './warning-callout/warning-callout.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { HeaderAdminComponent } from './components/header/header-admin.component
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
+    WarningCalloutComponent,
     AnnouncementCardComponent,
     ContentWrapperComponent,
     HeaderComponent,
@@ -122,6 +124,7 @@ import { HeaderAdminComponent } from './components/header/header-admin.component
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
+    WarningCalloutComponent,
     AnnouncementCardComponent,
     ContentWrapperComponent,
     HeaderComponent,

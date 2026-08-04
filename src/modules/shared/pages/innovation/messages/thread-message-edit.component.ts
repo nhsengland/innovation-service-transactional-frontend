@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 import { ContextInnovationType } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -16,6 +16,18 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
   innovation: ContextInnovationType;
   threadId: string;
   messageId: string;
+
+  showLinkForm = false;
+  linkForm = new FormGroup(
+    {
+      linkText: new FormControl<string>('', CustomValidators.required('Link text is required')),
+      linkUrl: new FormControl<string>('', [
+        CustomValidators.required('Link URL is required'),
+        CustomValidators.urlFormatValidator({ message: 'Enter a valid URL' })
+      ])
+    },
+    { updateOn: 'blur' }
+  );
 
   form = new FormGroup({
     message: new UntypedFormControl('', CustomValidators.required('A message is required'))
@@ -31,6 +43,30 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
     this.innovation = this.ctx.innovation.info();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
     this.messageId = this.activatedRoute.snapshot.params.messageId;
+  }
+
+  toggleLinkForm(): void {
+    this.showLinkForm = !this.showLinkForm;
+    if (!this.showLinkForm) {
+      this.linkForm.reset();
+    }
+  }
+
+  onInsertLink(): void {
+    if (!this.linkForm.valid) {
+      this.linkForm.markAllAsTouched();
+      return;
+    }
+
+    const text = this.linkForm.value.linkText || '';
+    const url = (this.linkForm.value.linkUrl || '').trim();
+    const markdownLink = `[${text}](${url})`;
+
+    const currentMessage = this.form.value.message || '';
+    const newMessage = currentMessage.length > 0 ? `${currentMessage} ${markdownLink}` : markdownLink;
+
+    this.form.patchValue({ message: newMessage });
+    this.toggleLinkForm();
   }
 
   ngOnInit(): void {

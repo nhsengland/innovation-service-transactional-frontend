@@ -37,7 +37,28 @@
           [pageUniqueField]="false"
         ></theme-form-input>
 
-        <theme-form-textarea controlName="message" label="Enter your message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
+        <theme-form-textarea controlName="message" [pageUniqueField]="false" lengthLimit="xxl">
+          <div form-header class="d-flex justify-content-space-between align-items-end nhsuk-u-margin-bottom-1">
+            <span class="nhsuk-label nhsuk-u-margin-bottom-0">Enter your message</span>
+            <button type="button" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0" (click)="toggleLinkForm()">
+              {{ showLinkForm ? "Cancel link insertion" : "Insert a link" }}
+            </button>
+          </div>
+
+          <div form-header class="nhsuk-u-margin-bottom-4">
+            <div *ngIf="showLinkForm" class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4 nhsuk-u-padding-4 bg-color-grey border-left-inset-neutral">
+              <ng-container [formGroup]="linkForm">
+                <theme-form-input controlName="linkText" label="Link text" description="e.g. Book a meeting with me" [pageUniqueField]="false"></theme-form-input>
+                <theme-form-input controlName="linkUrl" label="Link URL" description="e.g. https://calendly.com/your-name" [pageUniqueField]="false"></theme-form-input>
+
+                <div class="nhsuk-u-margin-top-4 d-flex align-items-center">
+                  <button type="button" class="nhsuk-button nhsuk-u-margin-bottom-0 nhsuk-u-margin-right-4" (click)="onInsertLink()">Insert</button>
+                  <a href="javascript:void(0)" (click)="toggleLinkForm()" class="nhsuk-link nhsuk-link--no-visited-state">Cancel</a>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </theme-form-textarea>
 
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
 

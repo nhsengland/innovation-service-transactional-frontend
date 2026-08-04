@@ -127,6 +127,11 @@
                 {{ item.support?.updatedAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
 
+              <td *ngIf="innovationsList.getColumnLabel('lastSupportGivenAt')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("lastSupportGivenAt") }} </span>
+                {{ item.lastSupportGivenAt | date: ("app.date_formats.long_date" | translate) }}
+              </td>
+
               <td *ngIf="innovationsList.getColumnLabel('suggestion.suggestedOn')" class="nhsuk-table__cell text-nowrap-only-desktop">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("suggestion.suggestedOn") }} </span>
                 {{ item.suggestion?.suggestedOn | date: ("app.date_formats.long_date" | translate) }}
@@ -153,7 +158,7 @@
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('support.status')" class="nhsuk-table__cell text-align-right">
-                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("supportStatus") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("support.status") }}</span>
                 <div>
                   <theme-tag
                     type="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.cssColorClass' | translate }}"
@@ -163,7 +168,7 @@
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('support.updatedBy')" class="nhsuk-table__cell">
-                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("updatedBy") }} </span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("support.updatedBy") }} </span>
                 {{ item.support?.updatedBy }}
               </td>
 
