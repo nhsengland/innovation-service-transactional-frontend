@@ -730,25 +730,42 @@ export class WizardIRV3EngineModel {
 
     const summary = this.parseSummary();
 
-    const translatedSummary = summary.map(item => {
+    const translatedSummary = summary.flatMap(item => {
+      const stepParams = this.steps.find(step => step.parameters[0]?.id === item.stepId)?.parameters[0];
+      const conditionalItems = stepParams?.items?.filter(i => i.conditional) ?? [];
+      const selectedAnswers = stepParams ? this.currentAnswers[stepParams.id] : undefined;
+      const valueToTranslate = conditionalItems.length ? selectedAnswers : item.value;
       // get label translation
       const label = this.translations.questions.get(item.label.split('_')[0])?.label ?? item.label;
       let value = '';
 
-      if (typeof item.value === 'string') {
+      if (typeof valueToTranslate === 'string') {
         // translate item
-        value = this.translations.questions.get(item.stepId.split('_')[0])?.items.get(item.value)?.label ?? item.value;
-      } else if (item.value instanceof Array) {
+        value =
+          this.translations.questions.get(item.stepId.split('_')[0])?.items.get(valueToTranslate)?.label ??
+          valueToTranslate;
+      } else if (valueToTranslate instanceof Array) {
         const translatedArr: string[] = [];
 
         // translate each item of Array
-        item.value.forEach(v =>
+        valueToTranslate.forEach(v =>
           translatedArr.push(this.translations.questions.get(item.stepId)?.items?.get(v)?.label ?? v)
         );
         value = translatedArr.join('\n');
       }
 
-      return { label: label, value: value };
+      return [
+        { label: label, value: value },
+        ...conditionalItems
+          .filter(i => {
+            if (!i.conditional || !this.currentAnswers[i.conditional.id]) return false;
+            return selectedAnswers instanceof Array ? selectedAnswers.includes(i.id) : selectedAnswers === i.id;
+          })
+          .map(i => ({
+            label: i.conditional!.label ?? '',
+            value: this.currentAnswers[i.conditional!.id]
+          }))
+      ];
     });
 
     // Add evidences when available
