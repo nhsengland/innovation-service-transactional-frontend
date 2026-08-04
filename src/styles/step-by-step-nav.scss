@@ -1,5 +1,5 @@
 // Based on https://github.com/alphagov/govuk-prototype-kit/blob/master/app/assets/sass/patterns/_step-by-step-nav.scss
-@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+@use "nhsuk-frontend/dist/nhsuk" as nhsuk;
 
 @use "node_modules/govuk-frontend/dist/govuk" as govuk;
 
@@ -7,7 +7,7 @@ $stroke-width: 2px;
 $stroke-width-large: 3px;
 $number-circle-size: 26px;
 $number-circle-size-large: 35px;
-$top-border: solid 1px nhsuk.$nhsuk-border-color;
+$top-border: solid 1px nhsuk.$nhsuk-border-colour;
 
 @mixin govuk-text-colour {
   color: govuk.$govuk-text-colour;
@@ -280,7 +280,7 @@ $top-border: solid 1px nhsuk.$nhsuk-border-color;
   // &:hover {
   //   .app-step-nav__button:not(:focus),
   //   .app-step-nav__circle {
-  //     color: $nhsuk-link-color;
+  //     color: $nhsuk-link-colour;
   //   }
 
   //   .app-step-nav__toggle-link {
@@ -312,7 +312,7 @@ $top-border: solid 1px nhsuk.$nhsuk-border-color;
   @include step-nav-font(14, $line-height: 1.2);
   & {
     display: block;
-    color: nhsuk.$nhsuk-link-color;
+    color: nhsuk.$nhsuk-link-colour;
     text-transform: capitalize;
   }
 

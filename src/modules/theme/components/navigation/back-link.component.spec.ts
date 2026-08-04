@@ -24,7 +24,7 @@ describe('BackLinkComponent suite', () => {
     const actual = fixture.debugElement.nativeElement.innerHTML;
 
     expect(component).toBeTruthy();
-    expect(actual).toContain('Go back');
+    expect(actual).toContain('Back');
   });
 
   it('should create instance with href', () => {

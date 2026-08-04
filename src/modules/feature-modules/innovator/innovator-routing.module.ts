@@ -108,14 +108,11 @@ import { InnovationRegulationsListPageComponent } from '../../shared/pages/innov
 import { PageInnovationSectionRegulationInfoComponent } from '@modules/shared/pages/innovation/sections/section-regulation-info';
 
 const header: RoutesDataType['header'] = {
-  menuBarItems: {
-    left: [
-      { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard' },
-      { id: 'notifications', label: 'Notifications', url: '/innovator/notifications' },
-      { id: 'account', label: 'Your account', url: '/innovator/account/manage-details' }
-    ],
-    right: []
-  }
+  menuBarItems: [
+    { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard', align: 'left' },
+    { id: 'notifications', label: 'Notifications', url: '/innovator/notifications', align: 'left' },
+    { id: 'account', label: 'Your account', url: '/innovator/account/manage-details', align: 'left' }
+  ]
 };
 
 const routes: Routes = [

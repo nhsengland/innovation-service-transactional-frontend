@@ -180,12 +180,10 @@
         </div>
       </ng-container>
 
-      <div class="nhsuk-action-link nhsuk-u-padding-top-5">
-        <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link__link">
-          <theme-svg-icon type="arrow-right-circle" />
-          <span class="nhsuk-action-link__text"> View all the questions and answers </span>
-        </a>
-      </div>
+      <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link nhsuk-u-padding-top-5 d-flex align-items-center">
+        <theme-svg-icon type="arrow-right-circle" />
+        <span class="nhsuk-action-link__text"> View all the questions and answers </span>
+      </a>
 
       <theme-custom-notifications-entrypoint-component *ngIf="ctx.user.isAccessorType()" [links]="customNotificationLinks" />
     </div>

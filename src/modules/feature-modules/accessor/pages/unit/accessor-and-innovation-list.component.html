@@ -4,7 +4,7 @@
       <form [formGroup]="form">
         <theme-form-input label="Search list by accessor name" placeholder="Search" controlName="search" [pageUniqueField]="false">
           <ng-container append>
-            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+            <button type="button" (click)="onSearchClick()" class="nhsuk-button nhsuk-button--small form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />
               <span class="nhsuk-u-visually-hidden">Search</span>
             </button>
@@ -45,26 +45,30 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of accessorList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell width-40">
-                <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("accessor") }}</span>
-                <span class="d-block text-word-break">{{ item.accessor.name }},</span>
-                <span class="d-block"
-                  >{{ item.accessor.role | serviceRoleTranslate }}<span *ngIf="item.accessor.jobTitle"> ({{ item.accessor.jobTitle }})</span></span
-                >
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("accessor") }}</span>
+                <div>
+                  <span class="d-block text-word-break">{{ item.accessor.name }},</span>
+                  <span class="d-block"
+                    >{{ item.accessor.role | serviceRoleTranslate }}<span *ngIf="item.accessor.jobTitle"> ({{ item.accessor.jobTitle }})</span></span
+                  >
+                </div>
               </td>
               <td class="nhsuk-table__cell width-15">
-                <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovationsCount") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovationsCount") }}</span>
                 {{ item.innovations.length }}
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovations") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovations") }}</span>
 
-                <ul class="nhsuk-list">
-                  <li *ngFor="let innovation of item.innovations">
-                    <a class="text-word-break" routerLink="/accessor/innovations/{{ innovation.id }}">{{ innovation.name }}</a>
-                  </li>
-                </ul>
+                <div>
+                  <ul class="nhsuk-list">
+                    <li *ngFor="let innovation of item.innovations">
+                      <a class="text-word-break" routerLink="/accessor/innovations/{{ innovation.id }}">{{ innovation.name }}</a>
+                    </li>
+                  </ul>
 
-                <span *ngIf="item.innovations.length === 0" class="nhsuk-u-visually-hidden">There are no assigned innovations.</span>
+                  <span *ngIf="item.innovations.length === 0" class="nhsuk-u-visually-hidden">There are no assigned innovations.</span>
+                </div>
               </td>
             </tr>
           </tbody>

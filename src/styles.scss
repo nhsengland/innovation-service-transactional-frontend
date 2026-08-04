@@ -3,7 +3,7 @@
 );
 
 // NHS Design System.
-@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+@use "nhsuk-frontend/dist/nhsuk" as nhsuk;
 
 // Custom styles.
 @use "styles/left-menu-layout.scss" as left-menu-layout;
@@ -15,23 +15,38 @@
 // Angular Material.
 @import "node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 
+.cookie-success-banner {
+  padding: 8px 0;
+  color: #fff;
+  background: var(--success-color);
+
+  a,
+  a:visited {
+    color: #fff;
+  }
+
+  a:focus {
+    color: #212b32;
+  }
+}
+
 // Variables. (https://service-manual.nhs.uk/design-system/styles)
-$service-manual-container-size: 1100px; // Container width variable.
+$service-manual-container-size: 960px; // Container width variable.
 
 :root {
-  --primary-color: #{nhsuk.$color_nhsuk-blue};
-  --success-color: #{nhsuk.$color_nhsuk-green};
-  --warning-color: #{nhsuk.$color_nhsuk-yellow};
-  --error-color: #{nhsuk.$nhsuk-error-color};
-  --neutral-color: #{nhsuk.$color_nhsuk-blue};
-  --nhsuk-text-color: #{nhsuk.$nhsuk-text-color};
-  --white: #{nhsuk.$color_nhsuk-white};
-  --color_nhsuk-grey-1: #{nhsuk.$color_nhsuk-grey-1};
-  --color_nhsuk-grey-3: #{nhsuk.$color_nhsuk-grey-3};
-  --color_nhsuk-grey-4: #{nhsuk.$color_nhsuk-grey-4};
-  --color_nhsuk-grey-5: #{nhsuk.$color_nhsuk-grey-5};
-  --nhsuk-border-color: #{nhsuk.$nhsuk-border-color};
-  --nhsuk-button-color: #{nhsuk.$nhsuk-button-color};
+  --primary-color: #{nhsuk.nhsuk-colour("blue")};
+  --success-color: #{nhsuk.nhsuk-colour("green")};
+  --warning-color: #{nhsuk.nhsuk-colour("yellow")};
+  --error-color: #{nhsuk.$nhsuk-error-colour};
+  --neutral-color: #{nhsuk.nhsuk-colour("blue")};
+  --nhsuk-text-color: #{nhsuk.$nhsuk-text-colour};
+  --white: #{nhsuk.nhsuk-colour("white")};
+  --color_nhsuk-grey-1: #{nhsuk.nhsuk-colour("grey-1")};
+  --color_nhsuk-grey-3: #{nhsuk.nhsuk-colour("grey-3")};
+  --color_nhsuk-grey-4: #{nhsuk.nhsuk-colour("grey-4")};
+  --color_nhsuk-grey-5: #{nhsuk.nhsuk-colour("grey-5")};
+  --nhsuk-border-color: #{nhsuk.$nhsuk-border-colour};
+  --nhsuk-button-color: #{nhsuk.$nhsuk-button-colour};
 
   // --spacing-3: 32px;
   // --mobile:  20em; /* 320px */
@@ -206,13 +221,13 @@ $service-manual-container-size: 1100px; // Container width variable.
 }
 
 .font-color-text {
-  color: nhsuk.$nhsuk-text-color;
+  color: nhsuk.$nhsuk-text-colour;
 }
 .font-color-link {
   color: var(--primary-color);
 }
 .font-color-secondary {
-  color: nhsuk.$nhsuk-secondary-text-color;
+  color: nhsuk.$nhsuk-secondary-text-colour;
 }
 .font-color-error {
   color: var(--error-color);
@@ -328,7 +343,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .button-as-link {
   font-family: "Frutiger W01", Arial, sans-serif;
   border: 0;
-  color: nhsuk.$nhsuk-link-color;
+  color: nhsuk.$nhsuk-link-colour;
   cursor: pointer;
   text-decoration: underline;
 
@@ -336,13 +351,13 @@ $service-manual-container-size: 1100px; // Container width variable.
     text-decoration: none;
   }
   &:visited {
-    color: nhsuk.$nhsuk-link-color;
+    color: nhsuk.$nhsuk-link-colour;
     &:hover {
-      color: nhsuk.$nhsuk-link-hover-color;
+      color: nhsuk.$nhsuk-link-hover-colour;
     }
   }
   // &:focus {
-  //   &:hover { color: $nhsuk-focus-text-color; }
+  //   &:hover { color: $nhsuk-focus-text-colour; }
   // }
 }
 
@@ -477,7 +492,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 }
 
 .form-input-appended-button-search {
-  background-color: nhsuk.$nhsuk-button-color;
+  background-color: nhsuk.$nhsuk-button-colour;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   box-shadow: none;
@@ -486,39 +501,14 @@ $service-manual-container-size: 1100px; // Container width variable.
   padding: 0;
 
   &:hover {
-    background-color: nhsuk.$nhsuk-button-hover-color;
+    background-color: nhsuk.$nhsuk-button-hover-colour;
     border: 0;
   }
 
   .nhsuk-icon__search {
-    fill: nhsuk.$color_nhsuk-white;
+    fill: nhsuk.nhsuk-colour("white");
     height: 27px;
     width: 27px;
-  }
-}
-
-.form-checkboxes-small {
-  &.nhsuk-checkboxes__item {
-    min-height: 30px;
-    padding: 0 0 0 35px;
-  }
-  .nhsuk-checkboxes__label {
-    padding: 0;
-  }
-  .nhsuk-checkboxes__hint {
-    font-size: 1rem;
-    padding: 0;
-  }
-  .nhsuk-checkboxes__input + .nhsuk-checkboxes__label::before {
-    height: 25px;
-    width: 25px;
-  }
-  .nhsuk-checkboxes__input + .nhsuk-checkboxes__label::after {
-    width: 15px;
-    height: 8px;
-    top: 7px;
-    left: 5px;
-    border-width: 0 0 3px 3px;
   }
 }
 
@@ -541,32 +531,6 @@ $service-manual-container-size: 1100px; // Container width variable.
     font-size: 1.1875rem;
     font-weight: normal;
     line-height: 1.47368;
-  }
-}
-
-.form-radios-small {
-  &.nhsuk-radios__item {
-    min-height: 30px;
-    padding: 0 0 0 35px;
-  }
-  .nhsuk-radios__label {
-    padding: 0;
-  }
-  .nhsuk-radios__hint {
-    font-size: 1.1rem;
-    padding: 0;
-  }
-  .nhsuk-radios__input + .nhsuk-radios__label::before {
-    height: 25px;
-    width: 25px;
-  }
-  .nhsuk-radios__input + .nhsuk-radios__label::after {
-    background: #000;
-    width: 13px;
-    height: 13px;
-    top: 6px;
-    left: 6px;
-    border-width: 0;
   }
 }
 
@@ -684,6 +648,7 @@ ul.list-vertical-line {
 .app-table-inside-card {
   padding-left: 24px;
   padding-right: 24px;
+  border-collapse: separate;
 }
 
 .app-tabs {
@@ -712,14 +677,14 @@ ul.list-vertical-line {
         text-decoration: none;
 
         &:visited {
-          color: nhsuk.$nhsuk-link-color;
+          color: nhsuk.$nhsuk-link-colour;
           &:hover {
-            color: nhsuk.$nhsuk-link-hover-color;
+            color: nhsuk.$nhsuk-link-hover-colour;
           }
         }
         &:focus {
           &:hover {
-            color: nhsuk.$nhsuk-focus-text-color;
+            color: nhsuk.$nhsuk-focus-text-colour;
           }
         }
       }
@@ -802,7 +767,7 @@ a.app-tag {
 
   &:link,
   &:visited {
-    color: var(nhsuk.$nhsuk-link-color);
+    color: var(nhsuk.$nhsuk-link-colour);
   }
 
   &:active,
@@ -832,7 +797,7 @@ a.app-tag {
 .tag-close .icon {
   display: inline;
   .nhsuk-icon__close {
-    fill: nhsuk.$color_nhsuk-black;
+    fill: nhsuk.nhsuk-colour("black");
     height: 20px;
     width: 20px;
   }
@@ -847,7 +812,7 @@ a.app-tag {
 }
 
 .recent-innovations-link .icon .nhsuk-icon__chevron-right {
-  fill: nhsuk.$color_nhsuk-grey-1;
+  fill: nhsuk.nhsuk-colour("grey-1");
 }
 
 .notification-tag .icon {

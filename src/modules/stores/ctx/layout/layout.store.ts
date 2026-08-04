@@ -2,7 +2,8 @@ import { computed, Inject, Injectable, PLATFORM_ID, signal } from '@angular/core
 import { ContextLayoutType, EMPTY_PAGE_CONTEXT } from './layout.types';
 import { isPlatformServer } from '@angular/common';
 import { DeepPartial } from '@app/base/types';
-import { isUndefined, omitBy } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
+import omitBy from 'lodash/omitBy';
 
 @Injectable()
 export class LayoutContextStore {

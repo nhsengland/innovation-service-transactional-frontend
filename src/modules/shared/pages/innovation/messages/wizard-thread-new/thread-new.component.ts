@@ -20,7 +20,7 @@ import { SubjectMessageStepInputType, SubjectMessageStepOutputType } from './ste
 import { WizardInnovationThreadNewWarningStepComponent } from './steps/warning-step.component';
 import { WarningStepInputType, WarningStepOutputType } from './steps/warning-step.types';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

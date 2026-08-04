@@ -43,7 +43,7 @@
                     [checked]="isChecked(item.id ?? '')"
                     (change)="onChanged($event)"
                     class="nhsuk-checkboxes__input"
-                    [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
+                    [attr.data-aria-controls]="item.conditional ? 'conditional-' + id + i : null"
                     [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null"
                     [attr.aria-describedby]="item.label ? id! + i + '-hint' : null"
                   />

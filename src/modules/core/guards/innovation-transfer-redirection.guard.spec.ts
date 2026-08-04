@@ -15,6 +15,7 @@ import { StoresModule } from '@modules/stores';
 import { InnovationService } from '../services/innovation.service';
 
 import { InnovationTransferRedirectionGuard } from './innovation-transfer-redirection.guard';
+import { LoggerService } from '../services/logger.service';
 
 describe('Core/Guards/InnovationTransferRedirectionGuard running SERVER side', () => {
   let innovationService: InnovationService;
@@ -32,7 +33,8 @@ describe('Core/Guards/InnovationTransferRedirectionGuard running SERVER side', (
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: REQUEST, useValue: SERVER_REQUEST },
-        { provide: RESPONSE, useValue: SERVER_RESPONSE }
+        { provide: RESPONSE, useValue: SERVER_RESPONSE },
+        { provide: LoggerService, useValue: { trackTrace: jest.fn() } }
       ]
     });
 
@@ -77,7 +79,10 @@ describe('Core/Guards/InnovationTransferRedirectionGuard running CLIENT side', (
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule, LoggerTestingModule, CoreModule, StoresModule],
-      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' },
+        { provide: LoggerService, useValue: { trackTrace: jest.fn() } }
+      ]
     });
 
     innovationService = TestBed.inject(InnovationService);
