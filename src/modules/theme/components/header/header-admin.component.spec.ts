@@ -83,22 +83,21 @@ describe('Theme/Components/Header/HeaderAdminComponent', () => {
 
   it('renders accessible navigation and submenu controls', () => {
     const menuButton = fixture.nativeElement.querySelector('#toggle-menu');
-    const closeButton = fixture.nativeElement.querySelector('.app-admin-header__navigation-close');
-    const submenuButton = fixture.nativeElement.querySelector('[aria-controls="admin-menu-first-parent"]');
-    const submenu = fixture.nativeElement.querySelector('#admin-menu-first-parent');
+    const closeButton = fixture.nativeElement.querySelector('.nhsuk-header__navigation-close-v7');
+    const submenuButton = fixture.nativeElement.querySelector('.app-multilevel-navigation__toggle-button');
 
     expect(menuButton.getAttribute('aria-expanded')).toBe('false');
     expect(menuButton.getAttribute('aria-controls')).toBe('header-navigation');
     expect(closeButton.textContent).toContain('Close menu');
-    expect(submenuButton.getAttribute('aria-controls')).toBe('admin-menu-first-parent');
-    expect(submenu.hidden).toBe(true);
+    expect(submenuButton.getAttribute('aria-expanded')).toBe('false');
+    expect(fixture.nativeElement.querySelector('.app-multilevel-navigation__dropdown-menu')).toBeNull();
   });
 
   it('keeps service, account, role switch, sign-out, router and full reload links represented', () => {
     const links = Array.from(fixture.nativeElement.querySelectorAll('a')) as HTMLAnchorElement[];
     const linkByText = (text: string) => links.find(link => link.textContent?.trim() === text);
 
-    expect(fixture.nativeElement.querySelector('.nhsuk-header__service-name').textContent).toContain(
+    expect(fixture.nativeElement.querySelector('.nhsuk-header__service-name-v7').textContent).toContain(
       'Innovation Service'
     );
     expect(fixture.nativeElement.textContent).toContain('Test User');

@@ -147,7 +147,7 @@
       class="nhsuk-header__navigation-link-v7 app-multilevel-navigation__toggle-button"
       [ngClass]="{ 'button-closed': !item.isOpen, 'button-open': item.isOpen }"
       (click)="onHeaderMenuClick(item)"
-      [attr.aria-expanded]="item.isOpen"
+      [attr.aria-expanded]="item.isOpen ?? false"
       attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.label }} menu"
     >
       {{ item.label }}

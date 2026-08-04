@@ -12,6 +12,7 @@ import { CtxStore, StoresModule } from '@modules/stores';
 
 import { ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationGuard } from './authentication.guard';
+import { LoggerService } from '../services/logger.service';
 
 describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
   let ctx: CtxStore;
@@ -26,7 +27,8 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: REQUEST, useValue: SERVER_REQUEST },
-        { provide: RESPONSE, useValue: SERVER_RESPONSE }
+        { provide: RESPONSE, useValue: SERVER_RESPONSE },
+        { provide: LoggerService, useValue: { trackTrace: jest.fn() } }
       ]
     });
 
@@ -62,7 +64,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
-      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
+      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }, { provide: LoggerService, useValue: { trackTrace: jest.fn() } }]
     });
 
     ctx = TestBed.inject(CtxStore);
