@@ -76,7 +76,8 @@ export function app(): express.Express {
   server.use((req, res, next) => {
     if (!(req.method === 'OPTIONS' || req.method === 'GET' || req.method === 'HEAD')) {
       if (!req.cookies['XSRF-TOKEN'] || req.cookies['XSRF-TOKEN'] !== (req.session as any).xsrfToken) {
-        return res.status(403).send('Forbidden');
+        res.status(403).send('Forbidden');
+        return;
       }
     }
     next();
