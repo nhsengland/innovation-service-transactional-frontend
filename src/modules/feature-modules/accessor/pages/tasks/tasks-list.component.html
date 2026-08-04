@@ -69,7 +69,11 @@
               </td>
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("innovationName") }}</span>
-                <span><a routerLink="/accessor/innovations/{{ item.innovation.id }}" attr.aria-label="View innovation {{ item.innovation.name }} details"> {{ item.innovation.name }} </a></span>
+                <span
+                  ><a routerLink="/accessor/innovations/{{ item.innovation.id }}" attr.aria-label="View innovation {{ item.innovation.name }} details">
+                    {{ item.innovation.name }}
+                  </a></span
+                >
               </td>
               <td class="nhsuk-table__cell">
                 <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("createdAt") }}</span>

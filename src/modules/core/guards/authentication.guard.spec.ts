@@ -64,7 +64,10 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
-      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }, { provide: LoggerService, useValue: { trackTrace: jest.fn() } }]
+      providers: [
+        { provide: PLATFORM_ID, useValue: 'browser' },
+        { provide: LoggerService, useValue: { trackTrace: jest.fn() } }
+      ]
     });
 
     ctx = TestBed.inject(CtxStore);
