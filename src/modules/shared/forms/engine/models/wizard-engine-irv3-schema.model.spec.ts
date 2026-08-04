@@ -1,4 +1,5 @@
 import { WizardIRV3EngineModel } from './wizard-engine-irv3-schema.model';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 
 describe('WizardIRV3EngineModel', () => {
   describe('translateSummaryForIRDocumentExport', () => {
@@ -313,9 +314,7 @@ describe('WizardIRV3EngineModel', () => {
     });
   });
 
-  import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
-
-  const schema: InnovationRecordSchemaInfoType = {
+const schema: InnovationRecordSchemaInfoType = {
     id: 'schema',
     version: 1,
     schema: {
