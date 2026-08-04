@@ -314,7 +314,7 @@ describe('WizardIRV3EngineModel', () => {
     });
   });
 
-const schema: InnovationRecordSchemaInfoType = {
+  const schema: InnovationRecordSchemaInfoType = {
     id: 'schema',
     version: 1,
     schema: {
