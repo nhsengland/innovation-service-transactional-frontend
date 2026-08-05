@@ -36,7 +36,7 @@
             <h2 class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Search by document name</h2>
             <theme-form-input controlName="name" [pageUniqueField]="false" placeholder="Search by document name">
               <ng-container append>
-                <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+                <button type="button" (click)="onSearchClick()" class="nhsuk-button nhsuk-button--small form-input-appended-button-search" id="search-btn">
                   <theme-svg-icon type="search" />
                   <span class="nhsuk-u-visually-hidden">Search</span>
                 </button>
@@ -128,26 +128,32 @@
             <tbody class="nhsuk-table__body">
               <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("name") }}</span>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("name") }}</span>
                   <div>
                     <span class="nhsuk-u-font-weight-bold text-word-break">{{ item.name }}</span> ({{ item.file.extension | uppercase
                     }}{{ item.file.size ? ", " + (item.file.size | bytesPrettyPrint) : "" }})
                   </div>
                 </td>
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("createdAt") }}</span>
-                  <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ("app.date_formats.medium_date" | translate) }}</div>
-                  <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">by {{ item.createdBy.description }}</div>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("createdAt") }}</span>
+                  <div>
+                    <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ("app.date_formats.medium_date" | translate) }}</div>
+                    <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">by {{ item.createdBy.description }}</div>
+                  </div>
                 </td>
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("contextType") }}</span>
-                  <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.context.label }}</div>
-                  <div *ngIf="item.context.description" class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.context.description }}</div>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("contextType") }}</span>
+                  <div>
+                    <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.context.label }}</div>
+                    <div *ngIf="item.context.description" class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.context.description }}</div>
+                  </div>
                 </td>
                 <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
-                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("actions") }}</span>
-                  <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
-                  <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("actions") }}</span>
+                  <div>
+                    <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
+                    <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
+                  </div>
                 </td>
               </tr>
             </tbody>

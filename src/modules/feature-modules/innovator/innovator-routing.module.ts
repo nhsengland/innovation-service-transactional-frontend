@@ -103,16 +103,16 @@ import { InnovationSubmissionReadyComponent } from './pages/innovation/submissio
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
 import { ShareInnovationsWithOrgComponent } from './pages/share-innovations-with-org/share-innovations-with-org.component';
+import { InnovationEvidenceListComponent } from '../../shared/pages/innovation/sections/section-evidence-list.component';
+import { InnovationRegulationsListPageComponent } from '../../shared/pages/innovation/sections/section-regulations-list.component';
+import { PageInnovationSectionRegulationInfoComponent } from '@modules/shared/pages/innovation/sections/section-regulation-info';
 
 const header: RoutesDataType['header'] = {
-  menuBarItems: {
-    left: [
-      { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard' },
-      { id: 'notifications', label: 'Notifications', url: '/innovator/notifications' },
-      { id: 'account', label: 'Your account', url: '/innovator/account/manage-details' }
-    ],
-    right: []
-  }
+  menuBarItems: [
+    { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard', align: 'left' },
+    { id: 'notifications', label: 'Notifications', url: '/innovator/notifications', align: 'left' },
+    { id: 'account', label: 'Your account', url: '/innovator/account/manage-details', align: 'left' }
+  ]
 };
 
 const routes: Routes = [
@@ -288,13 +288,34 @@ const routes: Routes = [
                             component: InnovationSectionEditComponent,
                             data: { layout: { type: 'full' } }
                           },
-
+                          {
+                            path: 'regulations',
+                            data: { breadcrumb: null },
+                            children: [
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                component: InnovationRegulationsListPageComponent,
+                                data: { layout: { type: 'full' } }
+                              },
+                              {
+                                path: ':regulationId',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionRegulationInfoComponent,
+                                data: { layout: { type: 'full' } }
+                              }
+                            ]
+                          },
                           {
                             path: 'evidences',
                             data: { breadcrumb: null },
                             children: [
-                              { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
-
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                component: InnovationEvidenceListComponent,
+                                data: { layout: { type: 'full' } }
+                              },
                               { path: 'new', pathMatch: 'full', redirectTo: 'new/1' },
                               {
                                 path: 'new/:questionId',
@@ -311,6 +332,7 @@ const routes: Routes = [
                                   innovationSectionEvidenceData: mapToResolve(InnovationSectionEvidenceDataResolver)
                                 },
                                 data: {
+                                  layout: { type: 'full' },
                                   breadcrumb: (data: RoutesDataType) => {
                                     const name = data.innovationSectionEvidenceData?.name ?? '';
                                     return name.length > 30 ? `${name.substring(0, 30)}...` : name;

@@ -1,5 +1,19 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, computed } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  computed,
+  ChangeDetectorRef
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -17,9 +31,18 @@ export type HeaderMenuBarItemType = {
   fullReload?: boolean;
   isOpen?: boolean;
   children?: { label: string; url: string; description?: string; fullReload?: boolean }[];
+  isCurrent?: boolean;
+  align?: 'left' | 'right';
 };
 
 export type HeaderNotificationsType = Record<string, number>;
+
+export type NhsHeaderNavItem = {
+  label: string;
+  href?: string;
+  routerLink?: string | any[];
+  current?: boolean;
+};
 
 @Component({
   selector: 'theme-header',
@@ -29,9 +52,22 @@ export type HeaderNotificationsType = Record<string, number>;
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() showUserInformation = false;
   @Input() showSignOut = false;
-  @Input() leftMenuBarItems: HeaderMenuBarItemType[] = [];
-  @Input() rightMenuBarItems: HeaderMenuBarItemType[] = [];
+  @Input() menuBarItems: HeaderMenuBarItemType[] = [];
   @Input() notifications: HeaderNotificationsType = {};
+
+  @ViewChild('navList') navListRef?: ElementRef<HTMLUListElement>;
+  @ViewChild('navContainer') navContainerRef?: ElementRef<HTMLDivElement>;
+  @ViewChild('menuItem') menuItemRef?: ElementRef<HTMLLIElement>;
+  @ViewChild('menuToggle') menuToggleRef?: ElementRef<HTMLButtonElement>;
+  @ViewChild('menuList') menuListRef?: ElementRef<HTMLUListElement>;
+  @ViewChild('navigation') navigationRef?: ElementRef<HTMLElement>;
+
+  visibleItems: HeaderMenuBarItemType[] = [];
+  overflowItems: HeaderMenuBarItemType[] = [];
+  menuEnabled = false;
+  menuOpen = false;
+
+  private resizeTimer?: number;
 
   private subscriptions = new Subscription();
 
@@ -40,23 +76,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userDescription = computed(() =>
     this.ctx.user.isAccessorType()
-      ? `Logged in as ${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
-      : `Logged in as ${this.ctx.user.getUserRoleTranslation()}`
+      ? `${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
+      : `${this.ctx.user.getUserRoleTranslation()}`
   );
 
-  menuBarItems: {
-    isChildrenOpened: boolean;
-    left: HeaderMenuBarItemType[];
-    right: HeaderMenuBarItemType[];
-  } = { isChildrenOpened: false, left: [], right: [] };
-
   URLS: typeof URLS;
+
+  alignAtEnd = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private coockiesService: CookiesService,
-    protected ctx: CtxStore
+    protected ctx: CtxStore,
+    private cdr: ChangeDetectorRef
   ) {
     this.subscriptions.add(
       this.router.events
@@ -68,47 +101,36 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.menuBarItems = {
-      left: this.leftMenuBarItems,
-      right: this.rightMenuBarItems,
-      isChildrenOpened: false
-    };
+    this.visibleItems = this.menuBarItems;
+
+    this.alignAtEnd = this.menuBarItems.some(item => item.align === 'right');
   }
 
   ngAfterViewInit(): void {
     // Behaviour for header menu on mobile.
     // Copied from NHS design system framework scripts.
-    if (isPlatformBrowser(this.platformId)) {
-      const t = document.querySelector('#toggle-menu');
-      const m = document.querySelector('#close-menu');
-      const n = document.querySelector('#header-navigation');
+    // Wait for initial render so widths are measurable
 
-      if (t && m && n) {
-        [t, m].forEach(e => {
-          e.addEventListener('click', r => {
-            r.preventDefault();
-            const nTemp = 'true' === t.getAttribute('aria-expanded') ? 'false' : 'true';
-            t.setAttribute('aria-expanded', nTemp);
-            t.classList.toggle('is-active');
-            n.classList.toggle('js-show');
-          });
-        });
-      }
-    }
+    this.updateCurrentTab();
+    this.cdr.detectChanges();
+
+    setTimeout(() => this.updateNavigation());
   }
 
   private onRouteChange(event: NavigationEnd): void {
     // Only show cookies banner if NOT on policies pages.
     this.showCookiesBanner = this.coockiesService.shouldAskForCookies() && !event.url.startsWith('/policies');
 
-    // // Always reset focus to body.
-    // if (isPlatformBrowser(this.platformId)) {
-    //   setTimeout(() => {
-    //     document.body.setAttribute('tabindex', '-1');
-    //     document.body.focus();
-    //     document.body.removeAttribute('tabindex');
-    //   });
-    // }
+    this.updateCurrentTab();
+
+    // Always reset focus to body.
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        document.body.setAttribute('tabindex', '-1');
+        document.body.focus();
+        document.body.removeAttribute('tabindex');
+      });
+    }
   }
 
   onSaveCookies(useCookies: boolean): void {
@@ -133,11 +155,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onHeaderMenuClick(menuItem: HeaderMenuBarItemType): void {
-    [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(
-      i => (i.isOpen = menuItem.label !== i.label && i.isOpen ? false : i.isOpen)
-    );
-
-    this.menuBarItems.isChildrenOpened = menuItem.isOpen = !menuItem.isOpen;
+    this.menuBarItems.forEach(i => (i.isOpen = menuItem.label !== i.label && i.isOpen ? false : i.isOpen));
   }
 
   signOut(): void {
@@ -146,5 +164,162 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    if (this.resizeTimer) {
+      clearTimeout(this.resizeTimer);
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    if (this.resizeTimer) {
+      clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.updateNavigation();
+    }, 100);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.menuOpen) {
+      this.closeMenu();
+    }
+  }
+
+  toggleMenu(): void {
+    this.menuOpen ? this.closeMenu() : this.openMenu();
+  }
+
+  openMenu(): void {
+    if (!this.menuEnabled) return;
+    this.menuOpen = true;
+    this.menuToggleRef?.nativeElement.setAttribute('aria-expanded', 'true');
+    setTimeout(() => this.updateMenuBorderHeight());
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
+    this.menuToggleRef?.nativeElement.setAttribute('aria-expanded', 'false');
+    this.navigationRef?.nativeElement.style.removeProperty('border-bottom-width');
+  }
+
+  trackByLabel = (_: number, item: NhsHeaderNavItem) => item.label;
+
+  private updateNavigation(): void {
+    const navContainer = this.navContainerRef?.nativeElement;
+    const menuItem = this.menuItemRef?.nativeElement;
+    const navList = this.navListRef?.nativeElement;
+
+    if (!navContainer || !menuItem || !navList) return;
+
+    // Reset
+    this.visibleItems = this.menuBarItems;
+    this.overflowItems = [];
+    this.menuEnabled = false;
+    this.menuOpen = false;
+    this.navigationRef?.nativeElement.style.removeProperty('border-bottom-width');
+    this.cdr.detectChanges();
+
+    // Do not collapse when menu is explicitly right-aligned
+    if (this.alignAtEnd) {
+      return;
+    }
+
+    // Do not collapse when there is only one item
+    if (this.menuBarItems.length <= 1) {
+      return;
+    }
+
+    // Measure after reset has rendered
+    const itemElements = Array.from(
+      navList.querySelectorAll<HTMLElement>('.nhsuk-header__navigation-item[data-nav-item="true"]')
+    );
+
+    if (!itemElements.length) {
+      return;
+    }
+
+    const containerRect = navContainer.getBoundingClientRect();
+    const firstRowTop = Math.round(itemElements[0].getBoundingClientRect().top);
+
+    const isOverflowing = (el: HTMLElement, rightBoundary: number): boolean => {
+      const rect = el.getBoundingClientRect();
+      const isPastRightEdge = Math.ceil(rect.right) > Math.floor(rightBoundary);
+      const hasWrapped = Math.round(rect.top) > firstRowTop;
+      return isPastRightEdge || hasWrapped;
+    };
+
+    // First pass: detect if anything overflows without the More button
+    let overflowIndex = itemElements.findIndex(el => isOverflowing(el, containerRect.right));
+
+    if (overflowIndex === -1) {
+      return;
+    }
+
+    // Second pass: enable More button and reserve width for it
+    this.menuEnabled = true;
+    this.cdr.detectChanges();
+
+    const refreshedMenuItem = this.menuItemRef?.nativeElement;
+    const refreshedNavList = this.navListRef?.nativeElement;
+
+    if (!refreshedMenuItem || !refreshedNavList) return;
+
+    const refreshedItems = Array.from(
+      refreshedNavList.querySelectorAll<HTMLElement>('.nhsuk-header__navigation-item[data-nav-item="true"]')
+    );
+
+    const menuWidth = refreshedMenuItem.getBoundingClientRect().width;
+    const adjustedRightBoundary = containerRect.right - menuWidth;
+    const refreshedFirstRowTop = refreshedItems.length ? Math.round(refreshedItems[0].getBoundingClientRect().top) : 0;
+
+    const isOverflowingWithMenu = (el: HTMLElement): boolean => {
+      const rect = el.getBoundingClientRect();
+      const isPastRightEdge = Math.ceil(rect.right) > Math.floor(adjustedRightBoundary);
+      const hasWrapped = Math.round(rect.top) > refreshedFirstRowTop;
+      return isPastRightEdge || hasWrapped;
+    };
+
+    overflowIndex = refreshedItems.findIndex(el => isOverflowingWithMenu(el));
+
+    if (overflowIndex === -1) {
+      this.menuEnabled = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.visibleItems = this.menuBarItems.slice(0, overflowIndex);
+    this.overflowItems = this.menuBarItems.slice(overflowIndex);
+    this.menuEnabled = this.overflowItems.length > 0;
+    this.menuOpen = false;
+
+    this.cdr.detectChanges();
+  }
+
+  private updateMenuBorderHeight(): void {
+    const nav = this.navigationRef?.nativeElement;
+    const menuList = this.menuListRef?.nativeElement;
+
+    if (!nav || !menuList || !this.menuOpen) return;
+
+    nav.style.setProperty('border-bottom-width', `${menuList.offsetHeight}px`);
+  }
+
+  private updateCurrentTab(): void {
+    // check all items for the current one and update all logic's arrays
+
+    const currentUrl = this.router.url;
+
+    const markCurrent = (item: HeaderMenuBarItemType): HeaderMenuBarItemType => ({
+      ...item,
+      isCurrent: !!item.url && currentUrl.includes(item.url)
+    });
+
+    this.menuBarItems = this.menuBarItems.map(markCurrent);
+    this.visibleItems = this.visibleItems.map(markCurrent);
+    this.overflowItems = this.overflowItems.map(markCurrent);
+
+    this.cdr.detectChanges();
   }
 }

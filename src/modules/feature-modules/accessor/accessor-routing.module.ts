@@ -89,18 +89,17 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
 import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
+import { InnovationRegulationsListPageComponent } from '@modules/shared/pages/innovation/sections/section-regulations-list.component';
+import { PageInnovationSectionRegulationInfoComponent } from '@modules/shared/pages/innovation/sections/section-regulation-info';
 
 const header: RoutesDataType['header'] = {
-  menuBarItems: {
-    left: [
-      { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
-      { id: 'tasks', label: 'Tasks', url: '/accessor/tasks' },
-      { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
-      { id: 'account', label: 'Your account', url: '/accessor/account/manage-details' },
-      { id: 'account', label: 'Training and resources', url: '/accessor/training-and-resources' }
-    ],
-    right: []
-  }
+  menuBarItems: [
+    { id: 'innovations', label: 'Innovations', url: '/accessor/innovations', align: 'left' },
+    { id: 'tasks', label: 'Tasks', url: '/accessor/tasks', align: 'left' },
+    { id: 'notifications', label: 'Notifications', url: '/accessor/notifications', align: 'left' },
+    { id: 'account', label: 'Your account', url: '/accessor/account/manage-details', align: 'left' },
+    { id: 'training', label: 'Training and resources', url: '/accessor/training-and-resources', align: 'left' }
+  ]
 };
 
 const routes: Routes = [
@@ -255,17 +254,33 @@ const routes: Routes = [
                             component: PageInnovationSectionInfoComponent,
                             data: { breadcrumb: null }
                           },
-
+                          {
+                            path: 'regulations',
+                            data: { breadcrumb: null },
+                            children: [
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                component: InnovationRegulationsListPageComponent,
+                                data: { layout: { type: 'full' } }
+                              },
+                              {
+                                path: ':regulationId',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionRegulationInfoComponent,
+                                data: { layout: { type: 'full' } }
+                              }
+                            ]
+                          },
                           {
                             path: 'evidences',
                             data: { breadcrumb: null },
                             children: [
-                              { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
-
+                              { path: '', pathMatch: 'full', redirectTo: '../' },
                               {
                                 path: ':evidenceId',
                                 // resolve: { innovationSectionEvidenceData: InnovationSectionEvidenceDataResolver },
-                                data: { breadcrumb: 'Evidence Info' },
+                                data: { layout: { type: 'full' }, breadcrumb: 'Evidence Info' },
                                 pathMatch: 'full',
                                 component: PageInnovationSectionEvidenceInfoComponent
                               }

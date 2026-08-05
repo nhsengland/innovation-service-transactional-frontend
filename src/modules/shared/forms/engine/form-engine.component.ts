@@ -22,6 +22,7 @@ import { debounceTime } from 'rxjs/operators';
 import { FormEngineHelper } from './helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from './models/form-engine.models';
+import { UpsertInnovationDocumentType } from '@modules/shared/services/innovation-documents.service';
 
 /**
  * @param parameters is an array of ParameterModel. For more info, check ParameterModel.
@@ -46,6 +47,8 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() formValidations?: ValidatorFn[];
   @Input() values?: Record<string, any> = {};
   @Input() showParamLabelAsTitle?: boolean;
+  @Input() supportingDocumentsList?: UpsertInnovationDocumentType[];
+  @Input() titleHint?: string;
   @Output() formChanges: any = new EventEmitter<Record<string, any>>();
 
   private formChangeSubscription = new Subscription();

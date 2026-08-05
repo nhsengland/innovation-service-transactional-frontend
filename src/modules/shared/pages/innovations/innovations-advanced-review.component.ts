@@ -15,7 +15,13 @@ import { ActivatedRoute } from '@angular/router';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
-import { keyProgressAreas, maturityLevelItems } from '@modules/stores/innovation/config/innovation-catalog.config';
+import {
+  archiveReasonFilterItems,
+  keyProgressAreas,
+  maturityLevelItems
+} from '@modules/stores/innovation/config/innovation-catalog.config';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
+import { group } from 'console';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -33,6 +39,15 @@ type AdvancedReviewSortByKeysType = Record<
     order: 'ascending' | 'descending';
   }
 >;
+
+type GroupedFilterOption = {
+  groupedOptionID: string;
+  ungroupedOptionsIDs: string[];
+};
+
+type GroupedFilterMap = {
+  archiveReason: GroupedFilterOption;
+};
 
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
@@ -141,10 +156,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         datasets.progressAreas = [...keyProgressAreas];
         if (this.ctx.user.isAdmin()) {
           datasets.supportStatuses = [];
-          datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
-            label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
-            value: status
-          }));
+          datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
+            // .filter(e => e !== 'ARCHIVED')
+            .map(status => ({
+              label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
+              value: status
+            }));
+          datasets.archiveReason = [...archiveReasonFilterItems];
         } else if (this.ctx.user.isAssessment()) {
           datasets.maturityLevels = [];
           datasets.progressAreas = [];
@@ -230,11 +248,27 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'assessment.id',
       'assessment.finishedAt',
       'assessment.maturityLevel',
+      'archiveReason',
       'progressAreas'
     ]);
 
+    // Define and replace grouped option for the expanded list before querying
+    const groupedFilterOptions: GroupedFilterMap = {
+      archiveReason: {
+        groupedOptionID: 'ARCHIVED_BY_INNOVATOR',
+        ungroupedOptionsIDs: [
+          InnovationArchiveReasonEnum.DEVELOP_FURTHER,
+          InnovationArchiveReasonEnum.HAVE_ALL_SUPPORT,
+          InnovationArchiveReasonEnum.DECIDED_NOT_TO_PURSUE,
+          InnovationArchiveReasonEnum.ALREADY_LIVE_NHS,
+          InnovationArchiveReasonEnum.OTHER_DONT_WANT_TO_SAY
+        ]
+      }
+    };
+    const apiQueryParams = this.replaceFilterGroupedOptions(this.filtersModel, groupedFilterOptions);
+
     this.innovationsService
-      .getInnovationsSearch(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
+      .getInnovationsSearch(queryFields, apiQueryParams, this.paginationParams)
       .pipe(finalize(() => this.setPageStatus('READY')))
       .subscribe({
         next: response => {
@@ -372,6 +406,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       .getInnovationsSearchCSV(queryFields, this.filtersModel.getAPIQueryParams())
       .subscribe(response => {
         // replace the CSV headers
+        console.log('data response', response);
         const data = response.split('\n');
         data[0] = data[0]
           .split(',')
@@ -453,7 +488,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.pageNumber = 1;
     this.form.updateValueAndValidity({ onlySelf: true, emitEvent: false }); // Prevent debounce trigger
     this.filtersModel.handleStateChanges();
-
     const currentSearch = this.form.value.search;
     if (this.search !== currentSearch) {
       this.updateSearchQueryParams(currentSearch).then(() => {
@@ -496,5 +530,23 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     return this.router.navigate([path], {
       queryParams: { search: currentSearch }
     });
+  }
+
+  replaceFilterGroupedOptions(filtersModel: FiltersModel, data: GroupedFilterMap) {
+    const apiQueryParams = filtersModel.getAPIQueryParams();
+    for (const [key, value] of Object.entries(data)) {
+      // check if selected options include a grouped one, and replace
+      if (
+        apiQueryParams[key] &&
+        Array.isArray(apiQueryParams[key]) &&
+        apiQueryParams[key].includes(value.groupedOptionID)
+      ) {
+        apiQueryParams[key] = [
+          ...apiQueryParams[key].filter(r => r != value.groupedOptionID),
+          ...value.ungroupedOptionsIDs
+        ];
+      }
+    }
+    return apiQueryParams;
   }
 }

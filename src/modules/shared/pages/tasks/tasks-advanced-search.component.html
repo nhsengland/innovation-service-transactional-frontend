@@ -12,7 +12,7 @@
       <form [formGroup]="form">
         <theme-form-input [id]="'searchInnovation'" [label]="search.placeholder" [controlName]="search.key" [pageUniqueField]="false">
           <ng-container append>
-            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+            <button type="button" (click)="onSearchClick()" class="nhsuk-button nhsuk-button--small form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />
               <span class="nhsuk-u-visually-hidden">Search</span>
             </button>
@@ -73,8 +73,8 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of tasksList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("section") }}</span>
                 <div class="d-flex nhsuk-u-padding-right-1">
-                  <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("section") }}</span>
                   <a
                     routerLink="/{{ userUrlBasePath() }}/innovations/{{ item.innovation.id }}/tasks/{{ item.id }}"
                     attr.aria-label="View task named {{ item.name }} for innovation {{ item.innovation.name }}"
@@ -85,23 +85,29 @@
                 </div>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("innovationName") }}</span>
-                <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ item.innovation.id }}" attr.aria-label="View innovation {{ item.innovation.name }} details">
-                  {{ item.innovation.name }}
-                </a>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("innovationName") }}</span>
+                <span>
+                  <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ item.innovation.id }}" attr.aria-label="View innovation {{ item.innovation.name }} details">
+                    {{ item.innovation.name }}
+                  </a>
+                </span>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("updatedAt") }}</span>
-                <span>{{ item.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
-                <span class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">by {{ item.updatedBy.name }} ({{ item.updatedBy.displayTag }})</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("updatedAt") }}</span>
+                <div>
+                  <span>{{ item.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
+                  <span class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">by {{ item.updatedBy.name }} ({{ item.updatedBy.displayTag }})</span>
+                </div>
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("status") }}</span>
-                <theme-tag
-                  type="{{ 'shared.catalog.innovation.task_status.' + item.status + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.innovation.task_status.' + item.status + '.name' | translate }}"
-                  class="tag-no-wrap"
-                ></theme-tag>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel("status") }}</span>
+                <span>
+                  <theme-tag
+                    type="{{ 'shared.catalog.innovation.task_status.' + item.status + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.task_status.' + item.status + '.name' | translate }}"
+                    class="tag-no-wrap"
+                  ></theme-tag>
+                </span>
               </td>
             </tr>
           </tbody>

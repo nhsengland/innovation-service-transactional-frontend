@@ -108,12 +108,10 @@
     </div>
   </section>
 
-  <div *ngIf="this.canAddRole" class="nhsuk-action-link nhsuk-u-margin-bottom-5">
-    <a class="nhsuk-action-link__link" routerLink="role/new">
-      <theme-svg-icon type="arrow-right-circle" />
-      <span class="nhsuk-action-link__text">Add role</span>
-    </a>
-  </div>
+  <a *ngIf="this.canAddRole" class="nhsuk-action-link nhsuk-u-margin-bottom-5 d-flex align-items-center" routerLink="role/new">
+    <theme-svg-icon type="arrow-right-circle" />
+    <span class="nhsuk-action-link__text">Add role</span>
+  </a>
 
   <section *ngIf="user.strategicRoles.length > 0 || canAssignStrategicRole" class="nhsuk-u-margin-top-7 nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-row">
@@ -131,12 +129,10 @@
             </tbody>
           </table>
         </div>
-        <div *ngIf="canAssignStrategicRole" class="nhsuk-action-link nhsuk-u-margin-top-5">
-          <a class="nhsuk-action-link__link" routerLink="strategic-role/new">
-            <theme-svg-icon type="arrow-right-circle" />
-            <span class="nhsuk-action-link__text">Add strategic role</span>
-          </a>
-        </div>
+        <a *ngIf="canAssignStrategicRole" class="nhsuk-action-link nhsuk-u-margin-top-5 d-flex align-items-center" routerLink="strategic-role/new">
+          <theme-svg-icon type="arrow-right-circle" />
+          <span class="nhsuk-action-link__text">Add strategic role</span>
+        </a>
       </div>
     </div>
   </section>
@@ -177,20 +173,24 @@
             <tbody class="nhsuk-table__body">
               <tr *ngFor="let item of assignedInnovations.getRecords()" class="nhsuk-table__row">
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("innovation") }}</span>
-                  <a class="text-word-break" routerLink="/admin/innovations/{{ item.innovation.id }}">{{ item.innovation.name }}</a>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("innovation") }}</span>
+                  <span
+                    ><a class="text-word-break" routerLink="/admin/innovations/{{ item.innovation.id }}">{{ item.innovation.name }}</a></span
+                  >
                 </td>
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("supportedBy") }}</span>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("supportedBy") }}</span>
 
-                  <ul class="nhsuk-list">
-                    <li *ngFor="let user of item.supportedBy">
-                      <span>{{ user.name }}, {{ user.role | serviceRoleTranslate }}</span>
-                    </li>
-                  </ul>
+                  <div>
+                    <ul class="nhsuk-list">
+                      <li *ngFor="let user of item.supportedBy">
+                        <span>{{ user.name }}, {{ user.role | serviceRoleTranslate }}</span>
+                      </li>
+                    </ul>
+                  </div>
                 </td>
                 <td class="nhsuk-table__cell">
-                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("unit") }}</span>
+                  <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("unit") }}</span>
                   {{ item.unit }}
                 </td>
               </tr>

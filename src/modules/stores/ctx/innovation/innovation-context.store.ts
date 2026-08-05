@@ -14,7 +14,9 @@ import {
   take,
   catchError
 } from 'rxjs';
-import { omitBy, cloneDeep, isUndefined } from 'lodash';
+import omitBy from 'lodash/omitBy';
+import cloneDeep from 'lodash/cloneDeep';
+import isUndefined from 'lodash/isUndefined';
 
 import { InnovationContextService } from './innovation-context.service';
 import { InnovationSectionStatusEnum, InnovationStatusEnum } from './innovation.enums';

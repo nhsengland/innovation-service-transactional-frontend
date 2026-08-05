@@ -38,6 +38,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
 
   @Input() id?: string;
   @Input() type?: 'text' | 'number' | 'hidden' | 'password';
+  @Input() hint?: string;
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;

@@ -18,7 +18,7 @@ import {
   ThreadAvailableRecipientsDTO,
   UploadThreadMessageDocumentType
 } from '@modules/shared/services/innovations.service';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 
 @Component({
   selector: 'shared-pages-innovation-messages-thread-messages-list',
