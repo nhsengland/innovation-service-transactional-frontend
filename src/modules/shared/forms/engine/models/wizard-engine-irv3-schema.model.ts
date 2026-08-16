@@ -392,7 +392,7 @@ export class WizardIRV3EngineModel {
                     new FormEngineModelV3({
                       parameters: [
                         {
-                          id: `${aq.id}_${generatedFromAnswer}`,
+                          id: `${aq.id}_${q.dataType === 'fields-group' ? i : generatedFromAnswer}`,
                           dataType: aq.dataType,
                           label: label,
                           ...(aq.description && {
