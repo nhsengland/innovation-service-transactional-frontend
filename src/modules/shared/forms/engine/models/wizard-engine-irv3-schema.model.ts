@@ -667,7 +667,7 @@ export class WizardIRV3EngineModel {
               // add all addQuestions previous values
               (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
                 stepParams.addQuestions?.forEach(aq => {
-                  const generatedFromAnswer = answer[`${stepParams.checkboxAnswerId}`];
+                  const generatedFromAnswer = answer[stepParams.checkboxAnswerId ?? stepParams.id];
                   toReturn[`${aq.id}_${generatedFromAnswer}`] = answer[aq.id];
                 });
               });

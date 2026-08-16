@@ -120,6 +120,61 @@ describe('WizardIRV3EngineModel', () => {
     });
   });
 
+  it('uses the checkbox question id when checkboxAnswerId is not defined', () => {
+    const schema: InnovationRecordSchemaInfoType = {
+      id: 'test-schema',
+      version: 15,
+      schema: {
+        sections: [
+          {
+            id: 'categoriesSection',
+            title: 'Categories',
+            subSections: [
+              {
+                id: 'CATEGORIES',
+                title: 'Categories',
+                steps: [
+                  {
+                    questions: [
+                      {
+                        id: 'categories',
+                        dataType: 'checkbox-array',
+                        label: 'Which categories apply?',
+                        items: [{ id: 'MEDICAL_DEVICE', label: 'Medical device' }],
+                        addQuestions: [
+                          {
+                            id: 'details',
+                            dataType: 'text',
+                            label: 'Provide details'
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const wizard = new WizardIRV3EngineModel({
+      sectionId: 'CATEGORIES',
+      schema,
+      currentAnswers: {
+        categories: [{ categories: 'MEDICAL_DEVICE', details: 'A medical device' }]
+      }
+    });
+
+    wizard.runRules().runInboundParsing();
+
+    expect(wizard.getAnswers()).toMatchObject({
+      categories: ['MEDICAL_DEVICE'],
+      details_MEDICAL_DEVICE: 'A medical device'
+    });
+  });
+
   it('keeps an ambiguous legacy standard visible and blocks editing until it is replaced', () => {
     const schema: InnovationRecordSchemaInfoType = {
       id: 'test-schema',
