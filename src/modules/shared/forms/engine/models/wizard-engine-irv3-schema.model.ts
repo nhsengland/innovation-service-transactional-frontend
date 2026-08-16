@@ -36,6 +36,22 @@ export type EvidenceV3Type = {
   value: string;
 };
 
+const LEGACY_STANDARD_ID_MAP: Record<string, string> = {
+  MARKETING: 'MARKETING_AUTHORISATION'
+};
+
+const LEGACY_STANDARD_LABELS: Record<string, string> = {
+  CE_UKCA_NON_MEDICAL: 'Legacy standard: CE/UKCA non-medical',
+  CE_UKCA_CLASS_I: 'Legacy standard: CE/UKCA Class I',
+  CE_UKCA_CLASS_II_A: 'Legacy standard: CE/UKCA Class IIa',
+  CE_UKCA_CLASS_II_B: 'Legacy standard: CE/UKCA Class IIb',
+  CE_UKCA_CLASS_III: 'Legacy standard: CE/UKCA Class III',
+  IVD_GENERAL: 'Legacy standard: IVD general',
+  IVD_SELF_TEST: 'Legacy standard: IVD self-test',
+  IVD_ANNEX_LIST_A: 'Legacy standard: IVD Annex II List A',
+  IVD_ANNEX_LIST_B: 'Legacy standard: IVD Annex II List B'
+};
+
 export type StepsParentalRelationsType = Record<string, string>;
 
 export class WizardIRV3EngineModel {
@@ -281,6 +297,28 @@ export class WizardIRV3EngineModel {
   }
 
   runRules(): this {
+    if (this.sectionId === 'REGULATIONS_AND_STANDARDS' && Array.isArray(this.currentAnswers.standards)) {
+      this.currentAnswers = {
+        ...this.currentAnswers,
+        standards: this.currentAnswers.standards.map((standard: Record<string, any> | string) => {
+          if (typeof standard === 'string') return LEGACY_STANDARD_ID_MAP[standard] ?? standard;
+
+          return {
+            ...standard,
+            type: LEGACY_STANDARD_ID_MAP[standard.type] ?? standard.type
+          };
+        })
+      };
+    }
+
+    const legacyStandardIds = new Set(
+      this.sectionId === 'REGULATIONS_AND_STANDARDS' && Array.isArray(this.currentAnswers.standards)
+        ? this.currentAnswers.standards
+            .map((answer: Record<string, any> | string) => (typeof answer === 'string' ? answer : answer?.type))
+            .filter((id: string | undefined): id is string => !!id && !!LEGACY_STANDARD_LABELS[id])
+        : []
+    );
+
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
@@ -298,7 +336,16 @@ export class WizardIRV3EngineModel {
             ...(q.description && { description: this.translateDescriptionUrls(q.description) }),
             ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
             ...(q.validations && { validations: q.validations }),
-            ...(q.items && { items: q.items.map(i => i) }),
+            ...(q.items && {
+              items: [
+                ...q.items.map(i => i),
+                ...(q.id === 'standards'
+                  ? [...legacyStandardIds]
+                      .filter(id => !q.items?.some(item => item.id === id))
+                      .map(id => ({ id, label: LEGACY_STANDARD_LABELS[id] }))
+                  : [])
+              ]
+            }),
             ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
             ...(q.addQuestions && { addQuestions: q.addQuestions }),
             ...(q.field && { field: q.field }),
@@ -362,7 +409,11 @@ export class WizardIRV3EngineModel {
                   itemAnswer = this.getItemAnswerByDataType(q, i);
 
                   generatedFromAnswer = itemAnswer;
-                  label = this.translations.questions.get(q.id)?.items.get(itemAnswer)?.label ?? '';
+                  label =
+                    this.translations.questions.get(q.id)?.items.get(itemAnswer)?.label ??
+                    q.items?.find(item => item.id === itemAnswer)?.label ??
+                    LEGACY_STANDARD_LABELS[itemAnswer] ??
+                    '';
 
                   // search for conditional on question items, then check if answer is from a conditional. If so, get conditional answer
                   if (conditionalItem?.conditional && conditionalItem.id === itemAnswer) {
@@ -733,12 +784,29 @@ export class WizardIRV3EngineModel {
   validateData(): { valid: boolean; errors: { title: string; description: string }[] } {
     const parameters = this.steps.flatMap(step => step.parameters);
     const form = FormEngineHelperV3.buildForm(parameters, this.currentAnswers);
+    const errors = Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
+      title: parameters.find(p => p.id === key)?.label || '',
+      description: value || ''
+    }));
+
+    const hasLegacyStandard =
+      this.sectionId === 'REGULATIONS_AND_STANDARDS' &&
+      Array.isArray(this.currentAnswers.standards) &&
+      this.currentAnswers.standards.some((answer: Record<string, any> | string) => {
+        const id = typeof answer === 'string' ? answer : answer?.type;
+        return !!id && !!LEGACY_STANDARD_LABELS[id];
+      });
+
+    if (hasLegacyStandard) {
+      errors.push({
+        title: 'Regulations and standards',
+        description: 'Select a current standard for each legacy standard before saving.'
+      });
+    }
+
     return {
-      valid: form.valid,
-      errors: Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
-        title: parameters.find(p => p.id === key)?.label || '',
-        description: value || ''
-      }))
+      valid: form.valid && !hasLegacyStandard,
+      errors
     };
   }
 
