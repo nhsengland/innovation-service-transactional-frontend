@@ -172,9 +172,7 @@ describe('WizardIRV3EngineModel', () => {
 
     wizard.runRules();
 
-    expect(wizard.steps[0].parameters[0].items).toContainEqual(
-      expect.objectContaining({ id: 'CE_UKCA_CLASS_II_B' })
-    );
+    expect(wizard.steps[0].parameters[0].items).toContainEqual(expect.objectContaining({ id: 'CE_UKCA_CLASS_II_B' }));
     expect(wizard.validateData().valid).toBe(false);
   });
 });
