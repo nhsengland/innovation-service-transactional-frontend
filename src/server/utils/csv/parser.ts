@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { UserRoleEnum } from '@app/base/enums';
+
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import {
   AllSectionsOutboundPayloadType,
@@ -42,10 +44,12 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
     throw new DocumentGeneratorInnovationInfoError(error);
   }
 
-  try {
-    progressInfo = await getProgressInfo(innovationId, config);
-  } catch (error: any) {
-    throw new DocumentGeneratorProgressInfoError(error);
+  if (config.headers?.['x-is-role-type'] !== UserRoleEnum.INNOVATOR) {
+    try {
+      progressInfo = await getProgressInfo(innovationId, config);
+    } catch (error: any) {
+      throw new DocumentGeneratorProgressInfoError(error);
+    }
   }
 
   try {
