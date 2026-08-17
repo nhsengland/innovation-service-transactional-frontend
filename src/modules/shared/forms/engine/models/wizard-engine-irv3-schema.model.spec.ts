@@ -542,6 +542,36 @@ describe('translateSummaryForIRDocumentExport', () => {
       { label: 'Select all categories', value: 'Medical device' }
     ]);
   });
+
+  it('exports object answers such as certifications', () => {
+    const wizard = new WizardIRV3EngineModel({
+      currentAnswers: {
+        certifications: { GMDN: '12345', UDI: '67890' }
+      },
+      steps: [
+        {
+          parameters: [
+            {
+              id: 'certifications',
+              dataType: 'input-array',
+              label: 'Certifications',
+              items: [],
+              isHidden: false
+            }
+          ]
+        }
+      ],
+      translations: {
+        sections: new Map(),
+        subsections: new Map(),
+        questions: new Map([['certifications', { label: 'Certifications', items: new Map() }]])
+      }
+    });
+
+    expect(wizard.translateSummaryForIRDocumentExport()).toEqual([
+      { label: 'Certifications', value: 'GMDN: 12345\nUDI: 67890' }
+    ]);
+  });
 });
 
 const schema: InnovationRecordSchemaInfoType = {

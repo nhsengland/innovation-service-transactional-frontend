@@ -863,6 +863,10 @@ export class WizardIRV3EngineModel {
           translatedArr.push(this.translations.questions.get(item.stepId)?.items?.get(v)?.label ?? v)
         );
         value = translatedArr.join('\n');
+      } else if (valueToTranslate && typeof valueToTranslate === 'object') {
+        value = Object.entries(valueToTranslate)
+          .map(([key, answer]) => `${key}: ${answer}`)
+          .join('\n');
       }
 
       return [
