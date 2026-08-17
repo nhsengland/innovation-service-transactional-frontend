@@ -1,9 +1,7 @@
-<div class="nhsuk-back-link">
-  <a href="javascript:;" class="nhsuk-back-link__link" (click)="onPreviousStep()">
-    <theme-svg-icon type="chevron-left" />
-    Go back
-  </a>
-</div>
+<a href="javascript:;" class="nhsuk-back-link" (click)="onPreviousStep()">
+  <theme-svg-icon type="chevron-left" />
+  Go back
+</a>
 
 <h1 class="nhsuk-heading-l">{{ title }}</h1>
 
@@ -42,7 +40,7 @@
         <tbody class="nhsuk-table__body">
           <tr aria-live="off" *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
-              <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("userAccount") }}</span>
+              <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("userAccount") }}</span>
               <div>
                 <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.roleDescription }}</p>
                 <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.name }} ({{ item.email }})</p>

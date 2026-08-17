@@ -1,8 +1,9 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
-import { omit, isEmpty } from 'lodash';
 import { ItemConditionOptionsType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
+import omit from 'lodash/omit';
+import isEmpty from 'lodash/isEmpty';
 
 export class CustomFormGroupValidators {
   static mustMatch(fieldName: string, confirmationFieldName: string, errorMessage: string | null): ValidatorFn {

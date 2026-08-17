@@ -34,6 +34,10 @@ import { FormIRSelectableFiltersFilterComponent } from '@modules/feature-modules
 import { ThemeModule } from '../../theme/theme.module';
 import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters.component';
 import { FormInputArrayV3Component } from './components/input-array.component';
+import { RouterModule } from '@angular/router';
+import { BytesPrettyPrintPipeModule } from '../pipes/bytes-pretty-print.module';
+import { FormSupportingDocumentListComponent } from './components/supporting-documents-list-info.component';
+import { FormFieldsGroupV3Component } from './components/fields-group-v3.component';
 
 @NgModule({
   imports: [
@@ -44,7 +48,11 @@ import { FormInputArrayV3Component } from './components/input-array.component';
     NgxDropzoneModule,
     // Angular Material.
     MatAutocompleteModule,
-    ThemeModule
+    ThemeModule,
+    RouterModule,
+
+    // Pipes
+    BytesPrettyPrintPipeModule
   ],
   declarations: [
     FormEngineComponent,
@@ -63,10 +71,12 @@ import { FormInputArrayV3Component } from './components/input-array.component';
     FormInputArrayV3Component,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
+    FormFieldsGroupV3Component,
     FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
     FormTextareaComponent,
+    FormSupportingDocumentListComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
     FormSelectComponent,
@@ -94,10 +104,12 @@ import { FormInputArrayV3Component } from './components/input-array.component';
     FormInputArrayV3Component,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
+    FormFieldsGroupV3Component,
     FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
     FormTextareaComponent,
+    FormSupportingDocumentListComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
     FormSelectComponent,

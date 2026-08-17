@@ -75,8 +75,9 @@ export function app(): express.Express {
   // CSRF protection.
   server.use((req, res, next) => {
     if (!(req.method === 'OPTIONS' || req.method === 'GET' || req.method === 'HEAD')) {
-      if (!req.cookies['XSRF-TOKEN'] && req.cookies['XSRF-TOKEN'] !== (req.session as any).xsrfToken) {
-        res.send(403);
+      if (!req.cookies['XSRF-TOKEN'] || req.cookies['XSRF-TOKEN'] !== (req.session as any).xsrfToken) {
+        res.status(403).send('Forbidden');
+        return;
       }
     }
     next();

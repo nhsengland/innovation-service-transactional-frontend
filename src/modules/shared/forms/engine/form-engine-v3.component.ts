@@ -162,4 +162,8 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.formChangeSubscription.unsubscribe();
   }
+
+  getFieldArray(id: string): FormArray {
+    return this.form.get(id) as FormArray;
+  }
 }

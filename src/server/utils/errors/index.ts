@@ -53,3 +53,10 @@ export class DocumentGeneratorInnovationInfoError extends Error {
     this.name = 'DocumentGeneratorInnovationInfoError';
   }
 }
+
+export class DocumentGeneratorProgressInfoError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'DocumentGeneratorProgressInfoError';
+  }
+}

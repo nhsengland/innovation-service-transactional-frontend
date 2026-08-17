@@ -93,20 +93,12 @@
           <ng-container *ngIf="ctx.user.isInnovator()">
             <ul class="nhsuk-list">
               <li>
-                <a
-                  *ngIf="task.status === 'OPEN'"
-                  routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/accept"
-                  class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3"
-                >
-                  Mark task as done
-                </a>
-                <a
-                  *ngIf="task.status === 'OPEN'"
-                  routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/decline"
-                  class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3"
-                >
-                  Decline task
-                </a>
+                <div class="nhsuk-button-group">
+                  <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/accept" class="nhsuk-button">Mark task as done</a>
+                  <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/decline" class="nhsuk-button nhsuk-button--secondary"
+                    >Decline task</a
+                  >
+                </div>
               </li>
               <li class="nhsuk-u-margin-bottom-4">
                 <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}">

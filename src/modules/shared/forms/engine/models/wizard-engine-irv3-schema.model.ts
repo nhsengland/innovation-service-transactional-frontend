@@ -4,6 +4,7 @@ import { ValidatorFn } from '@angular/forms';
 import {
   InnovationRecordConditionType,
   InnovationRecordItemsType,
+  InnovationRecordQuestionStepType,
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
@@ -296,6 +297,10 @@ export class WizardIRV3EngineModel {
     return description;
   }
 
+  private getQuestionItems(question: InnovationRecordQuestionStepType): InnovationRecordQuestionStepType['items'] {
+    return question.items?.filter(item => !item.isLegacy || item.id === this.currentAnswers[question.id]);
+  }
+
   runRules(): this {
     if (this.sectionId === 'REGULATIONS_AND_STANDARDS' && Array.isArray(this.currentAnswers.standards)) {
       this.currentAnswers = {
@@ -329,6 +334,7 @@ export class WizardIRV3EngineModel {
         const addSteps: FormEngineModelV3[] = [];
 
         s.questions.forEach(q => {
+          const questionItems = this.getQuestionItems(q) ?? [];
           const param: FormEngineParameterModelV3 = {
             id: q.id,
             dataType: q.dataType,
@@ -338,10 +344,10 @@ export class WizardIRV3EngineModel {
             ...(q.validations && { validations: q.validations }),
             ...(q.items && {
               items: [
-                ...q.items.map(i => i),
+                ...questionItems,
                 ...(q.id === 'standards'
                   ? [...legacyStandardIds]
-                      .filter(id => !q.items?.some(item => item.id === id))
+                      .filter(id => !questionItems.some(item => item.id === id))
                       .map(id => ({ id, label: LEGACY_STANDARD_LABELS[id] }))
                   : [])
               ]
@@ -835,25 +841,42 @@ export class WizardIRV3EngineModel {
 
     const summary = this.parseSummary();
 
-    const translatedSummary = summary.map(item => {
+    const translatedSummary = summary.flatMap(item => {
+      const stepParams = this.steps.find(step => step.parameters[0]?.id === item.stepId)?.parameters[0];
+      const conditionalItems = stepParams?.items?.filter(i => i.conditional) ?? [];
+      const selectedAnswers = stepParams ? this.currentAnswers[stepParams.id] : undefined;
+      const valueToTranslate = conditionalItems.length ? selectedAnswers : item.value;
       // get label translation
       const label = this.translations.questions.get(item.label.split('_')[0])?.label ?? item.label;
       let value = '';
 
-      if (typeof item.value === 'string') {
+      if (typeof valueToTranslate === 'string') {
         // translate item
-        value = this.translations.questions.get(item.stepId.split('_')[0])?.items.get(item.value)?.label ?? item.value;
-      } else if (item.value instanceof Array) {
+        value =
+          this.translations.questions.get(item.stepId.split('_')[0])?.items.get(valueToTranslate)?.label ??
+          valueToTranslate;
+      } else if (valueToTranslate instanceof Array) {
         const translatedArr: string[] = [];
 
         // translate each item of Array
-        item.value.forEach(v =>
+        valueToTranslate.forEach(v =>
           translatedArr.push(this.translations.questions.get(item.stepId)?.items?.get(v)?.label ?? v)
         );
         value = translatedArr.join('\n');
       }
 
-      return { label: label, value: value };
+      return [
+        { label: label, value: value },
+        ...conditionalItems
+          .filter(i => {
+            if (!i.conditional || !this.currentAnswers[i.conditional.id]) return false;
+            return selectedAnswers instanceof Array ? selectedAnswers.includes(i.id) : selectedAnswers === i.id;
+          })
+          .map(i => ({
+            label: i.conditional!.label ?? '',
+            value: this.currentAnswers[i.conditional!.id]
+          }))
+      ];
     });
 
     // Add evidences when available

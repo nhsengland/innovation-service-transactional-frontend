@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <p>There are two ways to stop sharing an innovation. The easiest way is to send a message to your support organisations to let them know you are taking a break.</p>
 
@@ -40,25 +41,27 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let innovation of innovations.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("innovation") }} </span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("innovation") }} </span>
                 <span>{{ innovation.name }}</span>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("statusUpdatedAt") }} </span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("statusUpdatedAt") }} </span>
                 {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("actions") }} </span>
-                <a routerLink="/innovator/innovations/{{ innovation.id }}"
-                  >Go to innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span></a
-                >
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ innovations.getColumnLabel("actions") }} </span>
+                <span>
+                  <a routerLink="/innovator/innovations/{{ innovation.id }}"
+                    >Go to innovation <span class="nhsuk-u-visually-hidden"> {{ innovation.name }} </span></a
+                  >
+                </span>
               </td>
             </tr>
           </tbody>
         </table>
       </ng-container>
 
-      <a class="nhsuk-action-link__link" routerLink="request">
+      <a class="nhsuk-action-link d-flex align-items-center" routerLink="request">
         <theme-svg-icon type="arrow-right-circle" />
         <span class="nhsuk-action-link__text">Stop sharing this innovation</span>
       </a>

@@ -93,7 +93,7 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
     this.lookForAndSetExclusive();
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
-    this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
+    this.cssClass = this.size === 'small' ? 'nhsuk-checkboxes--small' : '';
 
     // This will filter any value not available on the items variable.
     const itemsValues = (this.items || []).map(item => item.id ?? '');

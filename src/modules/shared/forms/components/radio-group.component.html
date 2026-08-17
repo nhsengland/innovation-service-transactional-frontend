@@ -44,7 +44,7 @@
                   [name]="controlName"
                   [value]="item.value"
                   class="nhsuk-radios__input"
-                  [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
+                  [attr.data-aria-controls]="item.conditional ? 'conditional-' + id + i : null"
                   [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null"
                   [attr.aria-describedby]="item.description ? 'status{{ i }}-hint' : null"
                 />

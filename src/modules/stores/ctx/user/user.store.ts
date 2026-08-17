@@ -21,7 +21,8 @@ import { UserRoleEnum } from '@app/base/enums';
 import { isPlatformBrowser } from '@angular/common';
 import { EnvironmentVariablesStore } from '@modules/core';
 import { DeepPartial } from '@app/base/types';
-import { isUndefined, omitBy } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
+import omitBy from 'lodash/omitBy';
 
 @Injectable()
 export class UserContextStore {
