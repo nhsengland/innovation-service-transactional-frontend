@@ -201,18 +201,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         this.wizard.addAnswers(formData!.data).runRules();
 
-        if (this.sectionId === 'REGULATIONS_AND_STANDARDS') {
-          const validInformation = this.wizard.validateData();
-          if (!validInformation.valid) {
-            this.alertErrorsList = validInformation.errors;
-            this.setAlertError(`Please verify what's missing with your answers`, {
-              itemsList: this.alertErrorsList,
-              width: '2.thirds'
-            });
-            return;
-          }
-        }
-
         this.saveButton = { isActive: false, label: 'Saving...' };
 
         of(true)

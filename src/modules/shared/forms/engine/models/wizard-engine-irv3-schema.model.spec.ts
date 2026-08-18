@@ -232,6 +232,92 @@ describe('WizardIRV3EngineModel', () => {
   });
 });
 
+describe('parseSummary', () => {
+  it('uses the raw checkbox id when summarising dynamic child questions', () => {
+    const schema: InnovationRecordSchemaInfoType = {
+      id: 'test-schema',
+      version: 15,
+      schema: {
+        sections: [
+          {
+            id: 'regulationsStandards',
+            title: 'Regulations and standards',
+            subSections: [
+              {
+                id: 'REGULATIONS_AND_STANDARDS',
+                title: 'Regulations and standards',
+                steps: [
+                  {
+                    questions: [
+                      {
+                        id: 'standards',
+                        dataType: 'checkbox-array',
+                        checkboxAnswerId: 'type',
+                        label: 'Which standards apply?',
+                        items: [
+                          { id: 'UK_MDR_CLASS_I', label: 'UK MDR Class I (Great Britain)' },
+                          {
+                            id: 'OTHER',
+                            label: 'Other',
+                            conditional: {
+                              id: 'otherRegulationDescription',
+                              dataType: 'text',
+                              label: 'Other regulation'
+                            }
+                          }
+                        ],
+                        addQuestions: [
+                          {
+                            id: 'hasMet',
+                            dataType: 'radio-group',
+                            label: 'Do you have a certification for {{item}}?',
+                            items: [{ id: 'YES', label: 'Yes' }]
+                          },
+                          {
+                            id: 'certifications',
+                            dataType: 'input-array',
+                            label: 'Enter registration numbers for {{item}}',
+                            items: [{ id: 'OTHER_REG', label: 'Other registration number' }]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const wizard = new WizardIRV3EngineModel({
+      sectionId: 'REGULATIONS_AND_STANDARDS',
+      schema,
+      currentAnswers: {
+        standards: [
+          { type: 'UK_MDR_CLASS_I', hasMet: 'IN_PROGRESS', certifications: { OTHER_REG: null } },
+          { type: 'OTHER', hasMet: 'NOT_YET', certifications: { OTHER_REG: 'REG-123' } }
+        ],
+        otherRegulationDescription: 'Local regulatory framework'
+      }
+    });
+
+    wizard.runRules().runInboundParsing();
+    const summary = wizard.parseSummary();
+
+    expect(summary.find(step => step.stepId === 'hasMet_OTHER')).toMatchObject({
+      label: 'Do you have a certification for Local regulatory framework?',
+      value: 'NOT_YET'
+    });
+    expect(summary.find(step => step.stepId === 'certifications_OTHER')).toMatchObject({
+      label: 'Enter registration numbers for Local regulatory framework',
+      value: { OTHER_REG: 'REG-123' }
+    });
+    expect(summary).not.toEqual(expect.arrayContaining([expect.objectContaining({ stepId: '' })]));
+  });
+});
+
 describe('translateSummaryForIRDocumentExport', () => {
   it('exports radio item conditional answers as their own labelled rows', () => {
     const wizard = new WizardIRV3EngineModel({

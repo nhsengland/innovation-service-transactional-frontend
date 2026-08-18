@@ -577,9 +577,11 @@ export class WizardIRV3EngineModel {
             {
               value = undefined;
               let stepAnswers: string[] = [];
+              let answerIds: string[] = [];
 
               if (currentAnswers[stepParams.id]) {
-                stepAnswers = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
+                answerIds = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
+                stepAnswers = [...answerIds];
 
                 // Set value of parent, depending on type of answer
                 if (stepParams.addQuestions || stepParams.checkboxAnswerId) {
@@ -610,8 +612,8 @@ export class WizardIRV3EngineModel {
               this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
 
               // Push "children" if any
-              if (stepParams.addQuestions && stepAnswers) {
-                stepAnswers.forEach((answer, i) => {
+              if (stepParams.addQuestions && answerIds) {
+                answerIds.forEach((answer, i) => {
                   stepParams.addQuestions?.forEach(aq => {
                     const aqStepParam = this.steps.find(s => s.parameters[0].id === `${aq.id}_${answer}`)
                       ?.parameters[0];
