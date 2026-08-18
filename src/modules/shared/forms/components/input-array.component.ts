@@ -1,4 +1,14 @@
-import { Component, Input, OnInit, DoCheck, ChangeDetectionStrategy, ChangeDetectorRef, Injector } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  DoCheck,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Injector
+} from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
@@ -31,7 +41,7 @@ export type InnovationRecordItemType = {
   templateUrl: './input-array.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormInputArrayV3Component extends ControlValueAccessorComponent implements OnInit, DoCheck {
+export class FormInputArrayV3Component extends ControlValueAccessorComponent implements OnInit, OnChanges, DoCheck {
   @Input() id?: string;
   @Input() groupName = '';
   @Input() label?: string;
@@ -70,6 +80,15 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
     if (this.items) this.setItemsValidations(this.items!);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      (changes.items && !changes.items.firstChange) ||
+      (changes.relatedAnswers && !changes.relatedAnswers.firstChange)
+    ) {
+      this.setItemsValidations(this.items ?? []);
+    }
+  }
+
   ngDoCheck(): void {
     this.items?.forEach(item => {
       if (!item.id) return;
@@ -95,18 +114,19 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
   setItemsValidations(items: InnovationRecordItemsType) {
     items.forEach(i => {
       const itemControl = this.getItemControl(i.id);
+      const itemValidations = i.validations;
 
       const isOptional =
         i.itemConditionOptions && FormEngineHelperV3.isItemOptional(i.itemConditionOptions, this.relatedAnswers!);
 
-      if (itemControl && i.validations) {
+      if (itemControl && (i.validations || i.itemConditionOptions?.mandatoryIf)) {
         const validations: ValidatorFn[] = [];
         if (!isOptional) {
-          const validation = i.validations.isRequired ?? 'Is required';
+          const validation = itemValidations?.isRequired ?? 'Is required';
           validations.push(CustomValidators.required(validation));
         }
-        if (i.validations.equalToLength) {
-          const validation = i.validations.equalToLength;
+        if (itemValidations?.equalToLength) {
+          const validation = itemValidations.equalToLength;
 
           if (typeof validation === 'number') {
             validations.push(CustomValidators.equalToLength(validation));
@@ -117,8 +137,8 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
           }
         }
 
-        if (i.validations.maxLength) {
-          validations.push(Validators.maxLength(i.validations.maxLength));
+        if (itemValidations?.maxLength) {
+          validations.push(Validators.maxLength(itemValidations.maxLength));
         }
 
         itemControl.setValidators(validations);
@@ -137,7 +157,7 @@ export class FormInputArrayV3Component extends ControlValueAccessorComponent imp
 
   getLabel(item: InnovationRecordItemType): string {
     if (!item.itemConditionOptions) {
-      return '';
+      return item.label ?? '';
     } else {
       return FormEngineHelperV3.isItemOptional(item.itemConditionOptions, this.relatedAnswers!)
         ? `${item.label} (Optional)`
