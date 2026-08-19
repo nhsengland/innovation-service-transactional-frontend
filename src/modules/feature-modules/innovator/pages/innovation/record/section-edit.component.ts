@@ -214,6 +214,21 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         this.wizard.addAnswers(formData!.data).runRules();
 
+        if (this.isRegulationsSection) {
+          const validInformation = this.wizard.validateData();
+          const hasLegacyStandardError = validInformation.errors.some(error =>
+            error.description.startsWith('Select a current standard for each legacy standard')
+          );
+          if (hasLegacyStandardError) {
+            this.alertErrorsList = validInformation.errors;
+            this.setAlertError(`Please verify what's missing with your answers`, {
+              itemsList: this.alertErrorsList,
+              width: '2.thirds'
+            });
+            return;
+          }
+        }
+
         if (this.shouldDeferRegulationsSave()) {
           this.isInMemoryStepNavigation = true;
           const nextStep = currentStepIndex + 1;

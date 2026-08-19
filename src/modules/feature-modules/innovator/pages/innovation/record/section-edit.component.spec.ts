@@ -76,6 +76,7 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
     component = fixture.componentInstance;
     component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
     component.isRegulationsSection = true;
+    component.isRegulationsSection = true;
     component.isChangeMode = true;
     component.formEngineComponent = {
       getFormValues: () => ({ valid: true, data: { hasMet_UK_MDR_CLASS_I: 'YES' } })
@@ -91,6 +92,7 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
       getAnswers: () => ({ hasMet_UK_MDR_CLASS_I: 'IN_PROGRESS' }),
       addAnswers: jest.fn().mockReturnThis(),
       runRules: jest.fn().mockReturnThis(),
+      validateData: jest.fn().mockReturnValue({ valid: true, errors: [] }),
       getNextStep: jest.fn().mockReturnValue('summary')
     } as any;
     const updateSectionInfo = jest
@@ -122,16 +124,19 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;
     component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.isRegulationsSection = true;
     component.formEngineComponent = {
       getFormValues: () => ({ valid: true, data: { certifications: { GMDN: '12345' } } })
     } as any;
     component.wizard = {
       currentStepId: 4,
+      steps: [{}, {}, {}, { parameters: [{ id: 'certifications_UK_MDR_CLASS_I' }] }],
       getAnswers: () => ({ certifications: { GMDN: '12345' } }),
       addAnswers: jest.fn().mockReturnThis(),
       runRules: jest.fn().mockReturnThis(),
       runOutboundParsing: jest.fn().mockReturnValue({}),
-      getNextStep: jest.fn().mockReturnValue('summary')
+      getNextStep: jest.fn().mockReturnValue('summary'),
+      validateData: jest.fn().mockReturnValue({ valid: true, errors: [] })
     } as any;
     (component as any).isInMemoryStepNavigation = true;
     const updateSectionInfo = jest
@@ -142,5 +147,39 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
     component.onSubmitStep('next');
 
     expect(updateSectionInfo).toHaveBeenCalled();
+  });
+
+  it('does not save legacy standards', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.isRegulationsSection = true;
+    component.formEngineComponent = {
+      getFormValues: () => ({ valid: true, data: { standards: [{ type: 'CE_UKCA_CLASS_II_B' }] } })
+    } as any;
+    component.wizard = {
+      currentStepId: 2,
+      getAnswers: () => ({}),
+      addAnswers: jest.fn().mockReturnThis(),
+      runRules: jest.fn().mockReturnThis(),
+      runOutboundParsing: jest.fn().mockReturnValue({}),
+      getNextStep: jest.fn().mockReturnValue('summary'),
+      validateData: jest.fn().mockReturnValue({
+        valid: false,
+        errors: [
+          {
+            title: 'Regulations and standards',
+            description: 'Select a current standard for each legacy standard before saving.'
+          }
+        ]
+      })
+    } as any;
+    const updateSectionInfo = jest
+      .spyOn((component as any).ctx.innovation, 'updateSectionInfo$')
+      .mockReturnValue(of({}));
+
+    component.onSubmitStep('next');
+
+    expect(updateSectionInfo).not.toHaveBeenCalled();
   });
 });
