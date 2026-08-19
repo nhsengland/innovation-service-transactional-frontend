@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import isEqual from 'lodash/isEqual';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 import { combineLatest, concatMap, of } from 'rxjs';
@@ -180,6 +181,10 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     );
   }
 
+  private hasAnswerChanges(updatedAnswers: Record<string, unknown>, currentAnswers: Record<string, unknown>): boolean {
+    return Object.entries(updatedAnswers).some(([key, updatedAnswer]) => !isEqual(currentAnswers[key], updatedAnswer));
+  }
+
   onSubmitStep(action: 'previous' | 'next'): void {
     this.alertErrorsList = [];
     this.resetAlert();
@@ -205,13 +210,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       }
 
       if (action === 'next') {
-        const shouldUpdateInformation =
-          Object.entries(formData?.data || {}).filter(([key, updatedAnswer]) => {
-            // NOTE: This is a very shallow comparison, and will return false for objects and arrays.
-            // Althought this can be improved in the future, for now it helps on some steps...
-            const currentAnswer = this.wizard.getAnswers()[key];
-            return currentAnswer !== updatedAnswer;
-          }).length > 0;
+        const shouldUpdateInformation = this.hasAnswerChanges(formData?.data || {}, this.wizard.getAnswers());
 
         this.wizard.addAnswers(formData!.data).runRules();
 

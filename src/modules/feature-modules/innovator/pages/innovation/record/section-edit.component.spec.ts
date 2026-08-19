@@ -106,4 +106,15 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
     expect(goToStep).toHaveBeenCalledWith(4, true);
     expect(replaceState).toHaveBeenCalled();
   });
+
+  it('does not save unchanged certification objects', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    expect(
+      (component as any).hasAnswerChanges(
+        { certifications: { GMDN: '12345' } },
+        { certifications: { GMDN: '12345' } }
+      )
+    ).toBe(false);
+  });
 });
