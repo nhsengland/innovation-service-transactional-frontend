@@ -117,4 +117,30 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
       )
     ).toBe(false);
   });
+
+  it('saves unchanged certification data when a parent status is pending', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.formEngineComponent = {
+      getFormValues: () => ({ valid: true, data: { certifications: { GMDN: '12345' } } })
+    } as any;
+    component.wizard = {
+      currentStepId: 4,
+      getAnswers: () => ({ certifications: { GMDN: '12345' } }),
+      addAnswers: jest.fn().mockReturnThis(),
+      runRules: jest.fn().mockReturnThis(),
+      runOutboundParsing: jest.fn().mockReturnValue({}),
+      getNextStep: jest.fn().mockReturnValue('summary')
+    } as any;
+    (component as any).isInMemoryStepNavigation = true;
+    const updateSectionInfo = jest
+      .spyOn((component as any).ctx.innovation, 'updateSectionInfo$')
+      .mockReturnValue(of({}));
+    jest.spyOn(component, 'onGoToStep').mockImplementation();
+
+    component.onSubmitStep('next');
+
+    expect(updateSectionInfo).toHaveBeenCalled();
+  });
 });

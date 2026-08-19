@@ -227,7 +227,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         of(true)
           .pipe(
             concatMap(() => {
-              if (shouldUpdateInformation || this.errorOnSubmitStep) {
+              if (this.isInMemoryStepNavigation || shouldUpdateInformation || this.errorOnSubmitStep) {
                 return this.ctx.innovation.updateSectionInfo$(
                   this.innovation.id,
                   this.sectionId,
