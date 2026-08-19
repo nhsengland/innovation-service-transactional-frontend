@@ -935,7 +935,8 @@ export class WizardIRV3EngineModel {
     }
 
     siblingConditionIds.forEach(sibling => {
-      relatedAnswers[sibling] = this.currentAnswers[parentId ?? ''][i][sibling];
+      relatedAnswers[sibling] =
+        this.currentAnswers[`${sibling}_${parentAnswer}`] ?? this.currentAnswers[parentId ?? '']?.[i]?.[sibling];
     });
 
     return relatedAnswers;

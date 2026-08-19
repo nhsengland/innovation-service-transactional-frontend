@@ -233,6 +233,34 @@ describe('WizardIRV3EngineModel', () => {
 });
 
 describe('parseSummary', () => {
+  it('uses a parsed sibling answer when the nested answer is not updated yet', () => {
+    const wizard = new WizardIRV3EngineModel({
+      currentAnswers: {
+        standards: [{ type: 'UK_MDR_CLASS_I', hasMet: 'IN_PROGRESS' }]
+      }
+    });
+
+    wizard.addAnswers({ hasMet_UK_MDR_CLASS_I: 'YES' });
+
+    const relatedAnswers = wizard.parseSummaryRelatedQuestionsAnswers(
+      [
+        {
+          itemConditionOptions: {
+            mandatoryIf: {
+              groupLogic: 'AND',
+              conditions: [{ id: 'hasMet', list: ['YES'], relation: 'sibling' }]
+            }
+          }
+        }
+      ],
+      'standards',
+      0,
+      'UK_MDR_CLASS_I'
+    );
+
+    expect(relatedAnswers.hasMet).toBe('YES');
+  });
+
   it('uses the raw checkbox id when summarising dynamic child questions', () => {
     const schema: InnovationRecordSchemaInfoType = {
       id: 'test-schema',

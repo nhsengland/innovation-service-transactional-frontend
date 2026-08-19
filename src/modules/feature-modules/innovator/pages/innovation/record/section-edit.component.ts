@@ -44,6 +44,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   isEvidenceSection = false;
   isRegulationsSection = false;
+  private isInMemoryStepNavigation = false;
 
   allowMarkSectionAsComplete = true;
 
@@ -166,6 +167,19 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     return false;
   }
 
+  private shouldDeferRegulationsSave(): boolean {
+    if (!this.isRegulationsSection || typeof this.wizard.currentStepId !== 'number') return false;
+
+    const currentStep = this.wizard.steps[this.wizard.currentStepId - 1]?.parameters[0];
+    const nextStep = this.wizard.steps[this.wizard.currentStepId]?.parameters[0];
+
+    return (
+      currentStep?.id.startsWith('hasMet_') === true &&
+      nextStep?.id.startsWith('certifications_') === true &&
+      currentStep.generatedFromAnswer === nextStep.generatedFromAnswer
+    );
+  }
+
   onSubmitStep(action: 'previous' | 'next'): void {
     this.alertErrorsList = [];
     this.resetAlert();
@@ -201,6 +215,14 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         this.wizard.addAnswers(formData!.data).runRules();
 
+        if (this.shouldDeferRegulationsSave()) {
+          this.isInMemoryStepNavigation = true;
+          const nextStep = currentStepIndex + 1;
+          this.onGoToStep(nextStep, this.isChangeMode);
+          this.location.replaceState(`${this.baseUrl}/edit/${nextStep}`, this.isChangeMode ? 'isChangeMode=true' : '');
+          return;
+        }
+
         this.saveButton = { isActive: false, label: 'Saving...' };
 
         of(true)
@@ -231,7 +253,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               this.saveButton = { isActive: true, label: 'Save and continue' };
 
               const nextStep = this.wizard.getNextStep(this.isChangeMode);
-              this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+              const stepToDisplay = this.isInMemoryStepNavigation
+                ? currentStepIndex
+                : this.activatedRoute.snapshot.params.questionId;
+              this.isInMemoryStepNavigation = false;
+              this.onGoToStep(stepToDisplay, this.isChangeMode);
               this.redirectTo(`${this.baseUrl}/edit/${nextStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
             },
             error: ({ error: err }: HttpErrorResponse) => {
