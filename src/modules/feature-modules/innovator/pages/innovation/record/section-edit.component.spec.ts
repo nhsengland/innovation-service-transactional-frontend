@@ -113,10 +113,7 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;
     expect(
-      (component as any).hasAnswerChanges(
-        { certifications: { GMDN: '12345' } },
-        { certifications: { GMDN: '12345' } }
-      )
+      (component as any).hasAnswerChanges({ certifications: { GMDN: '12345' } }, { certifications: { GMDN: '12345' } })
     ).toBe(false);
   });
 
