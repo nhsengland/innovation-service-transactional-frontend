@@ -251,8 +251,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
           this.regulationsData.regulationsDocumentsList = response.regulationsDocuments?.data ?? [];
 
-          this.regulationsData.regulationsList =
-            (response.sectionInfo.data as RegulationsSectionAnswersType).standards?.map(s => s.type) ?? [];
+          this.regulationsData.regulationsList = UtilsHelper.regulationsRequiringDocuments(
+            (response.sectionInfo.data as RegulationsSectionAnswersType).standards ?? []
+          );
 
           this.regulationsData.hasRegulations =
             response.sectionInfo.data.hasRegulationKnowledge &&

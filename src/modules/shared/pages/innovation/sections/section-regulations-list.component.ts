@@ -63,7 +63,7 @@ export class InnovationRegulationsListPageComponent extends CoreComponent implem
     ]).subscribe(([sectionInfo, regulationDocumentResponse]) => {
       this.sectionInfoData = sectionInfo.data as RegulationsSectionAnswersType;
       this.regulationsDocuments = regulationDocumentResponse.data;
-      this.regulationsList = this.sectionInfoData.standards?.map(i => i.type) ?? [];
+      this.regulationsList = UtilsHelper.regulationsRequiringDocuments(this.sectionInfoData.standards ?? []);
 
       this.allRegulationsHaveDocuments =
         UtilsHelper.regulationsWithoutDocuments(this.regulationsList, this.regulationsDocuments).length === 0;
