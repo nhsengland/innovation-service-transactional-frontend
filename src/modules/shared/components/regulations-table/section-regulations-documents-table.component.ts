@@ -42,11 +42,13 @@ export class InnovationRegulationsDocumentsTableComponent extends CoreComponent 
       },
       {}
     );
-
-    // console.log('regulationsDocuments', this.regulationsDocuments);
   }
 
   certificationsHasDocuments(id: string): boolean {
-    return !!this.regulationsDocuments[id].length;
+    const regulation = (this.sectionInfo as RegulationsSectionAnswersType).standards?.find(
+      standard => standard.type === id
+    );
+
+    return regulation?.hasMet === 'NOT_YET' || !!this.regulationsDocuments[id]?.length;
   }
 }

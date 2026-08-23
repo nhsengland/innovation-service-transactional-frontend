@@ -301,6 +301,20 @@ export class WizardIRV3EngineModel {
     return question.items?.filter(item => !item.isLegacy || item.id === this.currentAnswers[question.id]);
   }
 
+  private shouldOmitNotYetRegulationCertification(standardId: string, questionId: string): boolean {
+    const standardAnswer = Array.isArray(this.currentAnswers.standards)
+      ? this.currentAnswers.standards.find(
+          (standard: Record<string, any> | string) => typeof standard !== 'string' && standard?.type === standardId
+        )
+      : undefined;
+
+    return (
+      this.sectionId === 'REGULATIONS_AND_STANDARDS' &&
+      questionId === 'certifications' &&
+      (this.currentAnswers[`hasMet_${standardId}`] ?? standardAnswer?.hasMet) === 'NOT_YET'
+    );
+  }
+
   runRules(): this {
     if (this.sectionId === 'REGULATIONS_AND_STANDARDS' && Array.isArray(this.currentAnswers.standards)) {
       this.currentAnswers = {
@@ -429,6 +443,8 @@ export class WizardIRV3EngineModel {
                   // replace variable (i.e. '{{item}}') on label's placeholders for checkbox-arrays with addQuestions
                   label = aq.label.replace(/{{[^{}]*}}/, label);
                 }
+
+                if (this.shouldOmitNotYetRegulationCertification(itemAnswer, aq.id)) return;
 
                 // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
                 if (q.addQuestions) {
@@ -615,6 +631,8 @@ export class WizardIRV3EngineModel {
               if (stepParams.addQuestions && answerIds) {
                 answerIds.forEach((answer, i) => {
                   stepParams.addQuestions?.forEach(aq => {
+                    if (this.shouldOmitNotYetRegulationCertification(answer, aq.id)) return;
+
                     const aqStepParam = this.steps.find(s => s.parameters[0].id === `${aq.id}_${answer}`)
                       ?.parameters[0];
                     editStepNumber++;
@@ -711,6 +729,8 @@ export class WizardIRV3EngineModel {
             };
 
             stepParams.addQuestions?.forEach(addQuestion => {
+              if (this.shouldOmitNotYetRegulationCertification(answer, addQuestion.id)) return;
+
               const addQuestionId = `${addQuestion.id}_${answer}`;
 
               if (this.currentAnswers[addQuestionId]) {

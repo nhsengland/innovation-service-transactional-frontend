@@ -332,16 +332,26 @@ describe('parseSummary', () => {
     });
 
     wizard.runRules().runInboundParsing();
+    expect(wizard.steps.some(step => step.parameters[0]?.id === 'certifications_OTHER')).toBe(false);
     const summary = wizard.parseSummary();
 
     expect(summary.find(step => step.stepId === 'hasMet_OTHER')).toMatchObject({
       label: 'Do you have a certification for Local regulatory framework?',
       value: 'NOT_YET'
     });
-    expect(summary.find(step => step.stepId === 'certifications_OTHER')).toMatchObject({
-      label: 'Enter registration numbers for Local regulatory framework',
-      value: { OTHER_REG: 'REG-123' }
-    });
+    expect(summary).not.toEqual(expect.arrayContaining([expect.objectContaining({ stepId: 'certifications_OTHER' })]));
+
+    const notYetOutbound = wizard.runOutboundParsing();
+    expect(notYetOutbound.data.standards).toEqual([
+      { type: 'UK_MDR_CLASS_I', hasMet: 'IN_PROGRESS', certifications: { OTHER_REG: null } },
+      { type: 'OTHER', hasMet: 'NOT_YET' }
+    ]);
+
+    wizard.addAnswers({ hasMet_OTHER: 'YES' });
+    expect(wizard.runOutboundParsing().data.standards).toEqual([
+      { type: 'UK_MDR_CLASS_I', hasMet: 'IN_PROGRESS', certifications: { OTHER_REG: null } },
+      { type: 'OTHER', hasMet: 'YES', certifications: { OTHER_REG: 'REG-123' } }
+    ]);
     expect(summary).not.toEqual(expect.arrayContaining([expect.objectContaining({ stepId: '' })]));
   });
 });
