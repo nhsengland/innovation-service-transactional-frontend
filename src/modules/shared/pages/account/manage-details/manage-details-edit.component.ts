@@ -93,13 +93,15 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
     const wizardData = this.wizard.runOutboundParsing();
 
     let body: UpdateUserInfo = {
-      displayName: wizardData.displayName,
+      givenName: wizardData.givenName,
+      surname: wizardData.surname,
       jobTitle: wizardData.jobTitle
     };
 
     if (this.ctx.user.isInnovator()) {
       body = {
-        displayName: wizardData.displayName,
+        givenName: wizardData.givenName,
+        surname: wizardData.surname,
         contactByPhone: wizardData.contactByPhone,
         contactByEmail: wizardData.contactByEmail,
         contactByPhoneTimeframe: wizardData.contactByPhoneTimeframe || null,

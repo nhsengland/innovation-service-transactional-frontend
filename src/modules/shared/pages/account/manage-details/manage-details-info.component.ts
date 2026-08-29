@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { UtilsHelper } from '@app/base/helpers';
+import { StringsHelper, UtilsHelper } from '@app/base/helpers';
 import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 import { UserContextType } from '@modules/stores';
 
@@ -29,7 +29,12 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent {
   private handleInnovatorInfo(user: UserContextType['user']): SummaryList {
     let editStep = 0;
     const summary = [
-      { label: 'Name', value: user.displayName, editStepNumber: ++editStep },
+      { label: 'Given name', value: user.givenName, editStepNumber: ++editStep },
+      { label: 'Surname', value: user.surname, editStepNumber: ++editStep },
+      {
+        label: 'Display name',
+        value: StringsHelper.getUserDisplayName(user.givenName, user.surname, user.displayName)
+      },
       { label: 'Email address', value: user.email },
       {
         label: 'Contact preference',
@@ -64,7 +69,8 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent {
     const roles = [...new Set(user.roles.map(r => this.ctx.user.getRoleDescription(r.role)))].join('\n');
 
     return [
-      { label: 'Name', value: user.displayName, editStepNumber: 1 },
+      { label: 'Given name', value: user.givenName, editStepNumber: 1 },
+      { label: 'Surname', value: user.surname, editStepNumber: 1 },
       { label: 'Email address', value: user.email },
       ...(organisation ? [{ label: 'Organisation', value: organisation }] : []),
       { label: 'Job title', value: user.jobTitle, editStepNumber: 1 },
@@ -74,7 +80,8 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent {
 
   private handleAdminInfo(user: UserContextType['user']): SummaryList {
     return [
-      { label: 'Name', value: user.displayName, editStepNumber: 1 },
+      { label: 'Given name', value: user.givenName, editStepNumber: 1 },
+      { label: 'Surname', value: user.surname, editStepNumber: 2 },
       { label: 'Email address', value: user.email },
       { label: 'User type', value: this.ctx.user.getRoleDescription(user.roles[0].role as 'ADMIN') }
     ];

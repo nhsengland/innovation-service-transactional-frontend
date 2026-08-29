@@ -5,7 +5,8 @@ import { UserContextType } from '@modules/stores';
 type InboundPayloadType = Required<UserContextType>['user'];
 
 type StepPayloadType = {
-  displayName: string;
+  givenName: string;
+  surname: string;
 };
 
 type OutboundPayloadType = StepPayloadType;
@@ -15,15 +16,20 @@ export const ACCOUNT_DETAILS_ADMIN: WizardEngineModel = new WizardEngineModel({
     new FormEngineModel({
       parameters: [
         {
-          id: 'displayName',
+          id: 'givenName',
           dataType: 'text',
-          label: "What's your full name?",
-          description: 'Enter your name with a maximum of 100 characters',
-          validations: {
-            isRequired: [true, 'Name is required'],
-            pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
-            maxLength: 100
-          }
+          label: 'What is your given name?',
+          validations: { isRequired: [true, 'Given name is required'], maxLength: 64 }
+        }
+      ]
+    }),
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'surname',
+          dataType: 'text',
+          label: 'What is your surname?',
+          validations: { isRequired: [true, 'Surname is required'], maxLength: 64 }
         }
       ]
     })
@@ -34,17 +40,26 @@ export const ACCOUNT_DETAILS_ADMIN: WizardEngineModel = new WizardEngineModel({
 });
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
-  return { displayName: data.displayName };
+  return {
+    givenName: data.givenName,
+    surname: data.surname
+  };
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-  return { displayName: data.displayName };
+  return {
+    givenName: data.givenName,
+    surname: data.surname
+  };
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
-  toReturn.push({ label: 'Name', value: data.displayName, editStepNumber: 1 });
+  toReturn.push(
+    { label: 'Given name', value: data.givenName, editStepNumber: 1 },
+    { label: 'Surname', value: data.surname, editStepNumber: 2 }
+  );
 
   return toReturn;
 }
