@@ -40,7 +40,12 @@
                       href="javascript:void(0)"
                       (click)="onChangeStep(item.editStepNumber, item)"
                     >
-                      Change<span class="nhsuk-u-visually-hidden"> {{ item.label }} </span>
+                      @if (!item.mandatoryAndNotAnswered) {
+                        Change
+                      } @else {
+                        Continue
+                      }
+                      <span class="nhsuk-u-visually-hidden"> {{ item.label }} </span>
                     </a>
                   </dd>
                 </div>

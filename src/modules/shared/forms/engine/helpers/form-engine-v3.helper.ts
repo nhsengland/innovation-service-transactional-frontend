@@ -11,16 +11,100 @@ import {
 import { FormEngineParameterModelV3 } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
-import { InnovationRecordMinMaxValidationType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  ConditionGroupType,
+  ConditionType,
+  InnovationRecordFormComponentType,
+  InnovationRecordItemsType,
+  InnovationRecordMinMaxValidationType,
+  ItemConditionOptionsType
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 export class FormEngineHelperV3 {
+  static filterQuestionItems(
+    dataType: InnovationRecordFormComponentType | undefined,
+    items: InnovationRecordItemsType | undefined,
+    answers: Record<string, string>
+  ): InnovationRecordItemsType {
+    switch (dataType) {
+      case 'input-array':
+        const filteredItems: InnovationRecordItemsType =
+          items?.filter(i => this.shouldShowItem(i.itemConditionOptions ?? {}, answers)) ?? [];
+        return filteredItems;
+
+      default:
+        return items ?? [];
+    }
+  }
+
+  static isItemOptional(item: ItemConditionOptionsType, relativeIdsAnswers: Record<string, string>): boolean {
+    return !this.evaluateConditionGroup(item.mandatoryIf, relativeIdsAnswers);
+  }
+
+  static shouldShowItem(item: ItemConditionOptionsType, relativeIdsAnswers: Record<string, string>): boolean {
+    if (!item.displayIf) return true;
+    return this.evaluateConditionGroup(item.displayIf, relativeIdsAnswers);
+  }
+
+  static evaluateCondition(condition: ConditionType, relativeIdsAnswers: Record<string, string>): boolean {
+    const relativeId = condition.id;
+    const answer = relativeIdsAnswers[relativeId];
+
+    // inclusive = answer must be one of the provided list items
+    if (condition.logic === 'inclusive' || !condition.logic) {
+      return condition.list.includes(answer);
+    }
+
+    // exclusive = answer can be anything except the provided list items
+    return !condition.list.includes(answer);
+  }
+
+  static evaluateConditionGroup(
+    group: ConditionGroupType | undefined,
+    relativeIdsAnswers: Record<string, string>
+  ): boolean {
+    if (!group?.conditions?.length) return false;
+
+    const results = group.conditions.map(condition => this.evaluateCondition(condition, relativeIdsAnswers));
+    return group.groupLogic === 'OR' ? results.some(Boolean) : results.every(Boolean);
+  }
+
+  static getItemsRelativeIdsAnswers(
+    parameter: FormEngineParameterModelV3,
+    currentAnswers: Record<string, string>,
+    index?: number
+  ): Record<string, string> {
+    const answers: Record<string, string> = {};
+
+    parameter.items?.forEach(item => {
+      const conditions = [
+        ...(item.itemConditionOptions?.mandatoryIf?.conditions ?? []),
+        ...(item.itemConditionOptions?.displayIf?.conditions ?? [])
+      ];
+
+      conditions.forEach(condition => {
+        if (condition.relation === 'sibling') {
+          answers[condition.id] = currentAnswers[`${condition.id}_${index}`];
+          return;
+        }
+
+        if (condition.relation === 'parent' || !condition.relation) {
+          answers[condition.id] = parameter.generatedFromAnswer
+            ? parameter.generatedFromAnswer
+            : currentAnswers[condition.id];
+        }
+      });
+    });
+
+    return answers;
+  }
+
   static buildForm(
     parameters: FormEngineParameterModelV3[],
     values: Record<string, any> = {},
     formValidations?: ValidatorFn[]
   ): FormGroup {
     const inputParameters = parameters;
-
     parameters = inputParameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
 
     const form = new FormGroup({}, { updateOn: 'blur', validators: formValidations });
@@ -83,6 +167,29 @@ export class FormEngineHelperV3 {
           });
 
           break;
+
+        case 'input-array': {
+          const group = new FormGroup({}, { updateOn: 'change' });
+
+          parameter.items?.forEach((item, i) => {
+            if (!item.id) return;
+
+            const validators: ValidatorFn[] = [];
+
+            if (item.itemConditionOptions?.mandatoryIf) {
+              const relativeIdsAnswers = this.getItemsRelativeIdsAnswers(parameter, values, i);
+
+              validators.push(
+                CustomValidators.conditionalRequiredValidator(item.itemConditionOptions, relativeIdsAnswers)
+              );
+            }
+
+            group.addControl(item.id, new FormControl(parameterValue?.[item.id] ?? null, validators));
+          });
+
+          form.addControl(parameter.id, group);
+          break;
+        }
 
         // case 'autocomplete-value':
         case 'radio-group':
@@ -166,13 +273,15 @@ export class FormEngineHelperV3 {
       newField.updateValueAndValidity();
       formGroup.addControl(parameter.field.id, newField);
     }
-    if (parameter.field && parameter.addQuestion) {
+    if (parameter.field && parameter.addQuestions) {
       const newField = FormEngineHelperV3.createParameterFormControl(
         parameter.field,
         (value || {})[parameter.field.id]
       );
       newField.updateValueAndValidity();
-      formGroup.addControl(parameter.addQuestion.id, newField);
+      parameter.addQuestions.forEach(aq => {
+        formGroup.addControl(aq.id, newField);
+      });
     }
 
     return formGroup;
@@ -356,6 +465,7 @@ export class FormEngineHelperV3 {
         case 'autocomplete-array':
         case 'checkbox-array':
         case 'fields-group':
+        case 'input-array':
           // case 'file-upload-array':
           validators.push(CustomValidators.requiredCheckboxArray(validation));
           break;
@@ -381,11 +491,14 @@ export class FormEngineHelperV3 {
       validators.push(Validators.maxLength(parameter.validations.maxLength));
     }
     if (parameter.validations?.equalToLength) {
-      validation =
-        typeof parameter.validations.equalToLength === 'number'
-          ? [parameter.validations.equalToLength, null]
-          : parameter.validations.equalToLength;
-      validators.push(CustomValidators.equalToLength(validation[0] as number, validation[1]));
+      const validation = parameter.validations.equalToLength;
+      if (typeof validation === 'number') {
+        validators.push(CustomValidators.equalToLength(validation));
+      } else if (Array.isArray(validation)) {
+        validators.push(CustomValidators.equalToLength(validation[0] as number, validation[1] as string));
+      } else if (typeof validation === 'object' && validation.length) {
+        validators.push(CustomValidators.equalToLength(validation.length, validation.errorMessage));
+      }
     }
 
     if (parameter.validations?.min) {

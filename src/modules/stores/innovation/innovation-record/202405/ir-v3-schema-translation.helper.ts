@@ -39,16 +39,18 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
         });
 
         // check for addQuestions
-        if (q.addQuestion) {
-          sectionsQuestions.push({
-            id: q.addQuestion?.id ?? '',
-            label: q.addQuestion?.label ?? '',
-            items: q.addQuestion?.items?.map(item => ({
-              id: item.id,
-              label: item.label,
-              group: item.group,
-              ...(item.itemsFromAnswer && { itemsFromAnswer: item.itemsFromAnswer })
-            }))
+        if (q.addQuestions) {
+          q.addQuestions.forEach(aq => {
+            sectionsQuestions.push({
+              id: aq.id ?? '',
+              label: aq.label ?? '',
+              items: aq.items?.map(item => ({
+                id: item.id,
+                label: item.label,
+                group: item.group,
+                ...(item.itemsFromAnswer && { itemsFromAnswer: item.itemsFromAnswer })
+              }))
+            });
           });
         }
       }

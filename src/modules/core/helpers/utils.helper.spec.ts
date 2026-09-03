@@ -55,3 +55,27 @@ describe('Core/Helpers/UtilsHelper/arrayFullTextSearch', () => {
     expect(UtilsHelper.arrayFullTextSearch(items, search)).toEqual(expected);
   });
 });
+
+describe('Core/Helpers/UtilsHelper/regulationsRequiringDocuments', () => {
+  it('excludes standards marked NOT_YET', () => {
+    expect(
+      UtilsHelper.regulationsRequiringDocuments([
+        { type: 'CE_UKCA_NON_MEDICAL', hasMet: 'NOT_YET' },
+        { type: 'DTAC', hasMet: 'YES' }
+      ])
+    ).toEqual(['DTAC']);
+  });
+
+  it('keeps YES and IN_PROGRESS standards', () => {
+    expect(
+      UtilsHelper.regulationsRequiringDocuments([
+        { type: 'CE_UKCA_NON_MEDICAL', hasMet: 'YES' },
+        { type: 'DTAC', hasMet: 'IN_PROGRESS' }
+      ])
+    ).toEqual(['CE_UKCA_NON_MEDICAL', 'DTAC']);
+  });
+
+  it('returns an empty list when every standard is NOT_YET', () => {
+    expect(UtilsHelper.regulationsRequiringDocuments([{ type: 'CE_UKCA_NON_MEDICAL', hasMet: 'NOT_YET' }])).toEqual([]);
+  });
+});

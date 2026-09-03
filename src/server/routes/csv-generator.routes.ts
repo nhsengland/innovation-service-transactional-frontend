@@ -16,7 +16,8 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        ...(req.query.role && { 'x-is-role': req.query.role })
+        ...(req.query.role && { 'x-is-role': req.query.role }),
+        ...(typeof req.query.roleType === 'string' && { 'x-is-role-type': req.query.roleType })
       }
     };
 

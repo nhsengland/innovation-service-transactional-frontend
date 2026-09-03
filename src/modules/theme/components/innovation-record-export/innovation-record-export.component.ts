@@ -24,6 +24,7 @@ export class InnovationRecordExportComponent extends CoreComponent {
         break;
     }
     url += `?role=${this.ctx.user.getUserContext()?.roleId}`;
+    url += `&roleType=${this.ctx.user.getUserType()}`;
     url += `&uniqueId=${this.ctx.innovation.info().uniqueId}`;
     return url;
   });

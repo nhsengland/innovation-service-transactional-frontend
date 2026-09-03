@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Location } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector, PLATFORM_ID } from '@angular/core';
 import { LoggerTestingModule } from 'ngx-logger/testing';
+import { of } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
 import { InnovationStatusEnum, StoresModule } from '@modules/stores';
@@ -67,5 +69,114 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
 
     expect(component.allowMarkSectionAsComplete).toBe(true);
     expect(component.summaryRedirectUrl).toBe(component.baseUrl);
+  });
+
+  it('keeps the selected regulation status while moving to its certification step', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.isRegulationsSection = true;
+    component.isRegulationsSection = true;
+    component.isChangeMode = true;
+    component.formEngineComponent = {
+      getFormValues: () => ({ valid: true, data: { hasMet_UK_MDR_CLASS_I: 'YES' } })
+    } as any;
+    component.wizard = {
+      currentStepId: 3,
+      steps: [
+        {},
+        {},
+        { parameters: [{ id: 'hasMet_UK_MDR_CLASS_I', generatedFromAnswer: 'UK_MDR_CLASS_I' }] },
+        { parameters: [{ id: 'certifications_UK_MDR_CLASS_I', generatedFromAnswer: 'UK_MDR_CLASS_I' }] }
+      ],
+      getAnswers: () => ({ hasMet_UK_MDR_CLASS_I: 'IN_PROGRESS' }),
+      addAnswers: jest.fn().mockReturnThis(),
+      runRules: jest.fn().mockReturnThis(),
+      validateData: jest.fn().mockReturnValue({ valid: true, errors: [] }),
+      getNextStep: jest.fn().mockReturnValue('summary')
+    } as any;
+    const updateSectionInfo = jest
+      .spyOn((component as any).ctx.innovation, 'updateSectionInfo$')
+      .mockReturnValue(of({}));
+    const goToStep = jest.spyOn(component, 'onGoToStep').mockImplementation();
+    const location = TestBed.inject(Location);
+    const replaceState = jest.spyOn(location, 'replaceState');
+
+    component.onSubmitStep('next');
+
+    expect(updateSectionInfo).not.toHaveBeenCalled();
+    expect(goToStep).toHaveBeenCalledWith(4, true);
+    expect(replaceState).toHaveBeenCalled();
+  });
+
+  it('does not save unchanged certification objects', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    expect(
+      (component as any).hasAnswerChanges({ certifications: { GMDN: '12345' } }, { certifications: { GMDN: '12345' } })
+    ).toBe(false);
+  });
+
+  it('saves unchanged certification data when a parent status is pending', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.isRegulationsSection = true;
+    component.formEngineComponent = {
+      getFormValues: () => ({ valid: true, data: { certifications: { GMDN: '12345' } } })
+    } as any;
+    component.wizard = {
+      currentStepId: 4,
+      steps: [{}, {}, {}, { parameters: [{ id: 'certifications_UK_MDR_CLASS_I' }] }],
+      getAnswers: () => ({ certifications: { GMDN: '12345' } }),
+      addAnswers: jest.fn().mockReturnThis(),
+      runRules: jest.fn().mockReturnThis(),
+      runOutboundParsing: jest.fn().mockReturnValue({}),
+      getNextStep: jest.fn().mockReturnValue('summary'),
+      validateData: jest.fn().mockReturnValue({ valid: true, errors: [] })
+    } as any;
+    (component as any).isInMemoryStepNavigation = true;
+    const updateSectionInfo = jest
+      .spyOn((component as any).ctx.innovation, 'updateSectionInfo$')
+      .mockReturnValue(of({}));
+    jest.spyOn(component, 'onGoToStep').mockImplementation();
+
+    component.onSubmitStep('next');
+
+    expect(updateSectionInfo).toHaveBeenCalled();
+  });
+
+  it('does not save legacy standards', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.isRegulationsSection = true;
+    component.formEngineComponent = {
+      getFormValues: () => ({ valid: true, data: { standards: [{ type: 'CE_UKCA_CLASS_II_B' }] } })
+    } as any;
+    component.wizard = {
+      currentStepId: 2,
+      getAnswers: () => ({}),
+      addAnswers: jest.fn().mockReturnThis(),
+      runRules: jest.fn().mockReturnThis(),
+      runOutboundParsing: jest.fn().mockReturnValue({}),
+      getNextStep: jest.fn().mockReturnValue('summary'),
+      validateData: jest.fn().mockReturnValue({
+        valid: false,
+        errors: [
+          {
+            title: 'Regulations and standards',
+            description: 'Select a current standard for each legacy standard before saving.'
+          }
+        ]
+      })
+    } as any;
+    const updateSectionInfo = jest
+      .spyOn((component as any).ctx.innovation, 'updateSectionInfo$')
+      .mockReturnValue(of({}));
+
+    component.onSubmitStep('next');
+
+    expect(updateSectionInfo).not.toHaveBeenCalled();
   });
 });

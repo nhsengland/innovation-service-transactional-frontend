@@ -3,6 +3,7 @@ import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from '
 import { ValidatorFn } from '@angular/forms';
 import {
   InnovationRecordConditionType,
+  InnovationRecordItemsType,
   InnovationRecordQuestionStepType,
   arrStringAnswer,
   nestedObjectAnswer
@@ -23,17 +24,33 @@ export type WizardSummaryV3Type = {
   label: string;
   value: string | string[];
   editStepNumber: number;
+  mandatoryAndNotAnswered: boolean;
   evidenceId?: string;
   type?: 'keyValueLink' | 'button';
   allowHTML?: boolean;
   isFile?: boolean;
-  isNotMandatory?: boolean;
 };
 
 export type EvidenceV3Type = {
   evidenceId: string;
   label: string;
   value: string;
+};
+
+const LEGACY_STANDARD_ID_MAP: Record<string, string> = {
+  MARKETING: 'MARKETING_AUTHORISATION'
+};
+
+const LEGACY_STANDARD_LABELS: Record<string, string> = {
+  CE_UKCA_NON_MEDICAL: 'Legacy standard: CE/UKCA non-medical',
+  CE_UKCA_CLASS_I: 'Legacy standard: CE/UKCA Class I',
+  CE_UKCA_CLASS_II_A: 'Legacy standard: CE/UKCA Class IIa',
+  CE_UKCA_CLASS_II_B: 'Legacy standard: CE/UKCA Class IIb',
+  CE_UKCA_CLASS_III: 'Legacy standard: CE/UKCA Class III',
+  IVD_GENERAL: 'Legacy standard: IVD general',
+  IVD_SELF_TEST: 'Legacy standard: IVD self-test',
+  IVD_ANNEX_LIST_A: 'Legacy standard: IVD Annex II List A',
+  IVD_ANNEX_LIST_B: 'Legacy standard: IVD Annex II List B'
 };
 
 export type StepsParentalRelationsType = Record<string, string>;
@@ -248,12 +265,16 @@ export class WizardIRV3EngineModel {
               stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
             }
 
-            if (question.addQuestion && !question.field) {
-              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            if (question.addQuestions && !question.field) {
+              question.addQuestions.forEach(aq => {
+                stepsChildParentRelations[aq.id] = question.id;
+              });
             }
 
-            if (question.addQuestion && question.field) {
-              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            if (question.addQuestions && question.field) {
+              question.addQuestions.forEach(aq => {
+                stepsChildParentRelations[aq.id] = question.id;
+              });
             }
           });
 
@@ -280,7 +301,43 @@ export class WizardIRV3EngineModel {
     return question.items?.filter(item => !item.isLegacy || item.id === this.currentAnswers[question.id]);
   }
 
+  private shouldOmitNotYetRegulationCertification(standardId: string, questionId: string): boolean {
+    const standardAnswer = Array.isArray(this.currentAnswers.standards)
+      ? this.currentAnswers.standards.find(
+          (standard: Record<string, any> | string) => typeof standard !== 'string' && standard?.type === standardId
+        )
+      : undefined;
+
+    return (
+      this.sectionId === 'REGULATIONS_AND_STANDARDS' &&
+      questionId === 'certifications' &&
+      (this.currentAnswers[`hasMet_${standardId}`] ?? standardAnswer?.hasMet) === 'NOT_YET'
+    );
+  }
+
   runRules(): this {
+    if (this.sectionId === 'REGULATIONS_AND_STANDARDS' && Array.isArray(this.currentAnswers.standards)) {
+      this.currentAnswers = {
+        ...this.currentAnswers,
+        standards: this.currentAnswers.standards.map((standard: Record<string, any> | string) => {
+          if (typeof standard === 'string') return LEGACY_STANDARD_ID_MAP[standard] ?? standard;
+
+          return {
+            ...standard,
+            type: LEGACY_STANDARD_ID_MAP[standard.type] ?? standard.type
+          };
+        })
+      };
+    }
+
+    const legacyStandardIds = new Set(
+      this.sectionId === 'REGULATIONS_AND_STANDARDS' && Array.isArray(this.currentAnswers.standards)
+        ? this.currentAnswers.standards
+            .map((answer: Record<string, any> | string) => (typeof answer === 'string' ? answer : answer?.type))
+            .filter((id: string | undefined): id is string => !!id && !!LEGACY_STANDARD_LABELS[id])
+        : []
+    );
+
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
@@ -291,6 +348,7 @@ export class WizardIRV3EngineModel {
         const addSteps: FormEngineModelV3[] = [];
 
         s.questions.forEach(q => {
+          const questionItems = this.getQuestionItems(q) ?? [];
           const param: FormEngineParameterModelV3 = {
             id: q.id,
             dataType: q.dataType,
@@ -298,9 +356,18 @@ export class WizardIRV3EngineModel {
             ...(q.description && { description: this.translateDescriptionUrls(q.description) }),
             ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
             ...(q.validations && { validations: q.validations }),
-            ...(q.items && { items: this.getQuestionItems(q) }),
+            ...(q.items && {
+              items: [
+                ...questionItems,
+                ...(q.id === 'standards'
+                  ? [...legacyStandardIds]
+                      .filter(id => !questionItems.some(item => item.id === id))
+                      .map(id => ({ id, label: LEGACY_STANDARD_LABELS[id] }))
+                  : [])
+              ]
+            }),
             ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
-            ...(q.addQuestion && { addQuestion: q.addQuestion }),
+            ...(q.addQuestions && { addQuestions: q.addQuestions }),
             ...(q.field && { field: q.field }),
             ...(q.condition && { condition: q.condition }),
             isNestedField: false,
@@ -346,65 +413,86 @@ export class WizardIRV3EngineModel {
           // runtimerules for `addQuestions`
           const conditionalItem = q.items?.find(i => i.conditional);
 
-          if (q.addQuestion && this.getAnswers()[q.id]) {
+          if (q.addQuestions && this.getAnswers()[q.id]) {
             (this.getAnswers()[q.id] as arrStringAnswer).forEach((answer, i) => {
-              // replace variables on label's placeholders for fields-groups
-              let label = q.addQuestion!.label;
+              q.addQuestions!.forEach(aq => {
+                // replace variables on label's placeholders for fields-groups
+                let label = aq.label;
 
-              if (q.dataType === 'fields-group' && q.field) {
-                label = q.addQuestion!.label.replace(
-                  /{{[^{}]*}}/,
-                  this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
-                );
-              } else if (q.dataType === 'checkbox-array' && q.addQuestion) {
-                const itemAnswer: string =
-                  typeof this.currentAnswers[q.id][i] === 'object'
-                    ? this.currentAnswers[q.id][i][this.getCheckBoxAnswerId(q)]
-                    : this.currentAnswers[q.id][i];
+                let generatedFromAnswer: string | undefined = undefined;
 
-                label = this.translations.questions.get(q.id)?.items.get(itemAnswer)?.label ?? '';
+                let itemAnswer = '';
 
-                // search for conditional on question items, then check if answer is from a conditional. If so, get conditional answer
-                if (conditionalItem?.conditional && conditionalItem.id === itemAnswer) {
-                  label = this.currentAnswers[conditionalItem.conditional.id];
+                if (q.dataType === 'fields-group' && q.field) {
+                  label = aq.label.replace(/{{[^{}]*}}/, this.currentAnswers[q.id][i][q.field.id] ?? aq.label);
+                } else if (q.dataType === 'checkbox-array') {
+                  itemAnswer = this.getItemAnswerByDataType(q, i);
+
+                  generatedFromAnswer = itemAnswer;
+                  label =
+                    this.translations.questions.get(q.id)?.items.get(itemAnswer)?.label ??
+                    q.items?.find(item => item.id === itemAnswer)?.label ??
+                    LEGACY_STANDARD_LABELS[itemAnswer] ??
+                    '';
+
+                  // search for conditional on question items, then check if answer is from a conditional. If so, get conditional answer
+                  if (conditionalItem?.conditional && conditionalItem.id === itemAnswer) {
+                    label = this.currentAnswers[conditionalItem.conditional.id];
+                  }
+
+                  // replace variable (i.e. '{{item}}') on label's placeholders for checkbox-arrays with addQuestions
+                  label = aq.label.replace(/{{[^{}]*}}/, label);
                 }
 
-                // replace variable (i.e. '{{item}}') on label's placeholders for checkbox-arrays with addQuestions
-                label = q.addQuestion.label.replace(/{{[^{}]*}}/, label);
-              }
+                if (this.shouldOmitNotYetRegulationCertification(itemAnswer, aq.id)) return;
 
-              // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
-              if (q.addQuestion) {
-                addSteps.push(
-                  new FormEngineModelV3({
-                    parameters: [
-                      {
-                        id: `${q.addQuestion.id}_${i}`,
-                        dataType: q.addQuestion.dataType,
-                        label: label,
-                        ...(q.addQuestion.description && {
-                          description: this.translateDescriptionUrls(q.addQuestion.description)
-                        }),
-                        ...(q.addQuestion.lengthLimit && { lengthLimit: q.addQuestion.lengthLimit }),
-                        ...(q.addQuestion.validations && { validations: q.addQuestion.validations }),
-                        ...(q.addQuestion.items && { items: q.addQuestion.items }),
-                        ...(q.addQuestion.addNewLabel && { addNewLabel: q.addQuestion.addNewLabel }),
-                        ...(q.addQuestion.addQuestion && { addQuestion: q.addQuestion.addQuestion }),
-                        ...(q.addQuestion.field && { field: q.addQuestion.field }),
-                        ...(q.addQuestion.condition && { condition: q.addQuestion.condition }),
-                        isNestedField: !!(
-                          (q.dataType === 'fields-group' && q.addQuestion) ||
-                          q.dataType === 'checkbox-array'
-                        ),
-                        parentId: q.id
-                      }
-                    ]
-                  })
-                );
-              }
+                // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
+                if (q.addQuestions) {
+                  const relatedAnswers: Record<string, string> = this.parseSummaryRelatedQuestionsAnswers(
+                    aq.items,
+                    q.id,
+                    i,
+                    itemAnswer
+                  );
+
+                  const filteredQuestionItems = FormEngineHelperV3.filterQuestionItems(
+                    aq.dataType,
+                    aq.items,
+                    relatedAnswers
+                  );
+
+                  addSteps.push(
+                    new FormEngineModelV3({
+                      parameters: [
+                        {
+                          id: `${aq.id}_${q.dataType === 'fields-group' ? i : generatedFromAnswer}`,
+                          dataType: aq.dataType,
+                          label: label,
+                          ...(aq.description && {
+                            description: this.translateDescriptionUrls(aq.description)
+                          }),
+                          ...(aq.lengthLimit && { lengthLimit: aq.lengthLimit }),
+                          ...(aq.validations && { validations: aq.validations }),
+                          ...(aq.items && { items: filteredQuestionItems }),
+                          ...(aq.addNewLabel && { addNewLabel: aq.addNewLabel }),
+                          ...(aq.addQuestions && { addQuestions: aq.addQuestions }),
+                          ...(aq.field && { field: aq.field }),
+                          ...(aq.condition && { condition: aq.condition }),
+                          isNestedField: !!(
+                            (q.dataType === 'fields-group' && q.addQuestions) ||
+                            q.dataType === 'checkbox-array'
+                          ),
+                          generatedFromAnswer: generatedFromAnswer,
+                          parentId: q.id,
+                          ...(relatedAnswers && { relatedAnswers: relatedAnswers })
+                        }
+                      ]
+                    })
+                  );
+                }
+              });
             });
           }
-          // }
         });
         this.steps = [...this.steps, step, ...addSteps];
       } else {
@@ -421,16 +509,13 @@ export class WizardIRV3EngineModel {
   parseSummary(): WizardSummaryV3Type[] {
     let editStepNumber = 0;
     this.summary = [];
-
     const currentAnswers = this.currentAnswers;
-
     // Parse condition step's answers
     for (const [i, step] of this.steps.entries()) {
       const stepParams = step.parameters[0];
       let stepId = stepParams.id;
       let label = stepId.split('|')[0];
       let value: string | string[] | undefined = currentAnswers[stepParams.id];
-      const isNotMandatory = !stepParams.validations?.isRequired;
       editStepNumber++;
 
       if (!stepParams.parentId && !stepParams.isHidden) {
@@ -438,31 +523,37 @@ export class WizardIRV3EngineModel {
           case 'fields-group':
             {
               const stepAnswers = currentAnswers[stepParams.id] as nestedObjectAnswer;
-
               if (stepAnswers) {
                 value = stepAnswers.map(item => item[stepParams.field!.id]);
               }
 
+              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
+
               // Push "parent"
-              this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+              this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
 
-              if (stepParams.addQuestion && stepParams.field) {
-                value = undefined;
-                // Push "children" if any
-                if (stepAnswers) {
-                  stepAnswers.forEach((question, i) => {
-                    editStepNumber++;
+              if (stepParams.addQuestions && stepParams.field) {
+                stepParams.addQuestions.forEach(aq => {
+                  value = undefined;
+                  // Push "children" if any
+                  if (stepAnswers) {
+                    stepAnswers.forEach((question, i) => {
+                      editStepNumber++;
 
-                    stepId = `${stepParams.addQuestion!.id}_${i}`;
-                    // replace label item
-                    label = stepParams.addQuestion!.label.replace(
-                      /{{[^{}]*}}/,
-                      this.currentAnswers[stepParams.id][i][stepParams.field!.id]
-                    );
-                    value = stepAnswers[i][stepParams.addQuestion!.id];
-                    this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
-                  });
-                }
+                      stepId = `${aq.id}_${i}`;
+                      // replace label item
+                      label = aq.label.replace(
+                        /{{[^{}]*}}/,
+                        this.currentAnswers[stepParams.id][i][stepParams.field!.id]
+                      );
+                      value = stepAnswers[i][aq.id];
+
+                      const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(aq, i);
+
+                      this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
+                    });
+                  }
+                });
               }
             }
             break;
@@ -477,8 +568,10 @@ export class WizardIRV3EngineModel {
             if (itemWithConditional && currentAnswers[itemWithConditional.conditional!.id]) {
               value = [stepAnswers, currentAnswers[itemWithConditional.conditional!.id]];
             }
+            const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
+
             // Push "parent"
-            this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+            this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
 
             break;
 
@@ -490,7 +583,9 @@ export class WizardIRV3EngineModel {
                 value = typeof stepAnswers === 'string' ? stepAnswers : (stepAnswers as string[]);
               }
 
-              this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
+
+              this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
             }
 
             break;
@@ -498,12 +593,14 @@ export class WizardIRV3EngineModel {
             {
               value = undefined;
               let stepAnswers: string[] = [];
+              let answerIds: string[] = [];
 
               if (currentAnswers[stepParams.id]) {
-                stepAnswers = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
+                answerIds = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
+                stepAnswers = [...answerIds];
 
                 // Set value of parent, depending on type of answer
-                if (stepParams.addQuestion || stepParams.checkboxAnswerId) {
+                if (stepParams.addQuestions || stepParams.checkboxAnswerId) {
                   value = stepAnswers;
 
                   label = stepParams.label ?? '';
@@ -526,62 +623,68 @@ export class WizardIRV3EngineModel {
                 }
               }
 
-              this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+              const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
+
+              this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
 
               // Push "children" if any
-              if (stepParams.addQuestion && stepAnswers) {
-                stepAnswers.forEach((item, i) => {
-                  editStepNumber++;
+              if (stepParams.addQuestions && answerIds) {
+                answerIds.forEach((answer, i) => {
+                  stepParams.addQuestions?.forEach(aq => {
+                    if (this.shouldOmitNotYetRegulationCertification(answer, aq.id)) return;
 
-                  stepId = `${stepParams.addQuestion?.id}_${i}`;
+                    const aqStepParam = this.steps.find(s => s.parameters[0].id === `${aq.id}_${answer}`)
+                      ?.parameters[0];
+                    editStepNumber++;
 
-                  // Replace label variables
-                  label = stepParams.addQuestion!.label.replace(
-                    /{{[^{}]*}}/,
-                    this.translations.questions.get(stepParams.id)?.items.get(item)?.label ?? item
-                  );
-                  value = currentAnswers[stepId];
+                    stepId = aqStepParam?.id ?? '';
+                    label = aqStepParam?.label ?? '';
+                    value = currentAnswers[stepId];
 
-                  this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+                    const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(aqStepParam, i);
+
+                    this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
+                  });
                 });
               }
             }
 
             break;
           default: {
-            this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+            const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(stepParams, i);
+            this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
             break;
           }
         }
       }
     }
-
     return this.summary;
   }
 
   runInboundParsing(): this {
     const toReturn: MappedObjectType = {};
-
     this.steps.forEach(step => {
       const stepParams = step.parameters[0];
       if (this.currentAnswers[stepParams.id]) {
         switch (stepParams.dataType) {
           case 'fields-group':
-            if (!stepParams.addQuestion && stepParams.field) {
+            if (!stepParams.addQuestions && stepParams.field) {
               // Convert array to nested object, if dataType is 'fields-group' without 'addQuestion'
               toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map(item => ({
                 [stepParams.field!.id]: item
               }));
             } else {
               (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
-                toReturn[`${stepParams.addQuestion!.id}_${i}`] = answer[stepParams.addQuestion!.id];
+                stepParams.addQuestions?.forEach(aq => {
+                  toReturn[`${aq.id}_${i}`] = answer[aq.id];
+                });
               });
             }
 
             break;
 
           case 'checkbox-array':
-            if (stepParams.addQuestion || (stepParams.checkboxAnswerId && this.currentAnswers)) {
+            if (stepParams.addQuestions || (stepParams.checkboxAnswerId && this.currentAnswers)) {
               // add parent question previous value
               toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as nestedObjectAnswer).map(
                 answer => answer[stepParams.checkboxAnswerId ?? stepParams.id]
@@ -589,7 +692,10 @@ export class WizardIRV3EngineModel {
 
               // add all addQuestions previous values
               (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
-                toReturn[`${stepParams.addQuestion!.id}_${i}`] = answer[stepParams.addQuestion!.id];
+                stepParams.addQuestions?.forEach(aq => {
+                  const generatedFromAnswer = answer[stepParams.checkboxAnswerId ?? stepParams.id];
+                  toReturn[`${aq.id}_${generatedFromAnswer}`] = answer[aq.id];
+                });
               });
             }
             break;
@@ -599,7 +705,6 @@ export class WizardIRV3EngineModel {
       }
     });
     this.currentAnswers = { ...this.currentAnswers, ...toReturn };
-
     return this;
   }
 
@@ -609,24 +714,30 @@ export class WizardIRV3EngineModel {
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
     for (const step of this.steps.filter(s => !s.parameters[0].isNestedField).values()) {
       const stepParams = step.parameters[0];
+
       const currentAnswer = this.currentAnswers[stepParams.id];
 
       if (currentAnswer) {
         toReturn[stepParams.id] = currentAnswer;
       }
-
       if (stepParams.dataType === 'checkbox-array') {
         // create nested object if it has addQuestions
-        if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && currentAnswer) {
+        if ((stepParams.addQuestions || stepParams.checkboxAnswerId) && currentAnswer) {
           toReturn[stepParams.id] = (currentAnswer as arrStringAnswer).map((answer, i) => {
-            const addQuestionId = `${stepParams.addQuestion!.id}_${i}`;
-
-            return {
-              [this.getCheckBoxAnswerId(stepParams)]: answer,
-              ...(this.currentAnswers[addQuestionId] && {
-                [stepParams.addQuestion!.id]: this.currentAnswers[addQuestionId]
-              })
+            const result: Record<string, string> = {
+              [this.getCheckBoxAnswerId(stepParams)]: answer
             };
+
+            stepParams.addQuestions?.forEach(addQuestion => {
+              if (this.shouldOmitNotYetRegulationCertification(answer, addQuestion.id)) return;
+
+              const addQuestionId = `${addQuestion.id}_${answer}`;
+
+              if (this.currentAnswers[addQuestionId]) {
+                result[addQuestion.id] = this.currentAnswers[addQuestionId];
+              }
+            });
+            return result;
           });
         }
       }
@@ -640,16 +751,22 @@ export class WizardIRV3EngineModel {
       }
 
       if (stepParams.dataType === 'fields-group' && currentAnswer) {
-        if (!stepParams.addQuestion) {
+        if (!stepParams.addQuestions) {
           // flatten fields-group with no addQuestions
           toReturn[stepParams.id] = (currentAnswer as nestedObjectAnswer).map(item => {
             return item[stepParams.field!.id];
           });
         } else {
           // add answers from all addQuestions steps to the fields-group object
-          (currentAnswer as nestedObjectAnswer).forEach(
-            (item, i) => (item[stepParams.addQuestion!.id] = this.currentAnswers[`${stepParams.addQuestion!.id}_${i}`])
-          );
+          (currentAnswer as nestedObjectAnswer).forEach((item, i) => {
+            stepParams.addQuestions?.forEach(aq => {
+              const addQuestionId = `${aq.id}_${i}`;
+
+              if (this.currentAnswers[addQuestionId]) {
+                item[aq.id] = this.currentAnswers[addQuestionId];
+              }
+            });
+          });
           toReturn[stepParams.id] = currentAnswer;
         }
       }
@@ -695,13 +812,29 @@ export class WizardIRV3EngineModel {
   validateData(): { valid: boolean; errors: { title: string; description: string }[] } {
     const parameters = this.steps.flatMap(step => step.parameters);
     const form = FormEngineHelperV3.buildForm(parameters, this.currentAnswers);
+    const errors = Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
+      title: parameters.find(p => p.id === key)?.label || '',
+      description: value || ''
+    }));
+
+    const hasLegacyStandard =
+      this.sectionId === 'REGULATIONS_AND_STANDARDS' &&
+      Array.isArray(this.currentAnswers.standards) &&
+      this.currentAnswers.standards.some((answer: Record<string, any> | string) => {
+        const id = typeof answer === 'string' ? answer : answer?.type;
+        return !!id && !!LEGACY_STANDARD_LABELS[id];
+      });
+
+    if (hasLegacyStandard) {
+      errors.push({
+        title: 'Regulations and standards',
+        description: 'Select a current standard for each legacy standard before saving.'
+      });
+    }
 
     return {
-      valid: form.valid,
-      errors: Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
-        title: parameters.find(p => p.id === key)?.label || '',
-        description: value || ''
-      }))
+      valid: form.valid && !hasLegacyStandard,
+      errors
     };
   }
 
@@ -713,15 +846,15 @@ export class WizardIRV3EngineModel {
     stepId: string,
     value: string | string[] | undefined,
     editStepNumber: number,
-    label?: string,
-    isNotMandatory?: boolean
+    mandatoryAndNotAnswered: boolean,
+    label?: string
   ) {
     this.summary.push({
       stepId: stepId,
       label: label ?? '',
       value: value ?? '',
-      editStepNumber: editStepNumber,
-      isNotMandatory: isNotMandatory ?? false
+      mandatoryAndNotAnswered: mandatoryAndNotAnswered,
+      editStepNumber: editStepNumber
     });
   }
 
@@ -752,6 +885,10 @@ export class WizardIRV3EngineModel {
           translatedArr.push(this.translations.questions.get(item.stepId)?.items?.get(v)?.label ?? v)
         );
         value = translatedArr.join('\n');
+      } else if (valueToTranslate && typeof valueToTranslate === 'object') {
+        value = Object.entries(valueToTranslate)
+          .map(([key, answer]) => `${key}: ${answer}`)
+          .join('\n');
       }
 
       return [
@@ -776,5 +913,93 @@ export class WizardIRV3EngineModel {
     }
 
     return translatedSummary;
+  }
+
+  getItemAnswerByDataType(q: FormEngineParameterModelV3, index: number): string {
+    switch (q.dataType) {
+      case 'checkbox-array':
+        return typeof this.currentAnswers[q.id][index] === 'object'
+          ? this.currentAnswers[q.id][index][this.getCheckBoxAnswerId(q)]
+          : this.currentAnswers[q.id][index];
+      default:
+        return this.currentAnswers[q.id];
+    }
+  }
+
+  parseSummaryRelatedQuestionsAnswers(
+    items: InnovationRecordItemsType | undefined,
+    parentId: string | undefined,
+    i: number,
+    parentAnswer: string
+  ): Record<string, string> {
+    const relatedAnswers: Record<string, string> = {};
+
+    // add parent
+    relatedAnswers[parentId ?? ''] = parentAnswer;
+
+    let siblingConditionIds: string[] = [];
+    // add siblings
+    if (items) {
+      siblingConditionIds = [
+        ...new Set(
+          items
+            .flatMap(i => [
+              ...(i.itemConditionOptions?.mandatoryIf?.conditions ?? []),
+              ...(i.itemConditionOptions?.displayIf?.conditions ?? [])
+            ])
+            .filter(condition => condition.relation === 'sibling')
+            .map(condition => condition.id)
+            .filter((id): id is string => !!id)
+        )
+      ];
+    }
+
+    siblingConditionIds.forEach(sibling => {
+      relatedAnswers[sibling] =
+        this.currentAnswers[`${sibling}_${parentAnswer}`] ?? this.currentAnswers[parentId ?? '']?.[i]?.[sibling];
+    });
+
+    return relatedAnswers;
+  }
+
+  checkIsQuestionMandatoryAndNotAnswered(stepParam: FormEngineParameterModelV3 | undefined, index?: number): boolean {
+    const currentAnswers = this.currentAnswers;
+    let isMissingAnswer = false;
+    switch (stepParam?.dataType) {
+      case 'input-array': {
+        const items = stepParam?.items ?? [];
+
+        return items.some(i => {
+          const answers: Record<string, any> = {};
+
+          i.itemConditionOptions?.mandatoryIf?.conditions.forEach(c => {
+            if (c.relation === 'parent' || !c.relation) {
+              answers[c.id] = stepParam.parentId ? stepParam.generatedFromAnswer : currentAnswers[c.id];
+            }
+
+            if (c.relation === 'sibling') {
+              answers[c.id] = currentAnswers[`${c.id}_${index}`];
+            }
+          });
+
+          const isOptional = FormEngineHelperV3.isItemOptional(i.itemConditionOptions ?? {}, answers);
+
+          if (isOptional) return false;
+
+          const itemAnswer = currentAnswers[stepParam.id]?.[i.id ?? ''];
+
+          const isMissingAnswer = itemAnswer === undefined || itemAnswer === null || itemAnswer === '';
+
+          return isMissingAnswer;
+        });
+      }
+      default:
+        const isMandatory = stepParam?.validations?.isRequired !== undefined;
+        const answer = currentAnswers[stepParam?.id ?? ''];
+
+        if (!isMandatory) return false;
+        isMissingAnswer = answer === undefined || (Array.isArray(answer) && answer.length === 0);
+        return isMissingAnswer;
+    }
   }
 }

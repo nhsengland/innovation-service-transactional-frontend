@@ -15,7 +15,7 @@ export type WizardSummaryType = {
   evidenceId?: string;
   allowHTML?: boolean;
   isFile?: boolean;
-  isNotMandatory?: boolean;
+  mandatoryAndNotAnswered?: boolean;
 };
 
 export type StepsParentalRelationsType = Record<string, string>;

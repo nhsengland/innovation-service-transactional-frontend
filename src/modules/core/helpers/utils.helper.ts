@@ -161,6 +161,10 @@ export class UtilsHelper {
     return evidenceList.filter(e => !docContextIds.has(e.evidenceId)).map(e => e);
   }
 
+  static regulationsRequiringDocuments(regulations: { type: string; hasMet?: string }[]): string[] {
+    return regulations.filter(regulation => regulation.hasMet !== 'NOT_YET').map(regulation => regulation.type);
+  }
+
   static regulationsWithoutDocuments(
     regulationsList: string[],
     regulationsDocumentsList: InnovationDocumentsListOutDTO['data']

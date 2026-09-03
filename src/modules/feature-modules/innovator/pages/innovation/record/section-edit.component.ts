@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import isEqual from 'lodash/isEqual';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 import { combineLatest, concatMap, of } from 'rxjs';
@@ -44,6 +45,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   isEvidenceSection = false;
   isRegulationsSection = false;
+  private isInMemoryStepNavigation = false;
 
   allowMarkSectionAsComplete = true;
 
@@ -141,7 +143,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
       for (const [index, item] of this.wizard.getSummary().entries()) {
         this.displayChangeButtonList.push(index);
-        if (!this.checkItemHasValue(item) && !item.isNotMandatory) {
+        if (item.mandatoryAndNotAnswered) {
           break;
         }
       }
@@ -164,6 +166,23 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       return Array.isArray(item.value) && item.value.length === 0 ? false : true;
     }
     return false;
+  }
+
+  private shouldDeferRegulationsSave(): boolean {
+    if (!this.isRegulationsSection || typeof this.wizard.currentStepId !== 'number') return false;
+
+    const currentStep = this.wizard.steps[this.wizard.currentStepId - 1]?.parameters[0];
+    const nextStep = this.wizard.steps[this.wizard.currentStepId]?.parameters[0];
+
+    return (
+      currentStep?.id.startsWith('hasMet_') === true &&
+      nextStep?.id.startsWith('certifications_') === true &&
+      currentStep.generatedFromAnswer === nextStep.generatedFromAnswer
+    );
+  }
+
+  private hasAnswerChanges(updatedAnswers: Record<string, unknown>, currentAnswers: Record<string, unknown>): boolean {
+    return Object.entries(updatedAnswers).some(([key, updatedAnswer]) => !isEqual(currentAnswers[key], updatedAnswer));
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -191,22 +210,39 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       }
 
       if (action === 'next') {
-        const shouldUpdateInformation =
-          Object.entries(formData?.data || {}).filter(([key, updatedAnswer]) => {
-            // NOTE: This is a very shallow comparison, and will return false for objects and arrays.
-            // Althought this can be improved in the future, for now it helps on some steps...
-            const currentAnswer = this.wizard.getAnswers()[key];
-            return currentAnswer !== updatedAnswer;
-          }).length > 0;
+        const shouldUpdateInformation = this.hasAnswerChanges(formData?.data || {}, this.wizard.getAnswers());
 
         this.wizard.addAnswers(formData!.data).runRules();
+
+        if (this.isRegulationsSection) {
+          const validInformation = this.wizard.validateData();
+          const hasLegacyStandardError = validInformation.errors.some(error =>
+            error.description.startsWith('Select a current standard for each legacy standard')
+          );
+          if (hasLegacyStandardError) {
+            this.alertErrorsList = validInformation.errors;
+            this.setAlertError(`Please verify what's missing with your answers`, {
+              itemsList: this.alertErrorsList,
+              width: '2.thirds'
+            });
+            return;
+          }
+        }
+
+        if (this.shouldDeferRegulationsSave()) {
+          this.isInMemoryStepNavigation = true;
+          const nextStep = currentStepIndex + 1;
+          this.onGoToStep(nextStep, this.isChangeMode);
+          this.location.replaceState(`${this.baseUrl}/edit/${nextStep}`, this.isChangeMode ? 'isChangeMode=true' : '');
+          return;
+        }
 
         this.saveButton = { isActive: false, label: 'Saving...' };
 
         of(true)
           .pipe(
             concatMap(() => {
-              if (shouldUpdateInformation || this.errorOnSubmitStep) {
+              if (this.isInMemoryStepNavigation || shouldUpdateInformation || this.errorOnSubmitStep) {
                 return this.ctx.innovation.updateSectionInfo$(
                   this.innovation.id,
                   this.sectionId,
@@ -231,7 +267,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               this.saveButton = { isActive: true, label: 'Save and continue' };
 
               const nextStep = this.wizard.getNextStep(this.isChangeMode);
-              this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+              const stepToDisplay = this.isInMemoryStepNavigation
+                ? currentStepIndex
+                : this.activatedRoute.snapshot.params.questionId;
+              this.isInMemoryStepNavigation = false;
+              this.onGoToStep(stepToDisplay, this.isChangeMode);
               this.redirectTo(`${this.baseUrl}/edit/${nextStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
             },
             error: ({ error: err }: HttpErrorResponse) => {
