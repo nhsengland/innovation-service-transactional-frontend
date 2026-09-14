@@ -1,4 +1,13 @@
 export class StringsHelper {
+  static getUserDisplayName(
+    givenName: string | null | undefined,
+    surname: string | null | undefined,
+    displayName: string
+  ): string {
+    const names = [givenName?.trim(), surname?.trim()];
+    return names.every(Boolean) ? names.join(' ') : displayName;
+  }
+
   static slugify(str: string, separator?: string) {
     if (!str) {
       return '';
