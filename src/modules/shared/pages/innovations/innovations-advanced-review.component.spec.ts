@@ -14,7 +14,9 @@ import { PageInnovationsAdvancedReviewComponent } from './innovations-advanced-r
 
 describe('PageInnovationsAdvancedReviewComponent', () => {
   const createComponent = (search: string | undefined = undefined) => {
-    const component = Object.create(PageInnovationsAdvancedReviewComponent.prototype) as PageInnovationsAdvancedReviewComponent;
+    const component = Object.create(
+      PageInnovationsAdvancedReviewComponent.prototype
+    ) as PageInnovationsAdvancedReviewComponent;
     component.form = new FormGroup({
       search: new FormControl(''),
       category: new FormControl(false)
