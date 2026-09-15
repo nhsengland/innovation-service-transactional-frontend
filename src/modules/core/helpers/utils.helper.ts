@@ -162,7 +162,7 @@ export class UtilsHelper {
   }
 
   static regulationsRequiringDocuments(regulations: { type: string; hasMet?: string }[]): string[] {
-    return regulations.filter(regulation => regulation.hasMet !== 'NOT_YET').map(regulation => regulation.type);
+    return regulations.filter(regulation => regulation.hasMet === 'YES').map(regulation => regulation.type);
   }
 
   static regulationsWithoutDocuments(

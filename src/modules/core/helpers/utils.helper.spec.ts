@@ -66,13 +66,13 @@ describe('Core/Helpers/UtilsHelper/regulationsRequiringDocuments', () => {
     ).toEqual(['DTAC']);
   });
 
-  it('keeps YES and IN_PROGRESS standards', () => {
+  it('only keeps YES standards', () => {
     expect(
       UtilsHelper.regulationsRequiringDocuments([
         { type: 'CE_UKCA_NON_MEDICAL', hasMet: 'YES' },
         { type: 'DTAC', hasMet: 'IN_PROGRESS' }
       ])
-    ).toEqual(['CE_UKCA_NON_MEDICAL', 'DTAC']);
+    ).toEqual(['CE_UKCA_NON_MEDICAL']);
   });
 
   it('returns an empty list when every standard is NOT_YET', () => {

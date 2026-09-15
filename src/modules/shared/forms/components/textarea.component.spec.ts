@@ -56,4 +56,17 @@ describe('FormTextareaComponent', () => {
     expect(hostComponent.childComponent?.hasError).toBe(false);
     expect(hostComponent.childComponent?.error.message).toBe('');
   });
+
+  it('should allow text beyond the limit and report a max-length error', () => {
+    hostFixture.detectChanges();
+    const textarea = hostFixture.nativeElement.querySelector('textarea');
+    const lengthLimit = hostComponent.childComponent?.lengthLimitCharacters ?? 0;
+
+    hostComponent.form.get('testField')?.setValue('x'.repeat(lengthLimit + 1));
+    hostComponent.form.get('testField')?.markAsTouched();
+    hostFixture.detectChanges();
+
+    expect(textarea.getAttribute('maxlength')).toBeNull();
+    expect(hostComponent.form.get('testField')?.hasError('maxlength')).toBe(true);
+  });
 });
