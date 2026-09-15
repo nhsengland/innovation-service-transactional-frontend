@@ -277,8 +277,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           if (
             this.ctx.user.isInnovator() &&
             this.regulationsData.hasRegulations &&
-            // response.sectionInfo.data.standards &&
-            !!response.sectionInfo.data.standards.length &&
+            !!response?.sectionInfo?.data?.standards?.length &&
             !this.regulationsData.allRegulationsHaveDocuments
           ) {
             this.handleMissingRegulationsAlerts();
