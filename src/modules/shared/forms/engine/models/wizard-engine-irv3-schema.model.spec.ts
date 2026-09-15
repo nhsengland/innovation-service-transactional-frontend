@@ -63,6 +63,23 @@ describe('WizardIRV3EngineModel', () => {
     expect(wizard.steps.map(step => step.parameters[0].id)).toEqual(['userTests', 'feedback_0', 'feedback_1']);
   });
 
+  it('does not crash when the current step is outside the generated step list', () => {
+    const wizard = new WizardIRV3EngineModel({
+      currentStepId: 2,
+      steps: [
+        {
+          parameters: [{ id: 'firstStep', dataType: 'text', label: 'First step' }]
+        }
+      ]
+    });
+
+    expect(wizard.currentStepParameters()).toEqual([]);
+
+    wizard.gotoStep(2);
+
+    expect(wizard.currentStepId).toBe(1);
+  });
+
   it('normalizes a legacy standards id before binding its answers', () => {
     const schema: InnovationRecordSchemaInfoType = {
       id: 'test-schema',
@@ -233,6 +250,79 @@ describe('WizardIRV3EngineModel', () => {
 });
 
 describe('parseSummary', () => {
+  it('uses actual wizard positions after generated fields-group children', () => {
+    const schema: InnovationRecordSchemaInfoType = {
+      id: 'test-schema',
+      version: 15,
+      schema: {
+        sections: [
+          {
+            id: 'testingWithUsers',
+            title: 'Testing with users',
+            subSections: [
+              {
+                id: 'TESTING_WITH_USERS',
+                title: 'Testing with users',
+                steps: [
+                  {
+                    questions: [
+                      {
+                        id: 'userTests',
+                        dataType: 'fields-group',
+                        label: 'User tests',
+                        field: {
+                          id: 'kind',
+                          dataType: 'text',
+                          label: 'User test',
+                          validations: {}
+                        },
+                        addQuestions: [
+                          {
+                            id: 'feedback',
+                            dataType: 'textarea',
+                            label: 'Feedback for {{item.kind}}'
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    questions: [
+                      {
+                        id: 'nextQuestion',
+                        dataType: 'text',
+                        label: 'Next question'
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const wizard = new WizardIRV3EngineModel({
+      sectionId: 'TESTING_WITH_USERS',
+      schema,
+      currentAnswers: {
+        userTests: [
+          { kind: 'A', feedback: 'Feedback A' },
+          { kind: 'B', feedback: 'Feedback B' }
+        ],
+        nextQuestion: 'Next answer'
+      }
+    });
+
+    wizard.runRules();
+    const summary = wizard.parseSummary();
+
+    expect(summary.find(item => item.stepId === 'feedback_0')?.editStepNumber).toBe(2);
+    expect(summary.find(item => item.stepId === 'feedback_1')?.editStepNumber).toBe(3);
+    expect(summary.find(item => item.stepId === 'nextQuestion')?.editStepNumber).toBe(4);
+  });
+
   it('uses a parsed sibling answer when the nested answer is not updated yet', () => {
     const wizard = new WizardIRV3EngineModel({
       currentAnswers: {

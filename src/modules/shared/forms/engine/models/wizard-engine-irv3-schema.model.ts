@@ -117,7 +117,7 @@ export class WizardIRV3EngineModel {
 
   currentStep(): WizardStepTypeV3 & FormEngineModelV3 {
     if (typeof this.currentStepId === 'number') {
-      return this.steps[this.currentStepId - 1];
+      return this.steps[this.currentStepId - 1] ?? { ...new FormEngineModelV3({ parameters: [] }) };
     } else {
       return { ...new FormEngineModelV3({ parameters: [] }) };
     }
@@ -146,7 +146,10 @@ export class WizardIRV3EngineModel {
   }
 
   gotoStep(stepId: number | 'summary', isChangeMode = false): this {
-    this.currentStepId = parseInt(stepId as string, 10);
+    const requestedStepId = Number(stepId);
+    const maximumStepId = Math.max(this.steps.length, 1);
+
+    this.currentStepId = Number.isInteger(requestedStepId) ? Math.min(Math.max(requestedStepId, 1), maximumStepId) : 1;
 
     this.isChangingMode = isChangeMode;
 
@@ -516,7 +519,9 @@ export class WizardIRV3EngineModel {
       let stepId = stepParams.id;
       let label = stepId.split('|')[0];
       let value: string | string[] | undefined = currentAnswers[stepParams.id];
-      editStepNumber++;
+      if (!stepParams.parentId) {
+        editStepNumber++;
+      }
 
       if (!stepParams.parentId && !stepParams.isHidden) {
         switch (stepParams.dataType) {
@@ -548,7 +553,11 @@ export class WizardIRV3EngineModel {
                       );
                       value = stepAnswers[i][aq.id];
 
-                      const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(aq, i);
+                      const childStepParam = this.steps.find(step => step.parameters[0]?.id === stepId)?.parameters[0];
+                      const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(
+                        childStepParam ?? aq,
+                        i
+                      );
 
                       this.addSummaryStep(stepId, value, editStepNumber, mandatoryAndNotAnswered, label);
                     });
