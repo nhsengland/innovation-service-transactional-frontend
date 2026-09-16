@@ -179,4 +179,43 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
 
     expect(updateSectionInfo).not.toHaveBeenCalled();
   });
+
+  it('saves an unrelated regulation answer when legacy standards are present', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.isRegulationsSection = true;
+    component.formEngineComponent = {
+      getFormValues: () => ({ valid: true, data: { hasRegulationKnowledge: 'YES_SOME' } })
+    } as any;
+    component.wizard = {
+      currentStepId: 1,
+      steps: [{ parameters: [{ id: 'hasRegulationKnowledge' }] }],
+      getAnswers: () => ({
+        hasRegulationKnowledge: 'YES_ALL',
+        standards: [{ type: 'CE_UKCA_CLASS_II_B', hasMet: 'YES' }]
+      }),
+      addAnswers: jest.fn().mockReturnThis(),
+      runRules: jest.fn().mockReturnThis(),
+      runOutboundParsing: jest.fn().mockReturnValue({ version: 1, data: {} }),
+      getNextStep: jest.fn().mockReturnValue('summary'),
+      validateData: jest.fn().mockReturnValue({
+        valid: false,
+        errors: [
+          {
+            title: 'Regulations and standards',
+            description: 'Select a current standard for each legacy standard before saving.'
+          }
+        ]
+      })
+    } as any;
+    const updateSectionInfo = jest
+      .spyOn((component as any).ctx.innovation, 'updateSectionInfo$')
+      .mockReturnValue(of({}));
+    jest.spyOn(component, 'onGoToStep').mockImplementation();
+
+    component.onSubmitStep('next');
+
+    expect(updateSectionInfo).toHaveBeenCalled();
+  });
 });
