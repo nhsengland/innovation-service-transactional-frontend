@@ -214,7 +214,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         this.wizard.addAnswers(formData!.data).runRules();
 
-        if (this.isRegulationsSection) {
+        const isStandardsStep = Object.prototype.hasOwnProperty.call(formData?.data ?? {}, 'standards');
+        if (this.isRegulationsSection && isStandardsStep) {
           const validInformation = this.wizard.validateData();
           const hasLegacyStandardError = validInformation.errors.some(error =>
             error.description.startsWith('Select a current standard for each legacy standard')
