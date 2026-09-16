@@ -11,7 +11,7 @@
     </ng-container>
   </div>
   <div class="nhsuk-u-margin-bottom-6">
-    <a *ngIf="!allRegulationsHaveDocuments" [href]="baseUrl">Back to section</a>
-    <a *ngIf="allRegulationsHaveDocuments" [href]="baseUrl" class="nhsuk-button">Save and continue</a>
+    <a *ngIf="!allRegulationsHaveDocuments" [routerLink]="baseUrl">Back to section</a>
+    <a *ngIf="allRegulationsHaveDocuments" [routerLink]="baseUrl" class="nhsuk-button">Save and continue</a>
   </div>
 </theme-content-wrapper>

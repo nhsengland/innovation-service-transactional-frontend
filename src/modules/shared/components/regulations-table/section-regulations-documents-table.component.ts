@@ -45,10 +45,14 @@ export class InnovationRegulationsDocumentsTableComponent extends CoreComponent 
   }
 
   certificationsHasDocuments(id: string): boolean {
+    return !!this.regulationsDocuments[id]?.length;
+  }
+
+  shouldAddDocument(id: string): boolean {
     const regulation = (this.sectionInfo as RegulationsSectionAnswersType).standards?.find(
       standard => standard.type === id
     );
 
-    return regulation?.hasMet === 'NOT_YET' || !!this.regulationsDocuments[id]?.length;
+    return regulation?.hasMet === 'YES' && !this.regulationsDocuments[id]?.length;
   }
 }
