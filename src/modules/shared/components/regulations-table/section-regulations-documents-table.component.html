@@ -16,7 +16,7 @@
         >More details</a
       >
       <a
-        *ngIf="!certificationsHasDocuments(item) && ctx.user.isInnovator()"
+        *ngIf="shouldAddDocument(item) && ctx.user.isInnovator()"
         routerLink="{{ baseUrl }}/documents/new"
         [queryParams]="{ regulationId: item }"
         attr.aria-label="Add document for {{ item }} "
