@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { WizardSummaryV3Type } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { UtilsHelper } from '@app/base/helpers';
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
-import { ContextInnovationType, UserRoleEnum } from '@modules/stores';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
 
 export type RegulationsSectionAnswersType = {
@@ -31,7 +31,9 @@ export class InnovationRegulationsDocumentsTableComponent extends CoreComponent 
     this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
   }
   ngOnInit(): void {
-    this.selectedRegulations = (this.sectionInfo as RegulationsSectionAnswersType).standards?.map(i => i.type) ?? [];
+    this.selectedRegulations = UtilsHelper.regulationsRequiringDocuments(
+      (this.sectionInfo as RegulationsSectionAnswersType).standards ?? []
+    );
 
     const documents = this.sectionRegulationsDocuments ?? [];
 

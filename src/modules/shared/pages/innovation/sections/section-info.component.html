@@ -90,7 +90,7 @@
         <button *ngIf="ctx.user.isInnovator()" routerLink="evidences/new" class="nhsuk-button">Add evidence</button>
       </ng-container>
 
-      <ng-container *ngIf="isRegulationsSection && pageStatus() === 'READY'">
+      <ng-container *ngIf="isRegulationsSection && regulationsData.hasRegulationsRequiringDocuments && pageStatus() === 'READY'">
         <h2 class="nhsuk-u-margin-top-4">Supporting Documents</h2>
         <shared-innovation-regulations-docs-table [sectionInfo]="sectionInfoData" [sectionRegulationsDocuments]="regulationsData.regulationsDocumentsList" />
       </ng-container>

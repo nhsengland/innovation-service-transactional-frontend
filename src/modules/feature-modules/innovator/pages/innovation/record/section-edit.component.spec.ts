@@ -71,6 +71,26 @@ describe('Innovator/Pages/Innovation/Record/InnovationSectionEditComponent', () 
     expect(component.summaryRedirectUrl).toBe(component.baseUrl);
   });
 
+  it('does not redirect to supporting documents when no regulation is answered yes', () => {
+    fixture = TestBed.createComponent(InnovationSectionEditComponent);
+    component = fixture.componentInstance;
+    component.sectionId = innovationsSubSections.REGULATIONS_AND_STANDARDS;
+    component.sectionInfo = {
+      data: {
+        hasRegulationKnowledge: 'YES_ALL',
+        standards: [
+          { type: 'DTAC', hasMet: 'IN_PROGRESS' },
+          { type: 'CE_UKCA_NON_MEDICAL', hasMet: 'NOT_YET' }
+        ]
+      }
+    } as any;
+
+    component.handleMandatoryDocumentsSections();
+
+    expect(component.summaryRedirectUrl).toBe(component.baseUrl);
+    expect(component.allowMarkSectionAsComplete).toBe(true);
+  });
+
   it('keeps the selected regulation status while moving to its certification step', () => {
     fixture = TestBed.createComponent(InnovationSectionEditComponent);
     component = fixture.componentInstance;
