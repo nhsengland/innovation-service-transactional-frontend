@@ -76,10 +76,16 @@ export class InnovationRegulationsListPageComponent extends CoreComponent implem
           ['NO', 'NOT_RELEVANT'].includes(this.sectionInfoData.hasRegulationKnowledge))
       ) {
         this.router.navigateByUrl(`/innovator/innovations/${this.innovation.id}/record`);
+        return;
+      }
+
+      if (this.regulationsList.length === 0) {
+        this.router.navigateByUrl(this.baseUrl);
+        return;
       }
 
       this.setPageTitle('Supporting documents', { width: '2.thirds' });
-      this.setBackLink('Go back');
+      this.setBackLink('Go back', this.baseUrl);
       this.setPageStatus('READY');
     });
   }

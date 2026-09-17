@@ -18,6 +18,7 @@ export class PageInnovationSectionRegulationInfoComponent extends CoreComponent 
   regulationId: string;
 
   baseUrl: string;
+  documentDetailsReturnUrl: string;
 
   regulationsDocumentsList: InnovationDocumentsListOutDTO['data'] = [];
 
@@ -34,6 +35,7 @@ export class PageInnovationSectionRegulationInfoComponent extends CoreComponent 
     this.regulationId = this.activatedRoute.snapshot.params.regulationId;
 
     this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
+    this.documentDetailsReturnUrl = `${this.baseUrl}/record/sections/REGULATIONS_AND_STANDARDS/regulations/${this.regulationId}`;
   }
 
   ngOnInit(): void {

@@ -20,7 +20,12 @@
               <p *ngIf="doc.description">{{ doc.description }}</p>
             </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a [routerLink]="baseUrl + '/documents/' + doc.id" attr.aria-label="View {{ doc.name }} details">More details</a>
+              <a
+                [routerLink]="baseUrl + '/documents/' + doc.id"
+                [queryParams]="{ returnUrl: documentDetailsReturnUrl }"
+                attr.aria-label="View {{ doc.name }} details"
+                >More details</a
+              >
             </dd>
           </div>
         </dl>
