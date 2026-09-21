@@ -54,7 +54,7 @@ type EvidenceDataType = {
 type RegulationsDataType = {
   regulationsDocumentsList: InnovationDocumentsListOutDTO['data'];
   regulationsList: string[];
-  hasRegulations: boolean;
+  hasRegulationsRequiringDocuments: boolean;
   allRegulationsHaveDocuments: boolean;
   regulationsWithoutDocuments: string[];
 };
@@ -255,9 +255,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             (response.sectionInfo.data as RegulationsSectionAnswersType).standards ?? []
           );
 
-          this.regulationsData.hasRegulations =
-            response.sectionInfo.data.hasRegulationKnowledge &&
-            ['YES_ALL', 'YES_SOME'].includes(response.sectionInfo.data.hasRegulationKnowledge);
+          this.regulationsData.hasRegulationsRequiringDocuments = this.regulationsData.regulationsList.length > 0;
 
           this.regulationsData.regulationsWithoutDocuments = UtilsHelper.regulationsWithoutDocuments(
             this.regulationsData.regulationsList,
@@ -270,13 +268,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           // extra rules for Regulations section in order to be able to mark as complete
           this.isSectionComplete =
             this.isSectionComplete &&
-            this.regulationsData.hasRegulations &&
-            this.regulationsData.allRegulationsHaveDocuments;
+            (!this.regulationsData.hasRegulationsRequiringDocuments ||
+              this.regulationsData.allRegulationsHaveDocuments);
 
           // add error if any regulation is missing document, and only for innovators
           if (
             this.ctx.user.isInnovator() &&
-            this.regulationsData.hasRegulations &&
+            this.regulationsData.hasRegulationsRequiringDocuments &&
             !!response?.sectionInfo?.data?.standards?.length &&
             !this.regulationsData.allRegulationsHaveDocuments
           ) {
@@ -468,7 +466,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       regulationsDocumentsList: [],
       regulationsList: [],
       regulationsWithoutDocuments: [],
-      hasRegulations: false,
+      hasRegulationsRequiringDocuments: false,
       allRegulationsHaveDocuments: false
     };
   }

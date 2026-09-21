@@ -20,6 +20,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   documentId: string;
   pageStep: 'INFO' | 'DELETE' = 'INFO';
   baseUrl: string;
+  returnUrl?: string;
 
   documentInfo: null | (InnovationDocumentInfoOutDTO & { locationLink: null | string }) = null;
 
@@ -42,6 +43,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
     this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
+    this.returnUrl = this.getInternalReturnUrl(this.activatedRoute.snapshot.queryParams.returnUrl);
 
     this.pageData = {
       queryParams: {
@@ -80,7 +82,9 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   }
 
   gotoInfoPage() {
-    if (['/sections', '/support-summary'].some(i => this.ctx.layout.previousUrl()?.includes(i))) {
+    if (this.returnUrl) {
+      this.setBackLink('Go back', this.returnUrl);
+    } else if (['/sections', '/support-summary'].some(i => this.ctx.layout.previousUrl()?.includes(i))) {
       this.setBackLink('Go back');
     } else {
       this.setBackLink('Go back', `${this.baseUrl}/documents`);
@@ -88,6 +92,10 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
     this.setPageTitle('Document details', { width: '2.thirds' });
     this.pageStep = 'INFO';
+  }
+
+  private getInternalReturnUrl(returnUrl?: string): string | undefined {
+    return returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//') ? returnUrl : undefined;
   }
 
   gotoDeletePage() {

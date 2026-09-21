@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import isEqual from 'lodash/isEqual';
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 import { ContextInnovationType } from '@app/base/types';
 import { combineLatest, concatMap, of } from 'rxjs';
 
@@ -346,11 +347,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         break;
       case innovationsSubSections.REGULATIONS_AND_STANDARDS:
         this.submitButton.label = 'Save';
-        if (
-          sectionData &&
-          sectionData.hasRegulationKnowledge &&
-          ['YES_ALL', 'YES_SOME'].includes(sectionData.hasRegulationKnowledge)
-        ) {
+        if (sectionData && UtilsHelper.regulationsRequiringDocuments(sectionData.standards ?? []).length > 0) {
           this.allowMarkSectionAsComplete = false;
           this.summaryRedirectUrl = `${this.baseUrl}/regulations`;
         }

@@ -70,4 +70,16 @@ describe('Shared/Pages/Innovation/Documents/PageInnovationDocumentInfoComponent'
       { action: 'deleted' }
     );
   });
+
+  it('uses the explicit return URL for the document details back link', () => {
+    fixture = TestBed.createComponent(PageInnovationDocumentInfoComponent);
+    component = fixture.componentInstance;
+    component.returnUrl =
+      '/innovator/innovations/Innovation001/record/sections/REGULATIONS_AND_STANDARDS/regulations/DTAC';
+    const backLinkSpy = jest.spyOn(component, 'setBackLink');
+
+    component.gotoInfoPage();
+
+    expect(backLinkSpy).toHaveBeenCalledWith('Go back', component.returnUrl);
+  });
 });
