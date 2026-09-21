@@ -176,7 +176,9 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
               this.setAlertError('An innovation with that name already exists. Try again with a new name');
             } else if (err.error === InnovationErrorsEnum.INNOVATION_INFO_EMPTY_INPUT) {
               // TODO: confirm error copy
-              this.setAlertError('Import failed as some mandatory fields are missing. Please try again.');
+              this.setAlertError(
+                'Import failed as some mandatory fields are missing. Please Fill them then try again.'
+              );
             } else {
               this.setAlertError(
                 'An error occurred when importing the innovation. Please try again or contact us for further help'
