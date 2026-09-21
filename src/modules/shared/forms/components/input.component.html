@@ -1,5 +1,6 @@
 <div class="nhsuk-form-group {{ divCssOverride }}" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <ng-container *ngIf="label && pageUniqueField">
+    <span *ngIf="hint" class="nhsuk-caption-l nhsuk-u-margin-bottom-2">{{ hint }}</span>
     <h1 class="nhsuk-label-wrapper">
       <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id">
         {{ label }} <span *ngIf="lengthLimit" class="nhsuk-u-visually-hidden"> {{ "Limited to " + lengthLimitCharacters + " characters" }} </span>

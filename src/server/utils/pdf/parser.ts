@@ -17,6 +17,7 @@ import {
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
+import { keyProgressAreas } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 export const getSchema = async (config: any): Promise<InnovationRecordSchemaInfoType> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/ir-schema/`;
@@ -45,6 +46,14 @@ export const getInnovationInfo = async (innovationId: string, config: any): Prom
   return response.data;
 };
 
+export const getProgressInfo = async (innovationId: string, config: any): Promise<any> => {
+  const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/progress`;
+  const response = await axios.get<any>(url, {
+    ...config
+  });
+  return response.data;
+};
+
 export const generatePDFHandler = async (innovationId: string, body: any, config: any) => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/pdf`;
   config.responseType = 'arraybuffer';
@@ -62,7 +71,8 @@ export type InnovationRecordDocumentExportDataType = {
 export const getIRDocumentExportData = (
   documentType: 'CSV' | 'PDF',
   allSectionsData: AllSectionsOutboundPayloadType,
-  companyInfo?: { name: string; size: null | string; registrationNumber: null | string }
+  companyInfo?: { name: string; size: null | string; registrationNumber: null | string },
+  progressInfo?: any
 ): InnovationRecordDocumentExportDataType => {
   const sectionDataWithCompany: InnovationRecordDocumentExportDataType = {
     sections: allSectionsData,
@@ -70,7 +80,7 @@ export const getIRDocumentExportData = (
   };
 
   if ((documentType === 'PDF' && companyInfo) || documentType === 'CSV') {
-    sectionDataWithCompany.sections = [
+    const sections: AllSectionsOutboundPayloadType = [
       {
         title: 'Company Details',
         sections: [
@@ -93,9 +103,26 @@ export const getIRDocumentExportData = (
             ]
           }
         ]
-      },
-      ...allSectionsData
+      }
     ];
+
+    if (progressInfo) {
+      sections.push({
+        title: 'Key progress areas',
+        sections: [
+          {
+            section: 'Key progress areas',
+            status: 'UNKNOWN',
+            answers: keyProgressAreas.map(item => ({
+              label: item.label,
+              value: progressInfo[item.value] ? 'Yes' : 'No'
+            }))
+          }
+        ]
+      });
+    }
+
+    sectionDataWithCompany.sections = [...sections, ...allSectionsData];
   }
 
   return sectionDataWithCompany;

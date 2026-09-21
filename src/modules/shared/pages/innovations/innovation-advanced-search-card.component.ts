@@ -7,6 +7,7 @@ import {
   InnovationGroupedStatusEnum,
   InnovationSupportCloseReasonEnum
 } from '@modules/stores';
+import { innovationsSubSections } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 export type InnovationCardData = {
   id: string;
@@ -170,7 +171,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
       let sectionId = keyParts[1];
       if (keyParts[1] === 'evidences') {
         // Set
-        sectionId = 'EVIDENCE_OF_EFFECTIVENESS';
+        sectionId = innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS;
       }
       const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
       linkInfo.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;

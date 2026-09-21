@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { WizardSummaryType } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS, otherEmailItem } from './manage-transfer.config';
 
 @Component({

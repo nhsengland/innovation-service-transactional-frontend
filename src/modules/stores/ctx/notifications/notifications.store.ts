@@ -16,7 +16,8 @@ import { NotificationsContextType } from './notifications.types';
 import { NotificationDismissConditions, NotificationsContextService } from './notifications.service';
 import { isPlatformBrowser } from '@angular/common';
 import { DeepPartial } from '@app/base/types';
-import { isNil, omitBy } from 'lodash';
+import isNil from 'lodash/isNil';
+import omitBy from 'lodash/omitBy';
 import { NGXLogger } from 'ngx-logger';
 import { UserContextStore } from '../user/user.store';
 

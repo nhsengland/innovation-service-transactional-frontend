@@ -38,6 +38,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
 
   @Input() id?: string;
   @Input() type?: 'text' | 'number' | 'hidden' | 'password';
+  @Input() hint?: string;
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
@@ -84,7 +85,6 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
 
     if (this.lengthLimit) {
       this.lengthLimitCharacters = this.currentAvailableCharacters = INPUT_LENGTH_LIMIT[this.lengthLimit];
-
       const validators = this.fieldControl.validator ? [this.fieldControl.validator] : [];
       validators.push(Validators.maxLength(this.lengthLimitCharacters));
       this.fieldControl.setValidators(validators);

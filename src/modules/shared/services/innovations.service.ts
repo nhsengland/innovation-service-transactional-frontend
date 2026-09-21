@@ -19,7 +19,11 @@ import {
   InnovationTaskStatusEnum,
   UserRoleEnum
 } from '@modules/stores';
-import { ACTIVITY_LOG_ITEMS, InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
+import {
+  ACTIVITY_LOG_ITEMS,
+  GetInnovationEvidenceDTO,
+  InnovationSectionInfoDTO
+} from '@modules/stores/ctx/innovation/innovation.models';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 import { FileUploadType } from '../forms/engine/config/form-engine.config';
 import {
@@ -1045,5 +1049,11 @@ export class InnovationsService extends CoreService {
     }
 
     return new Blob([bytes], { type });
+  }    
+  getSectionEvidenceList(innovationId: string): Observable<GetInnovationEvidenceDTO[]> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/evidences')
+      .setPathParams({ innovationId });
+    return this.http.get<GetInnovationEvidenceDTO[]>(url.buildUrl()).pipe(take(1));
   }
 }

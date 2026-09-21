@@ -84,28 +84,32 @@
         <tbody class="nhsuk-table__body">
           <tr *ngFor="let task of topList.data" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
-              <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("id") }}</span>
+              <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("id") }}</span>
               <span>{{ task.displayId }}</span>
             </td>
             <td class="nhsuk-table__cell">
-              <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
-                <li class="nhsuk-u-padding-right-1">
-                  <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
-                  <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} task"> {{ task.name }} </a>
-                  <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
-                </li>
-                <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
-                  <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{ task.createdBy.displayTag }}</span>
-                </li>
-              </ul>
+              <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
+              <div>
+                <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
+                  <li class="nhsuk-u-padding-right-1">
+                    <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} task"> {{ task.name }} </a>
+                    <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
+                  </li>
+                  <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
+                    <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{ task.createdBy.displayTag }}</span>
+                  </li>
+                </ul>
+              </div>
             </td>
             <td class="nhsuk-table__cell text-align-right">
-              <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
-              <theme-tag
-                type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
-                label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"
-                class="tag-no-wrap"
-              ></theme-tag>
+              <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
+              <span>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"
+                  class="tag-no-wrap"
+                ></theme-tag>
+              </span>
             </td>
           </tr>
         </tbody>
@@ -145,30 +149,36 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let task of bottomList.data" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("id") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("id") }}</span>
                 <span>{{ task.displayId }}</span>
               </td>
               <td class="nhsuk-table__cell">
-                <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
-                  <li class="nhsuk-u-padding-right-1">
-                    <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
-                    <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} task">
-                      {{ task.name }}
-                    </a>
-                    <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
-                  </li>
-                  <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
-                    <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{ task.createdBy.displayTag }}</span>
-                  </li>
-                </ul>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
+                <div>
+                  <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
+                    <li class="nhsuk-u-padding-right-1">
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} task">
+                        {{ task.name }}
+                      </a>
+                      <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
+                    </li>
+                    <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
+                      <span
+                        >Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{ task.createdBy.displayTag }}</span
+                      >
+                    </li>
+                  </ul>
+                </div>
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
-                <theme-tag
-                  type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"
-                  class="tag-no-wrap"
-                ></theme-tag>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
+                <span>
+                  <theme-tag
+                    type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"
+                    class="tag-no-wrap"
+                  ></theme-tag>
+                </span>
               </td>
             </tr>
           </tbody>

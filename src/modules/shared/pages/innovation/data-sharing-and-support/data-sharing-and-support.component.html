@@ -145,7 +145,7 @@
         </div>
 
         <div *ngIf="ctx.user.isQualifyingAccessor() && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link nhsuk-u-padding-top-5">
-          <a routerLink="/accessor/innovations/{{ innovationId }}/support/suggest" class="nhsuk-action-link__link">
+          <a routerLink="/accessor/innovations/{{ innovationId }}/support/suggest" class="nhsuk-action-link d-flex align-items-center">
             <theme-svg-icon type="arrow-right-circle" />
             <span class="nhsuk-action-link__text">Suggest other organisations to support this innovation</span>
           </a>

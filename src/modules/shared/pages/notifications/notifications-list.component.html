@@ -46,38 +46,41 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of notificationsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell nhsuk-body-s">
-                <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("notification") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("notification") }}</span>
+                <div>
+                  <ng-container *ngIf="!item.link">
+                    {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}
+                    <a *ngIf="item.readAt === null" href="javascript:void(0)" (click)="onNotificationClick($event, item.id, null)">
+                      Mark as read.
+                      <span class="nhsuk-u-visually-hidden">Click to mark as read</span>
+                    </a>
+                  </ng-container>
 
-                <ng-container *ngIf="!item.link">
-                  {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}
-                  <a *ngIf="item.readAt === null" href="javascript:void(0)" (click)="onNotificationClick($event, item.id, null)">
-                    Mark as read.
-                    <span class="nhsuk-u-visually-hidden">Click to mark as read</span>
-                  </a>
-                </ng-container>
+                  <ng-container *ngIf="item.link">
+                    {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}
+                    <a href="/transactional{{ item.link.url }}" (click)="onNotificationClick($event, item.id, item.link.url, item.link.queryParams)">
+                      {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".link" | translate: item.params }}
+                      <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
+                    </a>
+                  </ng-container>
 
-                <ng-container *ngIf="item.link">
-                  {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}
-                  <a href="/transactional{{ item.link.url }}" (click)="onNotificationClick($event, item.id, item.link.url, item.link.queryParams)">
-                    {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".link" | translate: item.params }}
-                    <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
-                  </a>
-                </ng-container>
-
-                <theme-notification-tag label="dot" *ngIf="item.readAt === null"></theme-notification-tag>
+                  <theme-notification-tag label="dot" *ngIf="item.readAt === null"></theme-notification-tag>
+                </div>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("createdAt") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel("createdAt") }}</span>
                 {{ item.createdAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
               <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
-                <span class="nhsuk-table-responsive__heading">Action</span>
-                <a href="javascript:void(0)" (click)="onDeleteNotification(item.id, item.readAt)">
-                  Clear
-                  <span class="nhsuk-u-visually-hidden">
-                    notification {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}
-                  </span>
-                </a>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">Action</span>
+                <span>
+                  <a href="javascript:void(0)" (click)="onDeleteNotification(item.id, item.readAt)">
+                    Clear
+                    <span class="nhsuk-u-visually-hidden">
+                      notification {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}
+                    </span>
+                  </a>
+                </span>
               </td>
             </tr>
           </tbody>

@@ -18,7 +18,7 @@ import {
   ThreadAvailableRecipientsDTO,
   UploadThreadMessageDocumentType
 } from '@modules/shared/services/innovations.service';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 
 @Component({
   selector: 'shared-pages-innovation-messages-thread-messages-list',
@@ -59,6 +59,18 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
     maxFileSize: 20 // In Mb.
   };
+
+  showLinkForm = false;
+  linkForm = new FormGroup(
+    {
+      linkText: new FormControl<string>('', CustomValidators.required('Link text is required')),
+      linkUrl: new FormControl<string>('', [
+        CustomValidators.required('Link URL is required'),
+        CustomValidators.urlFormatValidator({ message: 'Enter a valid URL' })
+      ])
+    },
+    { updateOn: 'blur' }
+  );
 
   // Flags
   isFollower = false;
@@ -232,6 +244,32 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   checkIfUnfollowed(userId: string): boolean {
     return this.threadFollowers?.some(follower => follower.id === userId) ?? false;
+  }
+
+  toggleLinkForm(): void {
+    this.showLinkForm = !this.showLinkForm;
+    if (!this.showLinkForm) {
+      this.linkForm.reset();
+    }
+  }
+
+  onInsertLink(): void {
+    if (!this.linkForm.valid) {
+      this.linkForm.markAllAsTouched();
+      return;
+    }
+
+    const text = this.linkForm.value.linkText || '';
+    const url = (this.linkForm.value.linkUrl || '').trim();
+    const markdownLink = `[${text}](${url})`;
+
+    const currentMessage = this.form.value.message || '';
+    // Append the link at the end of the current message text
+    // A more advanced implementation would insert at cursor, but appending is a reliable fallback
+    const newMessage = currentMessage.length > 0 ? `${currentMessage} ${markdownLink}` : markdownLink;
+
+    this.form.patchValue({ message: newMessage });
+    this.toggleLinkForm();
   }
 
   onTableOrder(column: string): void {

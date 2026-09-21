@@ -20,14 +20,16 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() set groupedItems(value: FormEngineParameterModel['groupedItems']) {
     // If Group Item has only one child item, then show the child only.
     this.filteredGI = (value || []).map(groupItem => {
-      if (groupItem.items.length === 1) {
+      if (groupItem.items.length === 1 && groupItem.items[0].label === groupItem.label) {
+        const childUnit = groupItem.items[0];
+
         return {
           gItem: {
             // TODO:
             // When there's only one child, this is overriding the parente with the child information.
             // It's NOT this component responsibility to do this!
             // Change this behavior when possible.
-            ...groupItem.items[0],
+            ...childUnit,
             label: groupItem.label,
             items: []
           },
@@ -40,7 +42,7 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
         return {
           gItem: groupItem,
           showHideStatus: 'closed',
-          showHideText: `Show ${groupItem.items.length} units`,
+          showHideText: `Show ${groupItem.items.length} unit${groupItem.items.length === 1 ? '' : 's'}`,
           showHideDescription: `that belong to the ${groupItem.label}`,
           selectedChildren: groupItem.items.filter(a => this.fieldArrayValues.includes(a.value)).length
         };
@@ -129,12 +131,12 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
     switch (filteredGI?.showHideStatus) {
       case 'opened':
         filteredGI.showHideStatus = 'closed';
-        filteredGI.showHideText = `Show ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideText = `Show ${filteredGI.gItem.items.length} unit${filteredGI.gItem.items.length === 1 ? '' : 's'}`;
         filteredGI.showHideDescription = `that belong to the ${filteredGI.gItem.label}`;
         break;
       case 'closed':
         filteredGI.showHideStatus = 'opened';
-        filteredGI.showHideText = `Hide ${filteredGI.gItem.items.length} units`;
+        filteredGI.showHideText = `Hide ${filteredGI.gItem.items.length} unit${filteredGI.gItem.items.length === 1 ? '' : 's'}`;
         filteredGI.showHideDescription = `that belong to the ${filteredGI.gItem.label}`;
         break;
       default:

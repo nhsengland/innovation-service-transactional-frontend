@@ -1,9 +1,7 @@
-<div class="nhsuk-back-link">
-  <a href="javascript:;" class="nhsuk-back-link__link" (click)="onPreviousStep()">
-    <theme-svg-icon type="chevron-left" />
-    Go back
-  </a>
-</div>
+<a href="javascript:;" class="nhsuk-back-link" (click)="onPreviousStep()">
+  <theme-svg-icon type="chevron-left" />
+  Go back
+</a>
 
 <h1 class="nhsuk-heading-l">{{ title }}</h1>
 
@@ -49,9 +47,9 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("name") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("name") }}</span>
                 <div class="nhsuk-checkboxes">
-                  <div class="nhsuk-checkboxes__item form-checkboxes-small">
+                  <div class="nhsuk-checkboxes__item nhsuk-checkboxes--small">
                     <input
                       id="user-checkbox-{{ item.id }}"
                       type="checkbox"
@@ -66,13 +64,17 @@
                 </div>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("role") }}</span>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("role") }}</span>
                 {{ item.roleDescription }}
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("isActive") }}</span>
-                <theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
-                <div *ngIf="!item.isActive" class="nhsuk-body-s nhsuk-hint nhsuk-u-margin-0">Locked at {{ item.lockedAt | date: ("app.date_formats.long_date" | translate) }}</div>
+                <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("isActive") }}</span>
+                <div>
+                  <theme-tag type="{{ item.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ item.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                  <div *ngIf="!item.isActive" class="nhsuk-body-s nhsuk-hint nhsuk-u-margin-0">
+                    Locked at {{ item.lockedAt | date: ("app.date_formats.long_date" | translate) }}
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>

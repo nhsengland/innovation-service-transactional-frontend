@@ -67,7 +67,12 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold">
-                                {{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}
+                                {{ historyItem.createdBy.name
+                                }}{{
+                                  (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole)
+                                    ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")"
+                                    : ""
+                                }}
                               </span>
                             </span>
                           </p>
@@ -88,7 +93,12 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold">
-                                {{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}
+                                {{ historyItem.createdBy.name
+                                }}{{
+                                  (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole)
+                                    ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")"
+                                    : ""
+                                }}
                               </span>
                             </span>
                           </p>
@@ -105,7 +115,12 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold">
-                                {{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}
+                                {{ historyItem.createdBy.name
+                                }}{{
+                                  (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole)
+                                    ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")"
+                                    : ""
+                                }}
                               </span>
                             </span>
                           </p>
@@ -170,7 +185,12 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}</span
+                                >{{ historyItem.createdBy.name
+                                }}{{
+                                  (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole)
+                                    ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")"
+                                    : ""
+                                }}</span
                               >
                             </span>
                           </p>
@@ -191,7 +211,12 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}</span
+                                >{{ historyItem.createdBy.name
+                                }}{{
+                                  (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole)
+                                    ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")"
+                                    : ""
+                                }}</span
                               >
                             </span>
                           </p>
@@ -230,9 +255,9 @@
         </ng-container>
       </ng-container>
 
-      <div *ngIf="showSuggestOrganisationsToSupportLink" class="nhsuk-action-link">
+      <div *ngIf="showSuggestOrganisationsToSupportLink">
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-8" />
-        <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="nhsuk-action-link__link">
+        <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="d-flex align-items-center nhsuk-action-link">
           <theme-svg-icon type="arrow-right-circle" />
           <span class="nhsuk-action-link__text"> Suggest other organisations to support this innovation </span>
         </a>

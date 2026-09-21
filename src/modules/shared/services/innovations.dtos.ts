@@ -93,7 +93,8 @@ export type InnovationListSelectType =
   | 'statistics.notifications'
   | 'statistics.tasks'
   | 'statistics.messages'
-  | 'progressAreas';
+  | 'progressAreas'
+  | 'archiveReason';
 
 export type InnovationSearchSelectType = InnovationListSelectType | 'highlights';
 

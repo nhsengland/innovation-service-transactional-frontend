@@ -4,10 +4,11 @@ import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 import {
   InnovationRecordFormComponentType,
-  InnovationRecordMinMaxValidationType,
+  InnovationRecordItemsType,
   InnovationRecordQuestionStepType,
   InnovationRecordStepValidationsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { UpsertInnovationDocumentType } from '@modules/shared/services/innovation-documents.service';
 
 export type FormatUrlValidatorType = { message?: string; maxLength?: number };
 
@@ -43,7 +44,8 @@ export class FormEngineParameterModel {
     | 'file-upload-array'
     | 'select-component'
     | 'date-input'
-    | 'ir-selectable-filters';
+    | 'ir-selectable-filters'
+    | 'elements-list-info';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -115,6 +117,8 @@ export class FormEngineParameterModel {
 
   selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
 
+  supportingDocumentsList?: UpsertInnovationDocumentType[];
+
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
     this.dataType = data.dataType || 'text';
@@ -169,25 +173,14 @@ export class FormEngineParameterModelV3 {
   isHidden?: boolean;
   isEditable?: boolean;
   rank?: number;
-  validations?: {
-    isRequired?: string;
-    pattern?: string | [string, string];
-    min?: InnovationRecordMinMaxValidationType;
-    max?: InnovationRecordMinMaxValidationType;
-    minLength?: number;
-    maxLength?: number;
-    equalToLength?: number | [number, string];
-    async?: AsyncValidatorFn[];
-    existsIn?: string[] | [string[], string];
-    validEmail?: string;
-    postcodeFormat?: boolean;
-    urlFormat?: FormatUrlValidatorType;
-    equalTo?: string | [string, string];
-  };
+  validations?: InnovationRecordStepValidationsType;
   lengthLimit?: TextareaLengthLimitType;
   cssOverride?: string;
 
   additional?: FormEngineParameterModelV3[];
+
+  generatedFromAnswer?: string;
+  relatedAnswers?: Record<string, string>; // if created from a 'addAnswer' step, pass down the answer item it referes to
 
   groupedItems?: {
     // Used in "grouped-checkbox-array" dataType.
@@ -203,17 +196,8 @@ export class FormEngineParameterModelV3 {
     }[];
   }[];
 
-  items?: {
-    id?: string;
-    label?: string;
-    description?: string;
-    exclusive?: boolean;
-    conditional?: FormEngineParameterModelV3;
-    group?: string;
-    type?: string;
-    itemsFromAnswer?: string;
-  }[];
-  addQuestion?: InnovationRecordQuestionStepType;
+  items?: InnovationRecordItemsType;
+  addQuestions?: InnovationRecordQuestionStepType[];
   addNewLabel?: string;
 
   isNestedField?: boolean;
@@ -256,7 +240,7 @@ export class FormEngineParameterModelV3 {
     this.rank = data.rank || 0;
     this.validations = data.validations;
     this.cssOverride = data.cssOverride;
-    this.addQuestion = data.addQuestion;
+    this.addQuestions = data.addQuestions;
     this.addNewLabel = data.addNewLabel;
     this.field = data.field;
     this.condition = data.condition;
@@ -265,6 +249,8 @@ export class FormEngineParameterModelV3 {
     this.isNestedField = data.isNestedField;
     this.checkboxAnswerId = data.checkboxAnswerId;
     this.parentId = data.parentId;
+    this.generatedFromAnswer = data.generatedFromAnswer;
+    this.relatedAnswers = data.relatedAnswers;
 
     // this.additional = data.additional;
 

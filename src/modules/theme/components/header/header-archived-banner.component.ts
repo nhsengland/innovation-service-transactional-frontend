@@ -39,12 +39,14 @@ export class HeaderArchivedBannerComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkShowBanner();
-    this.innovationsService.getInnovationInfo(this.innovation.id).subscribe(innovation => {
-      this.innovation = {
-        ...this.innovation,
-        archiveReason: innovation.archiveReason
-      };
-    });
+    if (this.ctx.innovation.isArchived() && !this.ctx.innovation.info().archiveReason) {
+      this.innovationsService.getInnovationInfo(this.innovation.id).subscribe(innovation => {
+        this.innovation = {
+          ...this.innovation,
+          archiveReason: innovation.archiveReason
+        };
+      });
+    }
   }
 
   private checkShowBanner() {

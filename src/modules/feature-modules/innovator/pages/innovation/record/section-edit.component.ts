@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import isEqual from 'lodash/isEqual';
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 import { ContextInnovationType } from '@app/base/types';
 import { combineLatest, concatMap, of } from 'rxjs';
 
@@ -13,6 +15,8 @@ import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stor
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
+import { InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
+import { innovationsSubSections } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -28,6 +32,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   isArchived: boolean;
   sectionId: string;
   baseUrl: string;
+  summaryRedirectUrl: string;
 
   sectionsIdsList: string[];
   sectionQuestionsIdList: string[];
@@ -39,6 +44,14 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   isChangeMode = false;
   lastSection = false;
 
+  isEvidenceSection = false;
+  isRegulationsSection = false;
+  private isInMemoryStepNavigation = false;
+
+  allowMarkSectionAsComplete = true;
+
+  sectionInfo: undefined | InnovationSectionInfoDTO;
+
   displayChangeButtonList: number[] = [];
 
   constructor(private activatedRoute: ActivatedRoute) {
@@ -47,6 +60,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
+    this.summaryRedirectUrl = this.baseUrl;
 
     this.sectionsIdsList = this.ctx.schema.getSubSectionsIds();
     this.sectionQuestionsIdList = this.ctx.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
@@ -55,6 +69,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
 
     this.isArchived = this.ctx.innovation.isArchived();
+
+    this.isEvidenceSection = this.sectionId === innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS;
+    this.isRegulationsSection = this.sectionId === innovationsSubSections.REGULATIONS_AND_STANDARDS;
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
@@ -71,6 +88,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
           next: sectionInfoResponse => {
+            this.sectionInfo = sectionInfoResponse;
             this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
             this.sectionStatus = sectionInfoResponse.status;
 
@@ -118,6 +136,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
       if (this.sectionStatus === 'DRAFT') {
         this.submitButton.isActive = validInformation.valid;
+
         if (this.innovation.status !== InnovationStatusEnum.CREATED) {
           this.submitButton.label = 'Save updates';
         }
@@ -125,12 +144,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
       for (const [index, item] of this.wizard.getSummary().entries()) {
         this.displayChangeButtonList.push(index);
-        if (!this.checkItemHasValue(item) && !item.isNotMandatory) {
+        if (item.mandatoryAndNotAnswered) {
           break;
         }
       }
 
       this.wizard.gotoSummary();
+      this.handleMandatoryDocumentsSections();
       this.setPageTitle('Check your answers', { size: 'l' });
     } else {
       this.wizard.showSummary = false;
@@ -147,6 +167,23 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       return Array.isArray(item.value) && item.value.length === 0 ? false : true;
     }
     return false;
+  }
+
+  private shouldDeferRegulationsSave(): boolean {
+    if (!this.isRegulationsSection || typeof this.wizard.currentStepId !== 'number') return false;
+
+    const currentStep = this.wizard.steps[this.wizard.currentStepId - 1]?.parameters[0];
+    const nextStep = this.wizard.steps[this.wizard.currentStepId]?.parameters[0];
+
+    return (
+      currentStep?.id.startsWith('hasMet_') === true &&
+      nextStep?.id.startsWith('certifications_') === true &&
+      currentStep.generatedFromAnswer === nextStep.generatedFromAnswer
+    );
+  }
+
+  private hasAnswerChanges(updatedAnswers: Record<string, unknown>, currentAnswers: Record<string, unknown>): boolean {
+    return Object.entries(updatedAnswers).some(([key, updatedAnswer]) => !isEqual(currentAnswers[key], updatedAnswer));
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -174,22 +211,40 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       }
 
       if (action === 'next') {
-        const shouldUpdateInformation =
-          Object.entries(formData?.data || {}).filter(([key, updatedAnswer]) => {
-            // NOTE: This is a very shallow comparison, and will return false for objects and arrays.
-            // Althought this can be improved in the future, for now it helps on some steps...
-            const currentAnswer = this.wizard.getAnswers()[key];
-            return currentAnswer !== updatedAnswer;
-          }).length > 0;
+        const shouldUpdateInformation = this.hasAnswerChanges(formData?.data || {}, this.wizard.getAnswers());
 
         this.wizard.addAnswers(formData!.data).runRules();
+
+        const isStandardsStep = Object.prototype.hasOwnProperty.call(formData?.data ?? {}, 'standards');
+        if (this.isRegulationsSection && isStandardsStep) {
+          const validInformation = this.wizard.validateData();
+          const hasLegacyStandardError = validInformation.errors.some(error =>
+            error.description.startsWith('Select a current standard for each legacy standard')
+          );
+          if (hasLegacyStandardError) {
+            this.alertErrorsList = validInformation.errors;
+            this.setAlertError(`Please verify what's missing with your answers`, {
+              itemsList: this.alertErrorsList,
+              width: '2.thirds'
+            });
+            return;
+          }
+        }
+
+        if (this.shouldDeferRegulationsSave()) {
+          this.isInMemoryStepNavigation = true;
+          const nextStep = currentStepIndex + 1;
+          this.onGoToStep(nextStep, this.isChangeMode);
+          this.location.replaceState(`${this.baseUrl}/edit/${nextStep}`, this.isChangeMode ? 'isChangeMode=true' : '');
+          return;
+        }
 
         this.saveButton = { isActive: false, label: 'Saving...' };
 
         of(true)
           .pipe(
             concatMap(() => {
-              if (shouldUpdateInformation || this.errorOnSubmitStep) {
+              if (this.isInMemoryStepNavigation || shouldUpdateInformation || this.errorOnSubmitStep) {
                 return this.ctx.innovation.updateSectionInfo$(
                   this.innovation.id,
                   this.sectionId,
@@ -214,7 +269,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               this.saveButton = { isActive: true, label: 'Save and continue' };
 
               const nextStep = this.wizard.getNextStep(this.isChangeMode);
-              this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+              const stepToDisplay = this.isInMemoryStepNavigation
+                ? currentStepIndex
+                : this.activatedRoute.snapshot.params.questionId;
+              this.isInMemoryStepNavigation = false;
+              this.onGoToStep(stepToDisplay, this.isChangeMode);
               this.redirectTo(`${this.baseUrl}/edit/${nextStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
             },
             error: ({ error: err }: HttpErrorResponse) => {
@@ -244,24 +303,55 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onSubmitSection(): void {
-    this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
-      next: () => {
-        const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
-        const sectionLabel = `${group.number}.${section.number}. '${section.title}'`;
-        this.setRedirectAlertSuccess(`You have completed section ${sectionLabel}`);
+    if (this.allowMarkSectionAsComplete) {
+      this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
+        next: () => {
+          const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
+          const sectionLabel = `${group.number}.${section.number}. '${section.title}'`;
+          this.setRedirectAlertSuccess(`You have completed section ${sectionLabel}`);
 
-        if (
-          this.innovation.status === InnovationStatusEnum.CREATED ||
-          this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-        ) {
-          this.redirectTo(
-            this.lastSection ? `/innovator/innovations/${this.innovation.id}/submission-ready` : this.baseUrl
-          );
-        } else {
-          this.redirectTo(`${this.baseUrl}/submitted`);
+          if (
+            this.innovation.status === InnovationStatusEnum.CREATED ||
+            this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
+          ) {
+            this.summaryRedirectUrl = this.lastSection
+              ? `/innovator/innovations/${this.innovation.id}/submission-ready`
+              : this.baseUrl;
+          } else {
+            this.summaryRedirectUrl = `${this.baseUrl}/submitted`;
+          }
+
+          this.redirectTo(this.summaryRedirectUrl);
+        },
+        error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
+      });
+      return;
+    }
+
+    this.redirectTo(this.summaryRedirectUrl);
+  }
+
+  handleMandatoryDocumentsSections() {
+    const sectionData = this.sectionInfo?.data;
+    this.allowMarkSectionAsComplete = true;
+    this.summaryRedirectUrl = this.baseUrl;
+
+    // redirect to documents flows depending on section answers
+    switch (this.sectionId) {
+      case innovationsSubSections.EVIDENCE_OF_EFFECTIVENESS:
+        this.submitButton.label = 'Save';
+        if (sectionData && sectionData.hasEvidence && sectionData.hasEvidence === 'YES' && !this.isChangeMode) {
+          this.allowMarkSectionAsComplete = false;
+          this.summaryRedirectUrl = `${this.baseUrl}/evidences`;
         }
-      },
-      error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
-    });
+        break;
+      case innovationsSubSections.REGULATIONS_AND_STANDARDS:
+        this.submitButton.label = 'Save';
+        if (sectionData && UtilsHelper.regulationsRequiringDocuments(sectionData.standards ?? []).length > 0) {
+          this.allowMarkSectionAsComplete = false;
+          this.summaryRedirectUrl = `${this.baseUrl}/regulations`;
+        }
+        break;
+    }
   }
 }

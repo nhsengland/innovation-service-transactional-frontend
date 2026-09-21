@@ -138,4 +138,37 @@ describe('FormGroupCheckboxArrayComponent', () => {
 
     expect(hostComponent.childComponent?.filteredGI[2].showHideStatus).toBe('opened');
   });
+
+  it('should keep a single unit grouped when its name differs from the parent organisation', () => {
+    hostComponent.groupedItems = [
+      {
+        value: 'org1',
+        label: 'Parent Org',
+        items: [{ value: 'unit1', label: 'Different Unit Name' }]
+      }
+    ];
+    hostFixture.detectChanges();
+
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.label).toBe('Parent Org');
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.items).toEqual([
+      { value: 'unit1', label: 'Different Unit Name' }
+    ]);
+    expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('closed');
+    expect(hostComponent.childComponent?.filteredGI[0].showHideText).toBe('Show 1 unit');
+  });
+
+  it('should collapse a single unit when its name matches the parent organisation', () => {
+    hostComponent.groupedItems = [
+      {
+        value: 'org2',
+        label: 'Same Name Org',
+        items: [{ value: 'unit2', label: 'Same Name Org' }]
+      }
+    ];
+    hostFixture.detectChanges();
+
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.label).toBe('Same Name Org');
+    expect(hostComponent.childComponent?.filteredGI[0].gItem.items).toEqual([]);
+    expect(hostComponent.childComponent?.filteredGI[0].showHideStatus).toBe('hidden');
+  });
 });

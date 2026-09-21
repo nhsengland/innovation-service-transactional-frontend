@@ -80,6 +80,8 @@ describe('Theme/Components/Footer/FooterComponent', () => {
     fixture.detectChanges();
     const element = fixture.nativeElement;
 
-    expect(element.querySelector('p.nhsuk-footer__copyright').textContent).toContain('Crown copyright');
+    expect(element.querySelector('footer.nhsuk-footer')?.id).toEqual('nhsuk-footer');
+    expect(element.querySelector('.nhsuk-footer__meta')).toBeTruthy();
+    expect(element.querySelector('p.nhsuk-body-s').textContent).toContain('Crown copyright');
   });
 });
