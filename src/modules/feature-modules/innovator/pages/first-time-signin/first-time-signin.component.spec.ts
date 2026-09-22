@@ -41,6 +41,27 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
     expect(component).toBeTruthy();
   });
 
+  it('should preserve givenName and surname in the outbound payload', () => {
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.wizard.addAnswers({ givenName: 'Ada', surname: 'Lovelace' });
+
+    expect(component.wizard.runOutboundParsing()).toMatchObject({
+      givenName: 'Ada',
+      surname: 'Lovelace'
+    });
+  });
+
+  it('should keep the organisation question after adding the two name steps', () => {
+    fixture = TestBed.createComponent(FirstTimeSigninComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.wizard.steps[2]?.parameters[0]?.id).toBe('isCompanyOrOrganisation');
+  });
+
   // it('should NOT have default information loaded', () => {
 
   //   organisationsService.getAccessorsOrganisations = () => throwError('error');

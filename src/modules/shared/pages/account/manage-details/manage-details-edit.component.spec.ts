@@ -138,7 +138,8 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
     ctx.user.isInnovator = signal(true);
 
     const expected = {
-      displayName: 'Test qualifying Accessor',
+      givenName: 'Test',
+      surname: 'qualifying Accessor',
       mobilePhone: '212000000',
       isCompanyOrOrganisation: 'YES',
       organisationName: 'organisation_1',

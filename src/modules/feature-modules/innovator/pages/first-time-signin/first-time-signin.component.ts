@@ -70,7 +70,8 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
         concatMap(() =>
           this.ctx.user.updateUserInfo$(
             {
-              displayName: wizardData.innovatorName,
+              givenName: wizardData.givenName,
+              surname: wizardData.surname,
               mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
 
               organisation: wizardData.organisation
@@ -93,7 +94,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
         ),
 
         // Initialize authentication in order to update First Time SignIn information.
-        concatMap(() => this.ctx.user.initializeAuthentication$())
+        concatMap(() => this.ctx.user.initializeAuthentication$(true))
       )
       .subscribe({
         next: () => {

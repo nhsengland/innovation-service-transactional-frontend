@@ -11,7 +11,8 @@ import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/p
 export type MFAInfo = { type: 'none' } | { type: 'email' } | { type: 'phone'; phoneNumber: string | undefined };
 
 export type UpdateUserInfo = {
-  displayName: string;
+  givenName: string;
+  surname: string;
   jobTitle?: string | null;
   contactByPhone?: boolean;
   contactByEmail?: boolean;
@@ -67,6 +68,8 @@ export class UserContextService {
       map(response => ({
         id: response.id,
         email: response.email,
+        givenName: response.givenName,
+        surname: response.surname,
         displayName: ['unknown'].includes(response.displayName) ? '' : response.displayName,
         roles: response.roles ?? [],
         contactByPhone: response.contactByPhone,

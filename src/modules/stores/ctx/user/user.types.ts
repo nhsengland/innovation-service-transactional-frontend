@@ -18,6 +18,8 @@ export type DomainUserContext = {
 export type UserInfo = {
   id: string;
   email: string;
+  givenName: string;
+  surname: string;
   displayName: string;
   roles: UserRoleType[];
   contactByPhone: boolean;
@@ -48,6 +50,8 @@ export type UserInfo = {
 export const EMPTY_USER_INFO: UserInfo = {
   id: '',
   email: '',
+  givenName: '',
+  surname: '',
   displayName: '',
   roles: [],
   contactByEmail: false,

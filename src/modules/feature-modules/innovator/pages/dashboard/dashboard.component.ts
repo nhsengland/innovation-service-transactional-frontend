@@ -9,7 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationGroupedStatusEnum, InnovationTransferStatusEnum } from '@modules/stores';
 
-import { DatesHelper } from '@app/base/helpers';
+import { DatesHelper, StringsHelper } from '@app/base/helpers';
 import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
 import {
   AnnouncementType,
@@ -63,8 +63,9 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     super();
 
     const user = this.ctx.user.getUserInfo();
+    const displayName = StringsHelper.getUserDisplayName(user.givenName, user.surname, user.displayName);
     this.user = {
-      displayName: user.displayName,
+      displayName,
       innovationsOwner: [],
       innovationsCollaborator: [],
       innovationsArchived: [],
@@ -72,7 +73,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       firstTimeSignInAt: user.firstTimeSignInAt
     };
 
-    this.setPageTitle('Home', { hint: `Hello${user.displayName ? ' ' + user.displayName : ''}` });
+    this.setPageTitle('Home', { hint: `Hello${displayName ? ' ' + displayName : ''}` });
   }
 
   ngOnInit(): void {
