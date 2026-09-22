@@ -1049,7 +1049,7 @@ export class InnovationsService extends CoreService {
     }
 
     return new Blob([bytes], { type });
-  }    
+  }
   getSectionEvidenceList(innovationId: string): Observable<GetInnovationEvidenceDTO[]> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/evidences')
