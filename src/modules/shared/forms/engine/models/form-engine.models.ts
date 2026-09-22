@@ -1,4 +1,4 @@
-import { AsyncValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
@@ -111,6 +111,8 @@ export class FormEngineParameterModel {
     acceptedFiles?: FileTypes[];
     maxFileSize?: number; // In Mb.
     previousUploadedFiles?: { id: string; name: string }[];
+    localOnly?: boolean;
+    customValidationError?: ValidationErrors;
   };
 
   selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };

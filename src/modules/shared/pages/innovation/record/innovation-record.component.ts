@@ -138,4 +138,39 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       }
     });
   }
+
+  downloadInnovationRecordExcel(): void {
+    this.ctx.innovation.getAllSectionsInfo$(this.innovationId).subscribe({
+      next: (payload: any[]) => {
+        // Transform the InnovationAllSectionsInfoDTO array into an InnovationRecordDocumentType object
+        // The backend ExcelExportService expects a dictionary keyed by section ID.
+        const exportPayload = payload.reduce(
+          (acc, curr) => {
+            if (curr?.section?.section && curr?.data) {
+              acc[curr.section.section] = curr.data;
+            }
+            return acc;
+          },
+          {} as Record<string, any>
+        );
+
+        this.innovationsService.getInnovationRecordExcelExport(exportPayload).subscribe({
+          next: (blob: Blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${this.innovation.name}-Innovation-Record.xlsx`;
+            link.click();
+            window.URL.revokeObjectURL(url);
+          },
+          error: () => {
+            this.setAlertError('Unable to download the Excel export. Please try again.');
+          }
+        });
+      },
+      error: () => {
+        this.setAlertError('Unable to retrieve sections data for export.');
+      }
+    });
+  }
 }
