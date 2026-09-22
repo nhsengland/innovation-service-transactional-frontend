@@ -94,7 +94,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
         ),
 
         // Initialize authentication in order to update First Time SignIn information.
-        concatMap(() => this.ctx.user.initializeAuthentication$())
+        concatMap(() => this.ctx.user.initializeAuthentication$(true))
       )
       .subscribe({
         next: () => {

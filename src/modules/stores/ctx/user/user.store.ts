@@ -72,7 +72,7 @@ export class UserContextStore {
   hasError$ = toObservable(this.hasError);
 
   // Actions
-  fetch$ = new Subject<void>();
+  fetch$ = new Subject<boolean>();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -86,8 +86,8 @@ export class UserContextStore {
         tap(() => {
           this.state.update(state => ({ ...state, isStateLoaded: false, error: undefined }));
         }),
-        switchMap(() =>
-          this.userCtxService.getUserInfo().pipe(
+        switchMap(forceRefresh =>
+          this.userCtxService.getUserInfo(forceRefresh).pipe(
             catchError(error => {
               this.state.update(state => ({ ...state, error }));
               return of(null);
@@ -107,9 +107,9 @@ export class UserContextStore {
       });
   }
 
-  initializeAuthentication$(): Observable<boolean> {
+  initializeAuthentication$(forceRefresh = false): Observable<boolean> {
     this.clear();
-    this.fetch$.next();
+    this.fetch$.next(forceRefresh);
     return combineLatest([this.isStateLoaded$, this.hasError$]).pipe(
       filter(() => this.isStateLoaded() || this.hasError() !== undefined),
       switchMap(() => {
