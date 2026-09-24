@@ -61,6 +61,12 @@ describe('responsive table heading accessibility', () => {
 });
 
 describe('conditional form control accessibility', () => {
+  it('enables NHS frontend conditional reveal styles', () => {
+    const html = readFileSync(join(sourceDirectory, 'index.html'), 'utf8');
+
+    expect(html).toMatch(/<body\b[^>]*class="[^"]*\bnhsuk-frontend-supported\b/);
+  });
+
   it('uses data-aria-controls for conditionally revealed fields', () => {
     const conditionalControlTemplates = [
       'src/modules/shared/forms/components/radio-group.component.html',
