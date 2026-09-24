@@ -115,7 +115,7 @@ const header: RoutesDataType['header'] = {
   ]
 };
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: TransactionalLayoutComponent,
@@ -129,7 +129,7 @@ const routes: Routes = [
         pathMatch: 'full',
         component: PageTermsOfUseAcceptanceComponent,
         data: {
-          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          header: { menuBarItems: [] },
           layout: { type: 'full' }
         }
       },
@@ -139,7 +139,7 @@ const routes: Routes = [
         pathMatch: 'full',
         component: FirstTimeSigninComponent,
         data: {
-          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          header: { menuBarItems: [] },
           layout: { type: 'full' }
         }
       },

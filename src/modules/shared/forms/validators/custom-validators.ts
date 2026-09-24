@@ -1,9 +1,9 @@
-import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
-import first from 'lodash/first';
+import { ItemConditionOptionsType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
 import omit from 'lodash/omit';
 import isEmpty from 'lodash/isEmpty';
-import { INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
 
 export class CustomFormGroupValidators {
   static mustMatch(fieldName: string, confirmationFieldName: string, errorMessage: string | null): ValidatorFn {
@@ -68,8 +68,15 @@ export class CustomValidators {
   }
 
   static equalToLength(length: number, message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null =>
-      (control.value ?? '').length === length ? null : { equalToLength: message ? { message, length } : { length } };
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value ?? '';
+
+      if (value === '' || value === null || value === undefined) {
+        return null;
+      }
+
+      return String(value).length === length ? null : { equalToLength: message ? { message, length } : { length } };
+    };
   }
 
   static hexadecimalFormatValidator(): ValidatorFn {
@@ -373,6 +380,23 @@ export class CustomValidators {
       }
 
       return null;
+    };
+  }
+
+  static conditionalRequiredValidator(
+    itemConditionOptions: ItemConditionOptionsType,
+    relativeIdsAnswers: Record<string, string>
+  ): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const isOptional = FormEngineHelperV3.isItemOptional(itemConditionOptions, relativeIdsAnswers);
+
+      const isEmpty =
+        control.value === null ||
+        control.value === undefined ||
+        control.value === '' ||
+        (Array.isArray(control.value) && control.value.length === 0);
+
+      return !isOptional && isEmpty ? { requiredConditional: true } : null;
     };
   }
 

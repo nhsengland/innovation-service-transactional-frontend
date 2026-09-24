@@ -10,7 +10,7 @@ import { AnnouncementsListComponent } from './pages/announcements-list/announcem
 // Guards
 import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: TransactionalLayoutComponent,
@@ -21,7 +21,7 @@ const routes: Routes = [
         pathMatch: 'full',
         component: AnnouncementsListComponent,
         data: {
-          header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          header: { menuBarItems: [] },
           layout: { type: 'full' }
         }
       }

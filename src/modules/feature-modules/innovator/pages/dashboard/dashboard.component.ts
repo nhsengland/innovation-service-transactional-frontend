@@ -9,7 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationGroupedStatusEnum, InnovationTransferStatusEnum } from '@modules/stores';
 
-import { DatesHelper } from '@app/base/helpers';
+import { DatesHelper, StringsHelper } from '@app/base/helpers';
 import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
 import {
   AnnouncementType,
@@ -63,8 +63,9 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     super();
 
     const user = this.ctx.user.getUserInfo();
+    const displayName = StringsHelper.getUserDisplayName(user.givenName, user.surname, user.displayName);
     this.user = {
-      displayName: user.displayName,
+      displayName,
       innovationsOwner: [],
       innovationsCollaborator: [],
       innovationsArchived: [],
@@ -72,7 +73,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       firstTimeSignInAt: user.firstTimeSignInAt
     };
 
-    this.setPageTitle('Home', { hint: `Hello${user.displayName ? ' ' + user.displayName : ''}` });
+    this.setPageTitle('Home', { hint: `Hello${displayName ? ' ' + displayName : ''}` });
   }
 
   ngOnInit(): void {
@@ -201,6 +202,22 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   onClearAnnouncement(announcementId: string) {
     this.announcements = this.announcements.filter(a => a.id !== announcementId);
+  }
+
+  downloadExcelTemplate(): void {
+    this.innovationsService.getInnovationRecordExcelTemplate().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Innovation-Record-Template.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.setAlertError('Unable to download the template. Please try again.');
+      }
+    });
   }
 
   private buildDescriptionString(

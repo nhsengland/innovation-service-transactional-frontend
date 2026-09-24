@@ -83,6 +83,8 @@
           *ngFor="let item of visibleItems; trackBy: trackByLabel"
           class="nhsuk-header__navigation-item"
           [class.nhsuk-header__navigation-item--current]="item.isCurrent"
+          [class.d-flex]="!!notifications[item.id]"
+          [class.align-items-center]="!!notifications[item.id]"
           data-nav-item="true"
         >
           <a
@@ -103,6 +105,11 @@
           >
             <span>{{ item.label }}</span>
           </a>
+          <theme-notification-tag
+            *ngIf="notifications[item.id]"
+            [label]="notifications[item.id]"
+            class="nhsuk-u-padding-right-2 nhsuk-u-padding-bottom-3"
+          ></theme-notification-tag>
         </li>
 
         <li #menuItem class="nhsuk-header__menu" [hidden]="!menuEnabled">
@@ -118,10 +125,26 @@
           </button>
 
           <ul #menuList class="nhsuk-header__menu-list" [hidden]="!menuOpen">
-            <li *ngFor="let item of overflowItems; trackBy: trackByLabel" class="nhsuk-header__navigation-item" [class.nhsuk-header__navigation-item--current]="item.isCurrent">
-              <a class="nhsuk-header__navigation-link" [routerLink]="item.url" [attr.aria-current]="item.isCurrent ? 'true' : null">
+            <li
+              *ngFor="let item of overflowItems; trackBy: trackByLabel"
+              class="nhsuk-header__navigation-item"
+              [class.nhsuk-header__navigation-item--current]="item.isCurrent"
+              [class.d-flex]="!!notifications[item.id]"
+              [class.align-items-center]="!!notifications[item.id]"
+            >
+              <a
+                class="nhsuk-header__navigation-link"
+                [routerLink]="item.url"
+                [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
+                [attr.aria-current]="item.isCurrent ? 'true' : null"
+              >
                 {{ item.label }}
               </a>
+              <theme-notification-tag
+                *ngIf="notifications[item.id]"
+                [label]="notifications[item.id]"
+                class="nhsuk-u-padding-right-2 nhsuk-u-padding-bottom-3"
+              ></theme-notification-tag>
             </li>
           </ul>
         </li>

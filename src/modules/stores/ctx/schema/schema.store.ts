@@ -150,7 +150,10 @@ export class SchemaContextStore {
       section?.steps.flatMap(st =>
         st.questions.flatMap(q => [
           { label: q.label, conditional: !!st.condition },
-          ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
+          ...(q.addQuestions?.map(aq => ({
+            label: aq.label,
+            conditional: true
+          })) ?? [])
         ])
       ) ?? [];
 
@@ -222,6 +225,10 @@ export class SchemaContextStore {
         }, [])
       ];
     }, []);
+  }
+
+  getNumberedTranslatedSection(id: string): string {
+    return this.getIrSchemaNumberedSubSectionsList().find(s => s.value === id)?.label ?? id;
   }
 
   getIrSchemaTranslationsMap(): IrSchemaTranslatorMapType {

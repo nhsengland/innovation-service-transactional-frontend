@@ -194,6 +194,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             this.search = params.search;
             if (this.search && this.search !== this.form.value.search) {
               this.form.get('search')?.setValue(this.search);
+              this.onSearchClick();
             } else if (!this.search) {
               this.onFormChange();
             }
@@ -465,16 +466,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.form.markAllAsTouched();
     }
     this.pageNumber = 1;
-
-    // If 'search' has a different value from 'form search field' value, the user typed a new value into 'form search field'.
-    const currentSearch = this.form.value.search;
-    if (this.search != currentSearch && (this.search !== undefined || (this.search === undefined && currentSearch))) {
-      this.updateSearchQueryParams(currentSearch).then(() => {
-        this.getInnovationsList();
-      });
-    } else {
-      this.getInnovationsList();
-    }
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
   }

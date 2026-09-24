@@ -16,7 +16,7 @@ import {
 } from 'rxjs';
 import { DomainUserContext, EMPTY_USER_INFO, UserContextType, UserInfo } from './user.types';
 import { UpdateUserInfo, UserContextService } from './user.service';
-import { LocalStorageHelper } from '@app/base/helpers';
+import { LocalStorageHelper, StringsHelper } from '@app/base/helpers';
 import { UserRoleEnum } from '@app/base/enums';
 import { isPlatformBrowser } from '@angular/common';
 import { EnvironmentVariablesStore } from '@modules/core';
@@ -47,7 +47,10 @@ export class UserContextStore {
   getUserId = computed(() => this.getUserInfo().id);
   getUserType = computed(() => this.getUserContext()?.type); // TODO: Change this to be role instead of type.
   getUserRoleTranslation = computed(() => this.getRoleDescription(this.getUserType() ?? ''));
-  getDisplayName = computed(() => this.getUserInfo().displayName);
+  getDisplayName = computed(() => {
+    const user = this.getUserInfo();
+    return StringsHelper.getUserDisplayName(user.givenName, user.surname, user.displayName);
+  });
   hasMultipleRoles = computed(() => this.getUserInfo().roles.length > 1);
   getAccessorUnitName = computed(() => this.getUserContext()?.organisationUnit?.name);
 
@@ -70,7 +73,7 @@ export class UserContextStore {
   hasError$ = toObservable(this.hasError);
 
   // Actions
-  fetch$ = new Subject<void>();
+  fetch$ = new Subject<boolean>();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -84,8 +87,8 @@ export class UserContextStore {
         tap(() => {
           this.state.update(state => ({ ...state, isStateLoaded: false, error: undefined }));
         }),
-        switchMap(() =>
-          this.userCtxService.getUserInfo().pipe(
+        switchMap(forceRefresh =>
+          this.userCtxService.getUserInfo(forceRefresh).pipe(
             catchError(error => {
               this.state.update(state => ({ ...state, error }));
               return of(null);
@@ -105,9 +108,9 @@ export class UserContextStore {
       });
   }
 
-  initializeAuthentication$(): Observable<boolean> {
+  initializeAuthentication$(forceRefresh = false): Observable<boolean> {
     this.clear();
-    this.fetch$.next();
+    this.fetch$.next(forceRefresh);
     return combineLatest([this.isStateLoaded$, this.hasError$]).pipe(
       filter(() => this.isStateLoaded() || this.hasError() !== undefined),
       switchMap(() => {
@@ -237,7 +240,9 @@ export class UserContextStore {
       }
     }
     this.updateInfo({
-      displayName: body.displayName,
+      givenName: body.givenName,
+      surname: body.surname,
+      displayName: `${body.givenName} ${body.surname}`,
       contactByPhone: body.contactByPhone,
       contactByEmail: body.contactByEmail,
       contactByPhoneTimeframe: body.contactByPhoneTimeframe,

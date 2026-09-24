@@ -20,7 +20,8 @@ const organisationDescriptions = [
 type InboundPayloadType = Required<UserContextType>['user'];
 
 type StepPayloadType = {
-  displayName: string;
+  givenName: string;
+  surname: string;
   contactPreferences: ContactUserPreferenceEnum[];
   contactByPhoneTimeframe: PhoneUserPreferenceEnum | null;
   mobilePhone: null | string;
@@ -35,7 +36,8 @@ type StepPayloadType = {
 };
 
 type OutboundPayloadType = {
-  displayName: string;
+  givenName: string;
+  surname: string;
   contactByPhone: boolean;
   contactByEmail: boolean;
   contactByPhoneTimeframe: PhoneUserPreferenceEnum | null;
@@ -56,10 +58,20 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
     new FormEngineModel({
       parameters: [
         {
-          id: 'displayName',
+          id: 'givenName',
           dataType: 'text',
-          label: 'What is your name?',
-          validations: { isRequired: [true, 'Name is required'], maxLength: 100 }
+          label: 'What is your given name?',
+          validations: { isRequired: [true, 'Given name is required'], maxLength: 64 }
+        }
+      ]
+    }),
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'surname',
+          dataType: 'text',
+          label: 'What is your surname?',
+          validations: { isRequired: [true, 'Surname is required'], maxLength: 64 }
         }
       ]
     }),
@@ -228,7 +240,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
-    displayName: data.displayName,
+    givenName: data.givenName,
+    surname: data.surname,
     contactPreferences: getContactPreferences(data),
     contactByPhoneTimeframe: data.contactByPhoneTimeframe ?? null,
     mobilePhone: data.phone,
@@ -247,7 +260,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-    displayName: data.displayName,
+    givenName: data.givenName,
+    surname: data.surname,
     contactByPhone: data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE),
     contactByEmail: data.contactPreferences.includes(ContactUserPreferenceEnum.EMAIL),
     mobilePhone: data.mobilePhone,
@@ -271,7 +285,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
-    { label: 'Name', value: data.displayName, editStepNumber: 1 },
+    { label: 'Given name', value: data.givenName, editStepNumber: 1 },
+    { label: 'Surname', value: data.surname, editStepNumber: 2 },
     {
       label: 'Contact Preference',
       value: UtilsHelper.getContactPreferenceValue(
@@ -279,25 +294,25 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         data.contactPreferences.includes(ContactUserPreferenceEnum.PHONE),
         data.contactByPhoneTimeframe
       ),
-      editStepNumber: 2
+      editStepNumber: 3
     },
-    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 3 },
-    { label: 'Contact details', value: data.contactDetails, editStepNumber: 4 },
+    { label: 'Phone number', value: data.mobilePhone, editStepNumber: 4 },
+    { label: 'Contact details', value: data.contactDetails, editStepNumber: 5 },
     {
       label: 'Is company or organisation?',
       value: data.isCompanyOrOrganisation === 'YES' ? `Yes, ${data.organisationName}` : 'No',
-      editStepNumber: 5
+      editStepNumber: 6
     }
   );
 
   if (data.isCompanyOrOrganisation === 'YES') {
     toReturn.push(
-      { label: 'Company description', value: data.organisationDescription, editStepNumber: 6 },
-      { label: 'Company size', value: data.organisationSize, editStepNumber: 7 },
+      { label: 'Company description', value: data.organisationDescription, editStepNumber: 7 },
+      { label: 'Company size', value: data.organisationSize, editStepNumber: 8 },
       {
         label: 'Company UK registration number',
         value: data.hasRegistrationNumber === 'YES' ? `Yes, ${data.organisationRegistrationNumber}` : 'No',
-        editStepNumber: 8
+        editStepNumber: 9
       }
     );
   }

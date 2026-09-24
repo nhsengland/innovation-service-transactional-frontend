@@ -57,10 +57,11 @@
 
               <ng-container *ngIf="item.conditional">
                 <li
+                  *ngIf="isConditionalFieldVisible(item.conditional.id)"
                   [ngSwitch]="item.conditional.dataType"
                   id="conditional-{{ id }}{{ i }}"
                   class="nhsuk-checkboxes__conditional"
-                  [ngClass]="{ 'nhsuk-checkboxes__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), error: isConditionalFieldError(item.conditional.id) }"
+                  [ngClass]="{ error: isConditionalFieldError(item.conditional.id) }"
                 >
                   <ng-container *ngSwitchCase="'radio-group'">
                     <theme-form-radio-group-v3

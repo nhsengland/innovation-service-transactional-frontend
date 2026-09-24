@@ -3,6 +3,8 @@ import { ContextInnovationType, InnovationStatusEnum, UserContextType, UserRoleE
 export const USER_INFO_ACCESSOR: Required<UserContextType>['user'] = {
   id: '_id',
   email: 'tqa@email.com',
+  givenName: 'Test',
+  surname: 'qualifying Accessor',
   displayName: 'Test qualifying Accessor',
   roles: [],
   contactByPhone: false,
@@ -34,6 +36,8 @@ export const USER_INFO_ACCESSOR: Required<UserContextType>['user'] = {
 export const USER_INFO_INNOVATOR: Required<UserContextType>['user'] = {
   id: '_id',
   email: 'some@email.com',
+  givenName: 'Test',
+  surname: 'innovator',
   displayName: 'Test innovator',
   roles: [],
   contactByPhone: false,
@@ -65,6 +69,8 @@ export const USER_INFO_INNOVATOR: Required<UserContextType>['user'] = {
 export const USER_INFO_ADMIN: Required<UserContextType>['user'] = {
   id: '_id',
   email: 'a@gmail.com',
+  givenName: 'Test',
+  surname: 'admin',
   displayName: 'Test admin  ',
   roles: [
     {
