@@ -116,7 +116,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onChangeStep(stepId: number, item: WizardSummaryV3Type): void {
     this.isChangeMode = true;
-    this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { ...(item.value && { isChangeMode: true }) });
+    if (this.shouldDeferChangeModeSave()) {
+      this.onGoToStep(stepId, true);
+      this.location.replaceState(`${this.baseUrl}/edit/${stepId}`, 'isChangeMode=true');
+    } else {
+      this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { ...(item.value && { isChangeMode: true }) });
+    }
     this.resetAlert();
   }
 
@@ -134,7 +139,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         });
       }
 
-      if (this.sectionStatus === 'DRAFT') {
+      if (this.sectionStatus === 'DRAFT' || this.shouldDeferChangeModeSave()) {
         this.submitButton.isActive = validInformation.valid;
 
         if (this.innovation.status !== InnovationStatusEnum.CREATED) {
@@ -182,6 +187,10 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     );
   }
 
+  private shouldDeferChangeModeSave(): boolean {
+    return this.isChangeMode && this.sectionId === innovationsSubSections.TESTING_WITH_USERS;
+  }
+
   private hasAnswerChanges(updatedAnswers: Record<string, unknown>, currentAnswers: Record<string, unknown>): boolean {
     return Object.entries(updatedAnswers).some(([key, updatedAnswer]) => !isEqual(currentAnswers[key], updatedAnswer));
   }
@@ -204,6 +213,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         const previousStep = this.wizard.getPreviousStep(this.isChangeMode);
         if (previousStep === -1) {
           this.redirectTo(this.baseUrl);
+        } else if (this.shouldDeferChangeModeSave()) {
+          this.onGoToStep(previousStep, this.isChangeMode);
+          this.location.replaceState(`${this.baseUrl}/edit/${previousStep}`, 'isChangeMode=true');
         } else {
           this.onGoToStep(previousStep, this.isChangeMode);
           this.redirectTo(`${this.baseUrl}/edit/${previousStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
@@ -236,6 +248,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           const nextStep = currentStepIndex + 1;
           this.onGoToStep(nextStep, this.isChangeMode);
           this.location.replaceState(`${this.baseUrl}/edit/${nextStep}`, this.isChangeMode ? 'isChangeMode=true' : '');
+          return;
+        }
+
+        if (this.shouldDeferChangeModeSave()) {
+          const nextStep = this.wizard.getNextStep(this.isChangeMode);
+          this.onGoToStep(nextStep, this.isChangeMode);
+          this.location.replaceState(`${this.baseUrl}/edit/${nextStep}`, 'isChangeMode=true');
           return;
         }
 
@@ -304,7 +323,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onSubmitSection(): void {
     if (this.allowMarkSectionAsComplete) {
-      this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
+      const submitSection$ = this.shouldDeferChangeModeSave()
+        ? this.ctx.innovation
+            .updateSectionInfo$(this.innovation.id, this.sectionId, this.wizard.runOutboundParsing())
+            .pipe(concatMap(() => this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId)))
+        : this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId);
+
+      submitSection$.subscribe({
         next: () => {
           const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
           const sectionLabel = `${group.number}.${section.number}. '${section.title}'`;
