@@ -13,7 +13,7 @@ import * as dotenv from 'dotenv';
 import { Response, Router } from 'express';
 import { Agent } from 'https';
 import { getAppInsightsClient } from 'src/globals';
-import { ENVIRONMENT } from '../config/constants.config';
+import { ENVIRONMENT, REQUEST_TIMEOUT_MS } from '../config/constants.config';
 
 dotenv.config();
 
@@ -57,7 +57,7 @@ const confidentialClientConfig: Configuration = {
   }
 };
 
-const axiosInstance = axios.create({ timeout: 60000, httpsAgent: new Agent({ keepAlive: true }) });
+const axiosInstance = axios.create({ timeout: REQUEST_TIMEOUT_MS, httpsAgent: new Agent({ keepAlive: true }) });
 
 // Currently using these scopes to get the auth token which was not working with silent auth. Without the auth code the
 // token request from cache was returning no token and forcing a new token to be created

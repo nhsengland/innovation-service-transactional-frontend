@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import * as express from 'express';
 import * as https from 'https';
 
-import { ENVIRONMENT } from '../config/constants.config';
+import { ENVIRONMENT, REQUEST_TIMEOUT_MS } from '../config/constants.config';
 
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { getAppInsightsClient } from 'src/globals';
@@ -15,7 +15,7 @@ let axiosInstance: AxiosInstance;
 
 function getRequestHandler(): AxiosInstance {
   if (!axiosInstance) {
-    axiosInstance = axios.create({ timeout: 60000, httpsAgent: new https.Agent({ keepAlive: true }) });
+    axiosInstance = axios.create({ timeout: REQUEST_TIMEOUT_MS, httpsAgent: new https.Agent({ keepAlive: true }) });
   }
   return axiosInstance;
 }
