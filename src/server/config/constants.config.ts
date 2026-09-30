@@ -2,6 +2,9 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+/** Maximum time allowed for server-side API and authentication requests. */
+export const REQUEST_TIMEOUT_MS = 3 * 60 * 1000;
+
 export const ENVIRONMENT = {
   BASE_URL: process.env.BASE_URL || '',
   BASE_PATH: ['', '/'].includes(process.env.BASE_PATH || '')
