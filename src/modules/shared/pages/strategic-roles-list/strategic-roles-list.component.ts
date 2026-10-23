@@ -9,6 +9,7 @@ import { UsersService } from '../../services/users.service';
 export class PageStrategicRolesListComponent extends CoreComponent implements OnInit {
   strategicRolesList: {
     organisation: { id: string; name: string };
+    organisationUnit?: { id: string; name: string };
     champions: { name: string; email: string }[];
     seniorSponsors: { name: string; email: string }[];
   }[] = [];

@@ -85,6 +85,7 @@ export class UsersService extends CoreService {
   getStrategicRolesList(): Observable<
     {
       organisation: { id: string; name: string };
+      organisationUnit?: { id: string; name: string };
       champions: { name: string; email: string }[];
       seniorSponsors: { name: string; email: string }[];
     }[]

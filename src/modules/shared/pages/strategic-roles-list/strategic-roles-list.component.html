@@ -6,6 +6,7 @@
           <thead class="nhsuk-table__head">
             <tr class="nhsuk-table__row">
               <th class="nhsuk-table__header" scope="col">Organisation</th>
+              <th class="nhsuk-table__header" scope="col">Unit</th>
               <th class="nhsuk-table__header text-align-center" scope="col">Champion details</th>
               <th class="nhsuk-table__header text-align-center" scope="col">Senior sponsor details</th>
             </tr>
@@ -14,6 +15,9 @@
             <tr *ngFor="let org of strategicRolesList" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <strong>{{ org.organisation.name }}</strong>
+              </td>
+              <td class="nhsuk-table__cell">
+                {{ org.organisationUnit?.name !== org.organisation.name ? org.organisationUnit?.name : "" }}
               </td>
               <td class="nhsuk-table__cell text-align-center">
                 <div *ngFor="let champion of org.champions">
