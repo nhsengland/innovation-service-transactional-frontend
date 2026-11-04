@@ -187,22 +187,21 @@ export class UserContextStore {
   }
 
   private calculateUserContext(user: UserInfo): void {
-    let context: null | DomainUserContext = null;
-    if (user.roles.length === 1) {
-      context = {
-        id: user.id,
-        roleId: user.roles[0].id,
-        type: user.roles[0].role,
-        ...(user.roles[0].organisation && { organisation: user.roles[0].organisation }),
-        ...(user.roles[0].organisationUnit && { organisationUnit: user.roles[0].organisationUnit })
-      };
-    }
+    const savedContext = LocalStorageHelper.getObjectItem<DomainUserContext>('userContext');
+    // Use storage only to remember the selection; role details come from the current account response.
+    const savedSelection =
+      savedContext?.id === user.id ? user.roles.find(role => role.id === savedContext.roleId) : undefined;
+    const selectedRole = savedSelection ?? (user.roles.length === 1 ? user.roles[0] : undefined);
 
-    // Check on local storage
-    const currentRole = LocalStorageHelper.getObjectItem<DomainUserContext>('userContext');
-    if (currentRole && user.roles.find(i => i.id === currentRole.roleId)) {
-      context = currentRole;
-    }
+    const context: DomainUserContext | null = selectedRole
+      ? {
+          id: user.id,
+          roleId: selectedRole.id,
+          type: selectedRole.role,
+          ...(selectedRole.organisation && { organisation: selectedRole.organisation }),
+          ...(selectedRole.organisationUnit && { organisationUnit: selectedRole.organisationUnit })
+        }
+      : null;
 
     this.setUserContext(context);
   }
