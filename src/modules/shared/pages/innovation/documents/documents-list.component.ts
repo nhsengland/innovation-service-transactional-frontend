@@ -116,7 +116,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
             name: { label: 'Name', orderable: true },
             createdAt: { label: 'Uploaded', orderable: true },
             contextType: { label: 'Location', orderable: true },
-            actions: { label: '', align: 'right' }
+            actions: { label: 'Status and actions', align: 'right' }
           })
           .setOrderBy('createdAt', 'descending');
 

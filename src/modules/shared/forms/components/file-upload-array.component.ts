@@ -73,8 +73,8 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
   get fieldArrayControl(): FormArray {
     return this.parentFieldControl?.get(this.arrayName) as FormArray;
   }
-  get fieldArrayValues(): { id: string; name: string; url: string }[] {
-    return this.fieldArrayControl.value as { id: string; name: string; url: string }[];
+  get fieldArrayValues(): FileUploadType[] {
+    return this.fieldArrayControl.value as FileUploadType[];
   }
 
   // Accessibility.
@@ -108,7 +108,9 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
       name: item.name,
       size: 0,
       extension: '',
-      url: item.url
+      url: item.url,
+      scanState: item.scanState ?? (!item.url ? 'scanning' : undefined),
+      canDownload: item.canDownload
     })); // Need to clone here!
   }
 

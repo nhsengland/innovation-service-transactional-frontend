@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { SKIP_UNAUTHORIZED_RECOVERY } from './http-context-tokens';
 import { EMPTY, Observable, catchError, throwError } from 'rxjs';
 
 @Injectable()
@@ -13,7 +14,7 @@ export class ApiInInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         // console.log('APIin', error);
 
-        if (error.status === 401) {
+        if (error.status === 401 && !request.context.get(SKIP_UNAUTHORIZED_RECOVERY)) {
           // If 401 and browser reload the page to fetch a new token from the identity provider.
           if (isPlatformBrowser(this.platformId)) {
             location.reload();

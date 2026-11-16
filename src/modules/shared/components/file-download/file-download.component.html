@@ -1,0 +1,34 @@
+<ng-container *ngIf="!separateActions && label === fileName">
+  <ng-container *ngIf="canDownload; else blockedFileName" [ngTemplateOutlet]="fileActions"></ng-container>
+  <ng-template #blockedFileName><span class="text-word-break">{{ fileName }}</span></ng-template>
+</ng-container>
+<span
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+  [class]="'nhsuk-tag nhsuk-tag--' + badgeColour"
+  [attr.aria-label]="fileName ? fileName + ': ' + message : null"
+  ><span *ngIf="status.scanState === 'scanning'" class="file-scan-spinner" aria-hidden="true"></span
+  >{{ message }}</span
+>
+<ng-container *ngIf="!separateActions && (label !== fileName || !canDownload)" [ngTemplateOutlet]="fileActions"></ng-container>
+<ng-template #fileActions>
+  <a
+    *ngIf="canDownload; else blocked"
+    [href]="status.url"
+    [class]="'text-word-break ' + linkClass"
+    [attr.aria-label]="fileName ? 'Download ' + fileName : null"
+    >{{ label }}</a
+  >
+  <ng-template #blocked>
+    <button
+      *ngIf="canRetry"
+      type="button"
+      class="file-scan-retry"
+      (click)="retry()"
+      [attr.aria-label]="'Check scan status again' + (fileName ? ' for ' + fileName : '')"
+    >
+      Check again
+    </button>
+  </ng-template>
+</ng-template>

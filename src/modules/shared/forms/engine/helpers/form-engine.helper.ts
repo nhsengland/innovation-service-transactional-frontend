@@ -91,9 +91,23 @@ export class FormEngineHelper {
 
         case 'elements-list-info': // Creates a FormGroup and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
-          ((parameterValue as { id: string; name: string; url: string }[]) || []).forEach(v => {
+          (
+            (parameterValue as {
+              id: string;
+              name: string;
+              url?: string;
+              scanState?: string;
+              canDownload?: boolean;
+            }[]) || []
+          ).forEach(v => {
             (form.get(parameter.id) as FormArray).push(
-              new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) })
+              new FormGroup({
+                id: new FormControl(v.id),
+                name: new FormControl(v.name),
+                url: new FormControl(v.url),
+                scanState: new FormControl(v.scanState),
+                canDownload: new FormControl(v.canDownload)
+              })
             );
           });
           break;
@@ -107,9 +121,23 @@ export class FormEngineHelper {
 
         case 'file-upload-array': // Creates an FormArray and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
-          ((parameterValue as { id: string; name: string; url: string }[]) || []).forEach(v => {
+          (
+            (parameterValue as {
+              id: string;
+              name: string;
+              url?: string;
+              scanState?: string;
+              canDownload?: boolean;
+            }[]) || []
+          ).forEach(v => {
             (form.get(parameter.id) as FormArray).push(
-              new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) })
+              new FormGroup({
+                id: new FormControl(v.id),
+                name: new FormControl(v.name),
+                url: new FormControl(v.url),
+                scanState: new FormControl(v.scanState),
+                canDownload: new FormControl(v.canDownload)
+              })
             );
           });
           break;

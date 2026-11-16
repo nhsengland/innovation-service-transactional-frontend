@@ -135,15 +135,6 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
     }
   }
 
-  downloadFile(file: File): void {
-    const a = document.createElement('a');
-    const objectUrl = URL.createObjectURL(file);
-    a.href = objectUrl;
-    a.download = file.name;
-    a.click();
-    URL.revokeObjectURL(objectUrl);
-  }
-
   removeUploadedFile(): void {
     this.fieldControl[0].setValue(null);
     this.fieldControl[1].setValue('');

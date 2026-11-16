@@ -151,7 +151,17 @@
                 <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
                   <span aria-hidden="true" class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("actions") }}</span>
                   <div>
-                    <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
+                    <div class="nhsuk-u-margin-bottom-2">
+                      <shared-file-download
+                        [file]="item.file"
+                        [fileId]="item.id"
+                        [fileName]="item.name"
+                        [stacked]="true"
+                        align="end"
+                        label="Download"
+                        linkClass="nhsuk-u-font-size-14"
+                      ></shared-file-download>
+                    </div>
                     <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
                   </div>
                 </td>

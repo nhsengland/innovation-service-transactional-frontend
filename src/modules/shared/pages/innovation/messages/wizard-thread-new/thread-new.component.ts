@@ -299,7 +299,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         .uploadFile(httpUploadBody, file)
         .pipe(
           switchMap(response => {
-            const fileData = omit(response, 'url');
+            const fileData = omit(response, 'url', 'scanState', 'canDownload');
             body = {
               ...body,
               file: {

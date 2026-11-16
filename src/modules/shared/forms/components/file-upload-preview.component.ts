@@ -4,7 +4,7 @@ import { NgxDropzonePreviewComponent } from 'ngx-dropzone';
 
 @Component({
   selector: 'theme-file-upload-preview',
-  template: ` <ng-content select="ngx-dropzone-label"></ng-content>`,
+  templateUrl: './file-upload-preview.component.html',
   styleUrls: ['./file-upload-preview.component.scss'],
   providers: [
     {

@@ -13,17 +13,13 @@
             <dt class="nhsuk-summary-list__key">Document {{i+1}}</dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap">
               <p>
-                <a href="{{ doc.file.url }}" attr.aria-label="Download {{ doc.name }} file"
-                  >{{ doc.name }} ({{ doc.file.extension | uppercase }}{{ doc.file.size ? ", " + (doc.file.size | bytesPrettyPrint) : "" }})</a
-                >
+                <shared-file-download [file]="doc.file" [fileId]="doc.id" [fileName]="doc.name" [label]="doc.name"></shared-file-download>
+                <span class="d-block">({{ doc.file.extension | uppercase }}{{ doc.file.size ? ", " + (doc.file.size | bytesPrettyPrint) : "" }})</span>
               </p>
               <p *ngIf="doc.description">{{ doc.description }}</p>
             </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a
-                [routerLink]="baseUrl + '/documents/' + doc.id"
-                [queryParams]="{ returnUrl: documentDetailsReturnUrl }"
-                attr.aria-label="View {{ doc.name }} details"
+              <a [routerLink]="baseUrl + '/documents/' + doc.id" [queryParams]="{ returnUrl: documentDetailsReturnUrl }" attr.aria-label="View {{ doc.name }} details"
                 >More details</a
               >
             </dd>
