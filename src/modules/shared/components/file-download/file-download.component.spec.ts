@@ -27,7 +27,7 @@ import { FileDownloadComponent } from './file-download.component';
     </tbody>
   </table>`
 })
-class SeparateActionsHost {
+class SeparateActionsHostComponent {
   file: FileScanStatus = { id: 'database-file-id', scanState: 'scanning', canDownload: false };
 }
 
@@ -41,7 +41,7 @@ describe('FileDownloadComponent production DOM gating', () => {
     result = new Subject<FileScanStatus>();
     watch = jest.fn(() => result.asObservable());
     TestBed.configureTestingModule({
-      imports: [FileDownloadComponent, SeparateActionsHost],
+      imports: [FileDownloadComponent, SeparateActionsHostComponent],
       providers: [
         { provide: FileScanService, useValue: { watch } },
         { provide: CtxStore, useValue: { innovation: { info: () => ({ id: 'context-innovation' }) } } },
@@ -71,7 +71,7 @@ describe('FileDownloadComponent production DOM gating', () => {
   });
 
   it('keeps live status and actions in separate cells with one polling subscription', () => {
-    const host = TestBed.createComponent(SeparateActionsHost);
+    const host = TestBed.createComponent(SeparateActionsHostComponent);
     try {
       host.detectChanges();
       const cells = host.nativeElement.querySelectorAll('td');
