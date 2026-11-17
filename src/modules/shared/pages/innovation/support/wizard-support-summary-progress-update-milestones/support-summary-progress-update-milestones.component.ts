@@ -452,7 +452,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         .uploadFile(httpUploadBody, file)
         .pipe(
           switchMap(response => {
-            const fileData = omit(response, 'url');
+            const fileData = omit(response, 'url', 'scanState', 'canDownload');
 
             body = {
               ...body,

@@ -47,15 +47,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepCo
     this.setPageStatus('READY');
   }
 
-  downloadFile(file: File): void {
-    const a = document.createElement('a');
-    const objectUrl = URL.createObjectURL(file);
-    a.href = objectUrl;
-    a.download = file.name;
-    a.click();
-    URL.revokeObjectURL(objectUrl);
-  }
-
   onPreviousStep(): void {
     this.previousStepEvent.emit();
   }

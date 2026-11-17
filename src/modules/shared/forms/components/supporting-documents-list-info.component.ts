@@ -44,8 +44,8 @@ export class FormSupportingDocumentListComponent implements OnInit, DoCheck {
     return this.parentFieldControl?.get(this.arrayName) as FormArray;
   }
 
-  get fieldArrayValues(): { id: string; name: string; url: string }[] {
-    return this.fieldArrayControl.value as { id: string; name: string; url: string }[];
+  get fieldArrayValues(): { id: string; name: string; url?: string }[] {
+    return this.fieldArrayControl.value as { id: string; name: string; url?: string }[];
   }
 
   // Accessibility.

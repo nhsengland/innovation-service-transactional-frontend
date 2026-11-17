@@ -93,9 +93,8 @@
               <dd class="nhsuk-summary-list__value text-pre-wrap">
                 <p>
                   <span>Document {{ i + 1 }}: </span
-                  ><a href="{{ document.file.url }}"
-                    >{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ", " + (document.file.size | bytesPrettyPrint) : "" }})</a
-                  >
+                  ><shared-file-download [file]="document.file" [fileId]="document.id" [fileName]="document.name" [label]="document.name"></shared-file-download>
+                  <span class="d-block">({{ document.file.extension | uppercase }}{{ document.file.size ? ", " + (document.file.size | bytesPrettyPrint) : "" }})</span>
                 </p>
               </dd>
               <dd class="nhsuk-summary-list__actions">

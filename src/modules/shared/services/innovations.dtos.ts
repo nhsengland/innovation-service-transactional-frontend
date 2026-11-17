@@ -1,3 +1,4 @@
+import { FileDownloadType } from './file-scan.types';
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
@@ -307,7 +308,7 @@ export type SupportSummaryOrganisationHistoryDTO = {
     title?: string;
     message?: string;
     suggestedByName?: string;
-    file?: { id: string; name: string; url: string };
+    file?: { id: string; name: string } & FileDownloadType;
     categories?: string[];
     category?: string;
     subCategories?: string[];

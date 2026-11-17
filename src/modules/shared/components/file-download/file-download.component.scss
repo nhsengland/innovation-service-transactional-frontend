@@ -1,0 +1,58 @@
+:host {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+.nhsuk-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: normal;
+  line-height: 1.25;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+:host(.file-scan-stacked) {
+  flex-direction: column;
+  align-items: flex-start;
+}
+:host(.file-scan-stacked.file-scan-align-end) {
+  align-items: flex-end;
+}
+.file-scan-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 1em;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: file-scan-spin 1s linear infinite;
+}
+@keyframes file-scan-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .file-scan-spinner {
+    animation: none;
+  }
+}
+.file-scan-retry {
+  background: none;
+  border: 0;
+  color: #005eb8;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+.file-scan-retry:focus {
+  background: #ffeb3b;
+  color: #212b32;
+  outline: 3px solid #ffeb3b;
+}

@@ -29,9 +29,8 @@
                 Document <span *ngIf="documentsList.length > 1">{{ i + 1 }}</span>
               </dt>
               <dd class="nhsuk-summary-list__value text-pre-wrap">
-                <a href="{{ document.file.url }}" attr.aria-label="Download {{ document.name }} file"
-                  >{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ", " + (document.file.size | bytesPrettyPrint) : "" }})</a
-                >
+                <shared-file-download [file]="document.file" [fileId]="document.id" [fileName]="document.name" [label]="document.name"></shared-file-download>
+                <span class="d-block">({{ document.file.extension | uppercase }}{{ document.file.size ? ", " + (document.file.size | bytesPrettyPrint) : "" }})</span>
                 <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
               </dd>
               <dd class="nhsuk-summary-list__actions">

@@ -50,6 +50,12 @@ function parseAPIUrl(url: string): string {
 
 // Authenticated API proxy endpoints.
 apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
+  // File responses can contain signed URLs and changing scan decisions.
+  // Apply before authentication so failures are not cached either.
+  if (/(?:^|\/)files(?:\/|$)/.test(req.path)) {
+    res.setHeader('Cache-Control', 'no-store');
+  }
+
   const requestHandler = getRequestHandler();
   const oid = req.session.id;
   const accessToken = await getAccessTokenBySessionId(oid);

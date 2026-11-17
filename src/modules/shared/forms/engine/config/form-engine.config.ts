@@ -3,7 +3,9 @@ export type FileUploadType = {
   name: string;
   size?: number;
   extension: string;
-  url: string;
+  url?: string;
+  scanState?: import('@modules/shared/services/file-scan.types').FileScanState;
+  canDownload?: boolean;
   file?: File;
 };
 

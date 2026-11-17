@@ -110,7 +110,9 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
           name: currentValue.name,
           size: currentValue.size,
           extension: currentValue.extension,
-          url: currentValue.url
+          url: currentValue.url,
+          scanState: currentValue.scanState ?? (!currentValue.url ? 'scanning' : undefined),
+          canDownload: currentValue.canDownload
         }
       : null;
   }

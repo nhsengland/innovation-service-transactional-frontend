@@ -153,6 +153,7 @@ export class UserContextStore {
   }
 
   signOut(): void {
+    this.clear();
     LocalStorageHelper.removeItem('userContext');
     sessionStorage.clear();
     window.location.replace(`${this.envVariablesStore.APP_URL}/signout`); // Full reload to hit SSR.

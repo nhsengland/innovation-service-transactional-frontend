@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [ThemeModule, PluralTranslatePipe, TranslateModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  styles: [':host { display: block; }'] // allow host element to be styled
+  styleUrls: ['./innovation-record-progress.component.scss']
 })
 export class InnovationRecordProgressComponent extends CoreComponent {
   sections = input.required<SectionsSummaryModel>();

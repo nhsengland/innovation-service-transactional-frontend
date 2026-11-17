@@ -168,7 +168,15 @@
                               No document added.
                               <a *ngIf="unitItem.canDoProgressUpdates" routerLink="../documents/new" [queryParams]="{ progressUpdateId: historyItem.id }">Add a document.</a>
                             </span>
-                            <a *ngIf="historyItem.params.file" routerLink="../documents/{{ historyItem.params.file.id }}">{{ historyItem.params.file.name }}</a>
+                            <a *ngIf="historyItem.params.file" class="d-block text-word-break" routerLink="../documents/{{ historyItem.params.file.id }}">{{ historyItem.params.file.name }}</a>
+                            <span *ngIf="historyItem.params.file" class="d-block nhsuk-u-margin-top-2"
+                              ><shared-file-download
+                                [file]="historyItem.params.file"
+                                [fileId]="historyItem.params.file.id"
+                                [fileName]="historyItem.params.file.name"
+                                [stacked]="false"
+                              ></shared-file-download
+                            ></span>
                           </p>
                           <a
                             *ngIf="unitItem.canDoProgressUpdates"

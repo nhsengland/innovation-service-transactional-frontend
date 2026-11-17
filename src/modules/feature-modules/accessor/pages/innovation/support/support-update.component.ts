@@ -383,7 +383,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       .uploadFile(httpUploadBody, file)
       .pipe(
         switchMap(response => {
-          const fileData = omit(response, 'url');
+          const fileData = omit(response, 'url', 'scanState', 'canDownload');
           const updatedBody = {
             ...body,
             file: {
