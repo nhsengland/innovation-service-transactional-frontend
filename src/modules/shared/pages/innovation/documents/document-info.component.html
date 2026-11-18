@@ -28,21 +28,26 @@
               >
             </dd>
           </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">File status</dt>
+            <dd class="nhsuk-summary-list__value">
+              <shared-file-download
+                #documentDownload
+                [file]="documentInfo.file"
+                [fileId]="documentInfo.id"
+                [fileName]="documentInfo.name"
+                label="Download document"
+                [separateActions]="true"
+                linkClass="nhsuk-button nhsuk-u-margin-right-3"
+              ></shared-file-download>
+            </dd>
+          </div>
           <div *ngIf="documentInfo.description" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Description</dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.description }}</dd>
           </div>
         </dl>
 
-        <shared-file-download
-          #documentDownload
-          [file]="documentInfo.file"
-          [fileId]="documentInfo.id"
-          [fileName]="documentInfo.name"
-          label="Download document"
-          [separateActions]="true"
-          linkClass="nhsuk-button nhsuk-u-margin-right-3"
-        ></shared-file-download>
         <div class="nhsuk-u-margin-top-3">
           <span [class.d-block]="documentDownload.canRetry" [class.nhsuk-u-margin-bottom-3]="documentDownload.canRetry">
             <ng-container [ngTemplateOutlet]="documentDownload.actionsTemplate"></ng-container>
