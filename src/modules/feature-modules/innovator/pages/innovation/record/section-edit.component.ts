@@ -5,6 +5,7 @@ import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
 import { ContextInnovationType } from '@app/base/types';
 import { combineLatest, concatMap, of } from 'rxjs';
+import { requiredDocumentErrorAlert } from '@modules/shared/helpers/required-document-errors';
 
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 import {
@@ -348,7 +349,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
           this.redirectTo(this.summaryRedirectUrl);
         },
-        error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
+        error: error => {
+          const alert = requiredDocumentErrorAlert(
+            error,
+            this.innovation.id,
+            this.ctx.schema.getIrSchemaTranslationsMap()
+          );
+          if (alert) this.setAlertError(alert.message, alert);
+          else this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' });
+        }
       });
       return;
     }

@@ -79,3 +79,20 @@ describe('Core/Helpers/UtilsHelper/regulationsRequiringDocuments', () => {
     expect(UtilsHelper.regulationsRequiringDocuments([{ type: 'CE_UKCA_NON_MEDICAL', hasMet: 'NOT_YET' }])).toEqual([]);
   });
 });
+
+describe('required supporting document eligibility', () => {
+  const evidence = [{ evidenceId: 'ev', label: 'Trial', value: '' }];
+  const doc = (scanState: string, contextId = 'ev') => ({ context: { id: contextId }, file: { scanState } });
+
+  it.each(['scanning', 'delayed', 'rejected', 'scan_failed', 'not_scanned', 'removed', 'unavailable'])(
+    'does not count %s files toward evidence or certifications',
+    state => {
+      expect(UtilsHelper.evidenceWithoutDocuments(evidence, [doc(state)] as never)).toEqual(evidence);
+      expect(UtilsHelper.regulationsWithoutDocuments(['DTAC'], [doc(state, 'DTAC')] as never)).toEqual(['DTAC']);
+    }
+  );
+  it.each(['ready', 'legacy_allowed'])('counts %s files', state => {
+    expect(UtilsHelper.evidenceWithoutDocuments(evidence, [doc(state)] as never)).toEqual([]);
+    expect(UtilsHelper.regulationsWithoutDocuments(['DTAC'], [doc(state, 'DTAC')] as never)).toEqual([]);
+  });
+});

@@ -12,6 +12,7 @@ import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovati
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
 import { PhoneUserPreferenceEnum, SchemaContextStore } from '@modules/stores';
 import { GetInnovationEvidenceDTO } from '@modules/stores/ctx/innovation/innovation.models';
+import { isEligibleRequiredDocument } from '@modules/shared/helpers/required-document-errors';
 
 export class UtilsHelper {
   static isEmpty(value: any) {
@@ -157,7 +158,9 @@ export class UtilsHelper {
     evidenceList: EvidenceV3Type[],
     supportingDocumentsList: InnovationDocumentsListOutDTO['data']
   ): EvidenceV3Type[] {
-    const docContextIds = new Set(supportingDocumentsList.map(d => d.context.id));
+    const docContextIds = new Set(
+      supportingDocumentsList.filter(d => isEligibleRequiredDocument(d.file)).map(d => d.context.id)
+    );
     return evidenceList.filter(e => !docContextIds.has(e.evidenceId)).map(e => e);
   }
 
@@ -169,7 +172,9 @@ export class UtilsHelper {
     regulationsList: string[],
     regulationsDocumentsList: InnovationDocumentsListOutDTO['data']
   ) {
-    const docContextIds = new Set(regulationsDocumentsList.map(d => d.context.id));
+    const docContextIds = new Set(
+      regulationsDocumentsList.filter(d => isEligibleRequiredDocument(d.file)).map(d => d.context.id)
+    );
     return regulationsList.filter(e => !docContextIds.has(e)).map(e => e);
   }
 }
