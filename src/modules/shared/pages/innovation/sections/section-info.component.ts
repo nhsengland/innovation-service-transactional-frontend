@@ -1,3 +1,9 @@
+import {
+  buildRequiredDocumentAlert,
+  isEligibleRequiredDocument,
+  requiredDocumentErrorAlert,
+  RequiredDocumentIssue
+} from '@modules/shared/helpers/required-document-errors';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
@@ -92,6 +98,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isEvidenceSection = false;
   isRegulationsSection = false;
   isSectionComplete = false;
+  private requiredDocumentAlertShown = false;
 
   customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
@@ -173,6 +180,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           : of(null)
     }).subscribe({
       next: response => {
+        if (this.requiredDocumentAlertShown) {
+          this.resetAlert();
+          this.requiredDocumentAlertShown = false;
+        }
         // data for regulations table
         this.sectionInfoData = response.sectionInfo.data;
 
@@ -282,6 +293,66 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           }
         }
 
+        const requiredDocumentIssues: RequiredDocumentIssue[] = [];
+        if (this.isEvidenceSection && this.evidenceData.hasEvidences) {
+          for (const evidence of this.sectionSummaryData.evidencesList) {
+            const files = this.evidenceData.evidenceSupportingDocumentsList.filter(
+              file => file.context.id === evidence.evidenceId
+            );
+            if (!files.length)
+              requiredDocumentIssues.push({
+                section: 'EVIDENCE_OF_EFFECTIVENESS',
+                contextId: evidence.evidenceId,
+                contextName: evidence.label,
+                scanState: 'missing'
+              });
+            for (const file of files.filter(file => !isEligibleRequiredDocument(file.file))) {
+              requiredDocumentIssues.push({
+                section: 'EVIDENCE_OF_EFFECTIVENESS',
+                contextId: evidence.evidenceId,
+                contextName: evidence.label,
+                fileId: file.id,
+                filename: file.file.name,
+                scanState: file.file.scanState ?? 'unavailable'
+              });
+            }
+          }
+        }
+        if (this.isRegulationsSection) {
+          for (const regulation of this.regulationsData.regulationsList) {
+            const files = this.regulationsData.regulationsDocumentsList.filter(file => file.context.id === regulation);
+            if (!files.length)
+              requiredDocumentIssues.push({
+                section: 'REGULATIONS_AND_STANDARDS',
+                contextId: regulation,
+                contextName: regulation,
+                scanState: 'missing'
+              });
+            for (const file of files.filter(file => !isEligibleRequiredDocument(file.file))) {
+              requiredDocumentIssues.push({
+                section: 'REGULATIONS_AND_STANDARDS',
+                contextId: regulation,
+                contextName: regulation,
+                fileId: file.id,
+                filename: file.file.name,
+                scanState: file.file.scanState ?? 'unavailable'
+              });
+            }
+          }
+        }
+        if (requiredDocumentIssues.length) {
+          this.isSectionComplete = false;
+          if (this.ctx.user.isInnovator()) {
+            const alert = buildRequiredDocumentAlert(
+              this.innovation.id,
+              requiredDocumentIssues,
+              this.ctx.schema.getIrSchemaTranslationsMap()
+            );
+            this.requiredDocumentAlertShown = true;
+            this.setAlertError(alert.message, alert);
+          }
+        }
+
         if (this.isSectionComplete) {
           this.sectionSummaryData.sectionInfo.submitButton.show = true;
           if (this.innovation.status !== InnovationStatusEnum.CREATED) {
@@ -370,7 +441,17 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.redirectTo(`/${this.baseUrl}/record/sections/${this.sectionSummaryData.sectionInfo.id}/submitted`);
         }
       },
-      error: () => this.setAlertUnknownError()
+      error: error => {
+        const alert = requiredDocumentErrorAlert(
+          error,
+          this.innovation.id,
+          this.ctx.schema.getIrSchemaTranslationsMap()
+        );
+        if (alert) {
+          this.requiredDocumentAlertShown = true;
+          this.setAlertError(alert.message, alert);
+        } else this.setAlertUnknownError();
+      }
     });
   }
 
