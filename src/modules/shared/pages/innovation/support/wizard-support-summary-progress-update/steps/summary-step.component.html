@@ -60,11 +60,16 @@
             <dt class="nhsuk-summary-list__key">Uploaded document</dt>
             <dd class="nhsuk-summary-list__value">
               <shared-file-download
+                *ngIf="data.documentFileStep.documentFile.url; else uploadedWithoutResult"
                 [file]="data.documentFileStep.documentFile"
                 [label]="data.documentFileStep.documentFile.name"
                 [fileName]="data.documentFileStep.documentFile.name"
               >
               </shared-file-download>
+              <ng-template #uploadedWithoutResult>
+                <span>{{ data.documentFileStep.documentFile.name }}</span>
+                <div class="nhsuk-hint nhsuk-u-margin-bottom-0" role="status">File uploaded. You can check its security status after saving.</div>
+              </ng-template>
             </dd>
             <dd class="nhsuk-summary-list__actions">
               <a href="javascript:void(0)" (click)="onGotoStep('documentFileStep')">Change<span class="nhsuk-u-visually-hidden"> uploaded document</span></a>

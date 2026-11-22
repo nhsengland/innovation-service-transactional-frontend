@@ -22,7 +22,16 @@
     <dl class="nhsuk-summary-list">
       <div class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__value">
-          <shared-file-download [file]="previousUploadedFile" [label]="previousUploadedFile.name" [fileName]="previousUploadedFile.name"></shared-file-download>
+          <shared-file-download
+            *ngIf="previousUploadedFile.url; else uploadedWithoutResult"
+            [file]="previousUploadedFile"
+            [label]="previousUploadedFile.name"
+            [fileName]="previousUploadedFile.name"
+          ></shared-file-download>
+          <ng-template #uploadedWithoutResult>
+            <span>{{ previousUploadedFile.name }}</span>
+            <div class="nhsuk-hint nhsuk-u-margin-bottom-0" role="status">File uploaded. You can check its security status after saving.</div>
+          </ng-template>
         </dt>
         <dd class="nhsuk-summary-list__actions">
           <a href="javascript:void(0)" (click)="onRemovePreviousUploadedFile()"
