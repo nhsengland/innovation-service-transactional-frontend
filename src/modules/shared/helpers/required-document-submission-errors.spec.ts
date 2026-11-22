@@ -1,5 +1,6 @@
 import '@modules/core';
 import { of, throwError } from 'rxjs';
+import { PageInnovationNeedsReassessmentSendComponent } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationSectionEditComponent } from '@modules/feature-modules/innovator/pages/innovation/record/section-edit.component';
 import { InnovationDataSharingEditComponent } from '@modules/feature-modules/innovator/pages/innovation/record/data-sharing-edit.component';
 import { PageInnovationSectionInfoComponent } from '../pages/innovation/sections/section-info.component';
@@ -74,6 +75,31 @@ describe('required document submission error handling', () => {
       expect.any(String),
       expect.objectContaining({
         itemsList: [expect.objectContaining({ title: expect.stringContaining('Clinical trial') })]
+      })
+    );
+    expect(component.redirectTo).not.toHaveBeenCalled();
+  });
+  it('shows detailed reassessment file errors and leaves retry available', () => {
+    const component = Object.assign(Object.create(PageInnovationNeedsReassessmentSendComponent.prototype), {
+      innovationId: 'innovation',
+      wizard: { runOutboundParsing: () => ({}) },
+      innovationsService: { createNeedsReassessment: () => throwError(() => error) },
+      ctx: { schema: { getIrSchemaTranslationsMap: translations } },
+      resetAlert: jest.fn(),
+      setAlertError: jest.fn(),
+      redirectTo: jest.fn()
+    });
+    component.onSubmitWizard();
+    expect(component.submitButton).toEqual({ isActive: true, label: 'Send to needs reassessment' });
+    expect(component.setAlertError).toHaveBeenCalledWith(
+      expect.stringContaining('reassessment'),
+      expect.objectContaining({
+        itemsList: [
+          expect.objectContaining({
+            title: expect.stringContaining('results.pdf'),
+            callback: expect.stringContaining('/evidences/ev')
+          })
+        ]
       })
     );
     expect(component.redirectTo).not.toHaveBeenCalled();
