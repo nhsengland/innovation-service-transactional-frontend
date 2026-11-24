@@ -1,7 +1,33 @@
+import { FormArray } from '@angular/forms';
+import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 import { WizardIRV3EngineModel } from './wizard-engine-irv3-schema.model';
 
 describe('WizardIRV3EngineModel', () => {
+  it.each(['New feedback', '', null])(
+    'summarizes unsaved feedback instead of the previous nested value: %s',
+    feedback => {
+      const wizard = new WizardIRV3EngineModel({
+        currentAnswers: { userTests: [{ kind: 'Trial', feedback: 'Old feedback' }], feedback_0: feedback },
+        steps: [
+          {
+            parameters: [
+              {
+                id: 'userTests',
+                dataType: 'fields-group',
+                label: 'Tests',
+                field: { id: 'kind', dataType: 'text', label: 'Test', validations: {} },
+                addQuestions: [{ id: 'feedback', dataType: 'textarea', label: 'Feedback for {{item.kind}}' }]
+              }
+            ]
+          },
+          { parameters: [{ id: 'feedback_0', dataType: 'textarea', label: 'Feedback', parentId: 'userTests' }] }
+        ]
+      });
+      expect(wizard.parseSummary().find(row => row.stepId === 'feedback_0')?.value).toBe(feedback ?? '');
+    }
+  );
+
   it('uses the row index when generating fields-group addQuestions steps', () => {
     const schema: InnovationRecordSchemaInfoType = {
       id: 'test-schema',
@@ -838,5 +864,107 @@ describe('WizardIRV3EngineModel legacy schema values', () => {
     }).runRules();
 
     expect(wizard.steps[0].parameters[0].items?.map(item => item.id)).toEqual(['YES', 'CONCEPT_STAGE', 'PROTOTYPE']);
+  });
+});
+
+describe('fields-group row feedback ownership', () => {
+  const question: any = {
+    id: 'userTests',
+    dataType: 'fields-group',
+    label: 'Tests',
+    field: { id: 'kind', dataType: 'text', label: 'Name', validations: {} },
+    addQuestions: [
+      { id: 'feedback', dataType: 'textarea', label: 'Feedback {{item.kind}}' },
+      { id: 'details', dataType: 'textarea', label: 'Details {{item.kind}}' }
+    ]
+  };
+  function create() {
+    const schema: any = {
+      version: 15,
+      schema: {
+        sections: [
+          {
+            subSections: [
+              {
+                id: 'TESTING_WITH_USERS',
+                steps: [{ questions: [question] }]
+              }
+            ]
+          }
+        ]
+      }
+    };
+    return new WizardIRV3EngineModel({
+      sectionId: 'TESTING_WITH_USERS',
+      schema,
+      currentAnswers: {
+        userTests: ['A', 'B', 'C'].map(kind => ({ kind, feedback: `Saved ${kind}`, details: `Details ${kind}` })),
+        unrelated_choice: 'Keep'
+      }
+    })
+      .runRules()
+      .runInboundParsing();
+  }
+  it.each([0, 1, 2])('keeps feedback with rows after deleting index %s', index => {
+    const wizard = create();
+    wizard.addAnswers({ feedback_2: 'Latest C', feedback_0: '' });
+    const form = FormEngineHelperV3.buildForm([question], wizard.getAnswers());
+    const rows = form.get('userTests') as FormArray;
+    rows.removeAt(index);
+    const expected = ['A', 'B', 'C']
+      .filter((_, i) => i !== index)
+      .map(kind => ({
+        kind,
+        feedback: kind === 'A' ? '' : kind === 'C' ? 'Latest C' : 'Saved B',
+        details: `Details ${kind}`
+      }));
+    wizard.addAnswers(form.getRawValue()).runRules();
+    expect(wizard.runOutboundParsing().data.userTests).toEqual(expected);
+    expect(wizard.getAnswers().feedback_2).toBeUndefined();
+    expect(wizard.getAnswers().unrelated_choice).toBe('Keep');
+    const reloaded = create().setAnswers(wizard.runOutboundParsing().data).runRules().runInboundParsing();
+    expect(reloaded.runOutboundParsing().data.userTests).toEqual(expected);
+  });
+  it('clears every deleted child key without changing checkbox-array children', () => {
+    const wizard = create();
+    const checkbox: any = {
+      id: 'choices',
+      dataType: 'checkbox-array',
+      label: 'Choices',
+      checkboxAnswerId: 'choice',
+      addQuestions: [{ id: 'notes', dataType: 'textarea', label: 'Notes' }]
+    };
+    wizard.steps.push({ parameters: [checkbox] } as any);
+    wizard.addAnswers({ choices: ['selected'], notes_selected: 'Keep checkbox feedback' });
+    const form = FormEngineHelperV3.buildForm([question], wizard.getAnswers());
+    (form.get('userTests') as FormArray).clear();
+    wizard.addAnswers(form.getRawValue());
+    expect(wizard.getAnswers().feedback_0).toBeUndefined();
+    expect(wizard.getAnswers().feedback_1).toBeUndefined();
+    expect(wizard.getAnswers().feedback_2).toBeUndefined();
+    expect(wizard.runOutboundParsing().data.choices).toEqual([{ choice: 'selected', notes: 'Keep checkbox feedback' }]);
+  });
+  it('supports duplicate names, rename, additions and repeated deletion with independent child controls', () => {
+    const wizard = create();
+    wizard.addAnswers({ feedback_1: 'Latest B' });
+    const form = FormEngineHelperV3.buildForm([question], wizard.getAnswers());
+    const rows = form.get('userTests') as FormArray;
+    rows.at(1).get('kind')!.setValue('A');
+    rows.at(0).get('kind')!.setValue('Renamed');
+    rows.removeAt(0);
+    rows.push(FormEngineHelperV3.addFieldGroupRow(question));
+    rows.at(2).get('kind')!.setValue('New');
+    rows.at(2).get('feedback')!.setValue('New feedback');
+    rows.at(2).get('details')!.setValue('New details');
+    wizard.addAnswers(form.getRawValue()).runRules();
+    expect(wizard.runOutboundParsing().data.userTests).toEqual([
+      { kind: 'A', feedback: 'Latest B', details: 'Details B' },
+      { kind: 'C', feedback: 'Saved C', details: 'Details C' },
+      { kind: 'New', feedback: 'New feedback', details: 'New details' }
+    ]);
+    rows.removeAt(1);
+    wizard.addAnswers(form.getRawValue()).runRules();
+    expect(wizard.getAnswers().feedback_1).toBe('New feedback');
+    expect(wizard.getAnswers().feedback_2).toBeUndefined();
   });
 });

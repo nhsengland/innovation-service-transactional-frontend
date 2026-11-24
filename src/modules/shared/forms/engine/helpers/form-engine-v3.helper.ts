@@ -162,7 +162,14 @@ export class FormEngineHelperV3 {
 
           arrayValue.forEach((parameterValueRow, i) => {
             (form.get(parameter.id) as FormArray).push(
-              FormEngineHelperV3.addFieldGroupRow(parameter, parameterValueRow)
+              FormEngineHelperV3.addFieldGroupRow(parameter, {
+                ...parameterValueRow,
+                ...Object.fromEntries(
+                  (parameter.addQuestions ?? [])
+                    .filter(aq => Object.prototype.hasOwnProperty.call(values, `${aq.id}_${i}`))
+                    .map(aq => [aq.id, values[`${aq.id}_${i}`]])
+                )
+              })
             );
           });
 
@@ -274,13 +281,9 @@ export class FormEngineHelperV3 {
       formGroup.addControl(parameter.field.id, newField);
     }
     if (parameter.field && parameter.addQuestions) {
-      const newField = FormEngineHelperV3.createParameterFormControl(
-        parameter.field,
-        (value || {})[parameter.field.id]
-      );
-      newField.updateValueAndValidity();
       parameter.addQuestions.forEach(aq => {
-        formGroup.addControl(aq.id, newField);
+        // Child answers travel with their row when rows are renamed or removed.
+        formGroup.addControl(aq.id, new FormControl(value?.[aq.id] ?? null));
       });
     }
 

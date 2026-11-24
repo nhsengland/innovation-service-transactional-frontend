@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual';
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
 import { ContextInnovationType } from '@app/base/types';
-import { combineLatest, concatMap, of } from 'rxjs';
+import { combineLatest, concatMap, finalize, of } from 'rxjs';
 import { requiredDocumentErrorAlert } from '@modules/shared/helpers/required-document-errors';
 
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
@@ -48,6 +48,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   isEvidenceSection = false;
   isRegulationsSection = false;
   private isInMemoryStepNavigation = false;
+  private isSavingTestingSection = false;
 
   allowMarkSectionAsComplete = true;
 
@@ -117,7 +118,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onChangeStep(stepId: number, item: WizardSummaryV3Type): void {
     this.isChangeMode = true;
-    if (this.shouldDeferChangeModeSave()) {
+    if (this.shouldDeferTestingSave()) {
       this.onGoToStep(stepId, true);
       this.location.replaceState(`${this.baseUrl}/edit/${stepId}`, 'isChangeMode=true');
     } else {
@@ -140,7 +141,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         });
       }
 
-      if (this.sectionStatus === 'DRAFT' || this.shouldDeferChangeModeSave()) {
+      if (this.sectionStatus === 'DRAFT' || this.shouldDeferTestingSave()) {
         this.submitButton.isActive = validInformation.valid;
 
         if (this.innovation.status !== InnovationStatusEnum.CREATED) {
@@ -188,8 +189,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     );
   }
 
-  private shouldDeferChangeModeSave(): boolean {
-    return this.isChangeMode && this.sectionId === innovationsSubSections.TESTING_WITH_USERS;
+  private shouldDeferTestingSave(): boolean {
+    return this.sectionId === innovationsSubSections.TESTING_WITH_USERS;
   }
 
   private hasAnswerChanges(updatedAnswers: Record<string, unknown>, currentAnswers: Record<string, unknown>): boolean {
@@ -214,9 +215,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         const previousStep = this.wizard.getPreviousStep(this.isChangeMode);
         if (previousStep === -1) {
           this.redirectTo(this.baseUrl);
-        } else if (this.shouldDeferChangeModeSave()) {
+        } else if (this.shouldDeferTestingSave()) {
           this.onGoToStep(previousStep, this.isChangeMode);
-          this.location.replaceState(`${this.baseUrl}/edit/${previousStep}`, 'isChangeMode=true');
+          this.location.replaceState(
+            `${this.baseUrl}/edit/${previousStep}`,
+            this.isChangeMode ? 'isChangeMode=true' : ''
+          );
         } else {
           this.onGoToStep(previousStep, this.isChangeMode);
           this.redirectTo(`${this.baseUrl}/edit/${previousStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
@@ -252,10 +256,10 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           return;
         }
 
-        if (this.shouldDeferChangeModeSave()) {
+        if (this.shouldDeferTestingSave()) {
           const nextStep = this.wizard.getNextStep(this.isChangeMode);
           this.onGoToStep(nextStep, this.isChangeMode);
-          this.location.replaceState(`${this.baseUrl}/edit/${nextStep}`, 'isChangeMode=true');
+          this.location.replaceState(`${this.baseUrl}/edit/${nextStep}`, this.isChangeMode ? 'isChangeMode=true' : '');
           return;
         }
 
@@ -323,14 +327,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onSubmitSection(): void {
+    if (this.isSavingTestingSection) return;
+
     if (this.allowMarkSectionAsComplete) {
-      const submitSection$ = this.shouldDeferChangeModeSave()
+      const submitSection$ = this.shouldDeferTestingSave()
         ? this.ctx.innovation
             .updateSectionInfo$(this.innovation.id, this.sectionId, this.wizard.runOutboundParsing())
             .pipe(concatMap(() => this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId)))
         : this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId);
 
-      submitSection$.subscribe({
+      this.isSavingTestingSection = this.shouldDeferTestingSave();
+      submitSection$.pipe(finalize(() => (this.isSavingTestingSection = false))).subscribe({
         next: () => {
           const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
           const sectionLabel = `${group.number}.${section.number}. '${section.title}'`;
