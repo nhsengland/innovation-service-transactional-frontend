@@ -3,10 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Injector } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { UserRoleEnum } from '@app/base/enums';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-import { StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
+import { of, Subject, throwError } from 'rxjs';
 
 import { FirstTimeSigninComponent } from './first-time-signin.component';
 
@@ -60,6 +62,136 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
     fixture.detectChanges();
 
     expect(component.wizard.steps[2]?.parameters[0]?.id).toBe('isCompanyOrOrganisation');
+  });
+
+  describe('acknowledged names after onboarding', () => {
+    const submittedNames = { givenName: 'Ada', surname: 'Lovelace', displayName: 'Ada Lovelace' };
+
+    function prepareSubmission() {
+      fixture = TestBed.createComponent(FirstTimeSigninComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      const user = TestBed.inject(CtxStore).user;
+      user.updateInfo({ id: 'onboarding-user', organisations: [{ id: 'organisation-id' }] });
+      component.wizard.addAnswers(submittedNames);
+      const save = jest.spyOn(user, 'updateUserInfo$').mockReturnValue(of({ id: 'onboarding-user' }));
+      const refresh = jest.spyOn(user, 'initializeAuthentication$').mockImplementation(() => {
+        user.updateInfo({ givenName: '', surname: '', displayName: '' });
+        return of(true);
+      });
+      const navigate = jest.spyOn(component, 'redirectTo').mockImplementation(() => undefined);
+      return { user, save, refresh, navigate };
+    }
+
+    it('shows acknowledged submitted names when the fresh identity still has empty names', () => {
+      const { user, save, refresh, navigate } = prepareSubmission();
+
+      component.onSubmitWizard();
+
+      expect(save).toHaveBeenCalledTimes(1);
+      expect(refresh).toHaveBeenCalledWith(true);
+      expect(user.getUserInfo()).toMatchObject(submittedNames);
+      expect(navigate).toHaveBeenCalledWith('innovator/dashboard', { alert: 'alertDisabled' });
+      expect(component.isSaving).toBe(false);
+    });
+
+    it('changes only display fields and retains refreshed server onboarding state', () => {
+      const { user, refresh } = prepareSubmission();
+      refresh.mockImplementation(() => {
+        user.updateInfo({ givenName: 'Old', surname: 'Name', displayName: 'Old Name', firstTimeSignInAt: null });
+        return of(true);
+      });
+
+      component.onSubmitWizard();
+
+      expect(user.getUserInfo()).toMatchObject({ ...submittedNames, id: 'onboarding-user', firstTimeSignInAt: null });
+      expect(user.getUserInfo().organisations[0].id).toBe('organisation-id');
+    });
+
+    it("does not apply another identity's submitted name after the refresh changes user", () => {
+      const { user, refresh, navigate } = prepareSubmission();
+      refresh.mockImplementation(() => {
+        user.updateInfo({ id: 'different-user', givenName: 'Other', surname: 'Person', displayName: 'Other Person' });
+        return of(true);
+      });
+
+      component.onSubmitWizard();
+
+      expect(user.getUserInfo().displayName).toBe('Other Person');
+      expect(navigate).not.toHaveBeenCalled();
+      expect(component.alert.type).toBe('ERROR');
+      expect(component.isSaving).toBe(false);
+    });
+
+    it('does not claim success or refresh after the profile write fails', () => {
+      const { user, save, refresh, navigate } = prepareSubmission();
+      save.mockReturnValue(throwError(() => new Error('Profile write failed')));
+
+      component.onSubmitWizard();
+
+      expect(refresh).not.toHaveBeenCalled();
+      expect(navigate).not.toHaveBeenCalled();
+      expect(user.getUserInfo().displayName).not.toBe(submittedNames.displayName);
+      expect(component.alert.type).toBe('ERROR');
+      expect(component.isSaving).toBe(false);
+    });
+
+    it('does not navigate or invent a profile after the post-save refresh fails', () => {
+      const { user, refresh, navigate } = prepareSubmission();
+      refresh.mockReturnValue(throwError(() => new Error('Refresh timed out')));
+
+      component.onSubmitWizard();
+
+      expect(navigate).not.toHaveBeenCalled();
+      expect(user.getUserInfo().displayName).not.toBe(submittedNames.displayName);
+      expect(component.alert.type).toBe('ERROR');
+      expect(component.isSaving).toBe(false);
+    });
+
+    it('waits for the acknowledged write before refreshing or displaying submitted names', () => {
+      const { user, save, refresh, navigate } = prepareSubmission();
+      const pendingSave = new Subject<{ id: string }>();
+      save.mockReturnValue(pendingSave);
+
+      component.onSubmitWizard();
+
+      expect(refresh).not.toHaveBeenCalled();
+      expect(navigate).not.toHaveBeenCalled();
+      expect(user.getUserInfo().displayName).not.toBe(submittedNames.displayName);
+      expect(component.isSaving).toBe(true);
+
+      pendingSave.next({ id: 'onboarding-user' });
+      pendingSave.complete();
+      expect(user.getUserInfo()).toMatchObject(submittedNames);
+    });
+
+    it('waits for a delayed context refresh and preserves its authoritative roles', () => {
+      const { user, refresh, navigate } = prepareSubmission();
+      const pendingRefresh = new Subject<boolean>();
+      refresh.mockReturnValue(pendingRefresh);
+
+      component.onSubmitWizard();
+
+      expect(navigate).not.toHaveBeenCalled();
+      expect(component.isSaving).toBe(true);
+      user.updateInfo({
+        roles: [{ id: 'fresh-role', role: UserRoleEnum.INNOVATOR }],
+        firstTimeSignInAt: null,
+        termsOfUseAccepted: false,
+        displayName: 'Old name'
+      });
+      pendingRefresh.next(true);
+      pendingRefresh.complete();
+
+      expect(user.getUserInfo()).toMatchObject({
+        ...submittedNames,
+        roles: [{ id: 'fresh-role', role: UserRoleEnum.INNOVATOR }],
+        firstTimeSignInAt: null,
+        termsOfUseAccepted: false
+      });
+      expect(navigate).toHaveBeenCalledTimes(1);
+      expect(component.isSaving).toBe(false);
+    });
   });
 
   // it('should NOT have default information loaded', () => {

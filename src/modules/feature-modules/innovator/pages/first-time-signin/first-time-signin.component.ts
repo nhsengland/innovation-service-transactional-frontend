@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { concatMap, tap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
@@ -64,6 +64,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
   onSubmitWizard(): void {
     this.isSaving = true;
     const wizardData = this.wizard.runOutboundParsing();
+    const submittingUserId = this.ctx.user.getUserInfo().id;
 
     of(true)
       .pipe(
@@ -94,7 +95,20 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
         ),
 
         // Initialize authentication in order to update First Time SignIn information.
-        concatMap(() => this.ctx.user.initializeAuthentication$(true))
+        concatMap(() => this.ctx.user.initializeAuthentication$(true)),
+        tap(() => {
+          if (!submittingUserId || this.ctx.user.getUserInfo().id !== submittingUserId) {
+            throw new Error('The signed-in user changed while saving the profile');
+          }
+
+          // Graph accepted these names, but its read response can still contain the previous values.
+          // Keep all refreshed authorization and onboarding fields from the server.
+          this.ctx.user.updateInfo({
+            givenName: wizardData.givenName,
+            surname: wizardData.surname,
+            displayName: `${wizardData.givenName} ${wizardData.surname}`
+          });
+        })
       )
       .subscribe({
         next: () => {
