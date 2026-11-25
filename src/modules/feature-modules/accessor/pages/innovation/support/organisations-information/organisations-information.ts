@@ -149,27 +149,6 @@ export const ORGANISATIONS_INFORMATION: OrganisationInformation[] = [
     link: URLS.NICE,
     supportInformation: [
       {
-        title: 'NICE:',
-        bulletPoints: [
-          {
-            description:
-              'produces guidance on medical devices, diagnostic technologies, interventional procedures, pharmaceuticals and digital health technologies'
-          },
-          {
-            description:
-              'makes decisions about which topics to select for guidance production through its prioritisation board and uses the NHS Innovation Service to help identify technologies that fit with those topics. ',
-            link: {
-              url: URLS.NICE_KEY_PRIORITY_AREAS,
-              label: 'View key priority areas (opens in a new window)'
-            }
-          },
-          {
-            description:
-              'provides support to developers of health technologies through a range of fee-based, not-for-profit services, via NICE Advice. Companies can use these services regardless of their route to market, for example NICE guidance verse non-NICE routes'
-          }
-        ]
-      },
-      {
         title: 'NICE Advice supports innovations with:',
         bulletPoints: [
           { description: 'advice, including evidence gap analyses or scientific advice' },

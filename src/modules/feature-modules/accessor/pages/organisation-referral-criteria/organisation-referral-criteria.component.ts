@@ -236,31 +236,6 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
       information: [
         {
           type: 'PARAGRAPH',
-          values: [{ description: 'NICE:' }]
-        },
-        {
-          type: 'BULLET_LIST',
-          values: [
-            {
-              description:
-                'produces guidance on medical devices, diagnostic technologies, interventional procedures, pharmaceuticals and digital health technologies'
-            },
-            {
-              description:
-                'makes decisions about which topics to select for guidance production through its prioritisation board and uses the NHS Innovation Service to help identify technologies that fit with those topics.',
-              link: {
-                url: this.CONSTANTS.URLS.NICE_KEY_PRIORITY_AREAS,
-                label: 'View key priority areas (opens in a new window)'
-              }
-            },
-            {
-              description:
-                'provides support to developers of health technologies through a range of fee-based, not-for-profit services, via NICE Advice. Companies can use these services regardless of their route to market, for example NICE guidance verse non-NICE routes'
-            }
-          ]
-        },
-        {
-          type: 'PARAGRAPH',
           values: [{ description: 'NICE Advice supports innovations with:' }]
         },
         {
