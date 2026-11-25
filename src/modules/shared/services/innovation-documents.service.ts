@@ -204,7 +204,18 @@ export class InnovationDocumentsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/files')
       .setPathParams({ innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
+    const body = {
+      ...data,
+      ...(data.file && {
+        file: {
+          id: data.file.id,
+          name: data.file.name,
+          size: data.file.size,
+          extension: data.file.extension
+        }
+      })
+    };
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
     );

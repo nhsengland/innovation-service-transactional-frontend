@@ -1,3 +1,4 @@
+import { FileDownloadComponent } from '@modules/shared/components/file-download/file-download.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule as AngularFormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -41,6 +42,7 @@ import { FormFieldsGroupV3Component } from './components/fields-group-v3.compone
 
 @NgModule({
   imports: [
+    FileDownloadComponent,
     CommonModule,
     AngularFormsModule,
     ReactiveFormsModule,

@@ -378,9 +378,9 @@ function summaryParsing(data: StepPayloadType, schema?: InnovationRecordSchemaIn
     },
     {
       label: 'Uploaded document',
-      value: `<a href='${data.file?.url}'>${data.file?.name}</a>`,
+      value: data.file?.url ? `<a href='${data.file.url}'>${data.file.name}</a>` : data.file?.name,
       editStepNumber: editStepNumber++,
-      allowHTML: true
+      allowHTML: !!data.file?.url
     }
   );
 

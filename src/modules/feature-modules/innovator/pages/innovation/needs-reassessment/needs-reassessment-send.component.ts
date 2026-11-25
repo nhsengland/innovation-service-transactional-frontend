@@ -8,6 +8,7 @@ import { ContextInnovationType } from '@modules/stores';
 
 import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassessment-send.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { requiredDocumentErrorAlert } from '@modules/shared/helpers/required-document-errors';
 import { FormFieldActionsEnum } from '../how-to-proceed/how-to-proceed.component';
 
 @Component({
@@ -135,9 +136,19 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
         });
         this.redirectTo(`${this.baseUrl}`);
       },
-      error: () => {
+      error: error => {
         this.submitButton = { isActive: true, label: 'Send to needs reassessment' };
-        this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' });
+        const alert = requiredDocumentErrorAlert(
+          error,
+          this.innovationId,
+          this.ctx.schema.getIrSchemaTranslationsMap()
+        );
+        if (alert) {
+          alert.message = 'You cannot send your innovation for reassessment until you resolve these document issues.';
+          this.setAlertError(alert.message, alert);
+        } else {
+          this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' });
+        }
       }
     });
   }

@@ -301,7 +301,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         .uploadFile(httpUploadBody, file)
         .pipe(
           switchMap(response => {
-            const fileData = omit(response, 'url');
+            const fileData = omit(response, 'url', 'scanState', 'canDownload');
             body = {
               ...body,
               file: {

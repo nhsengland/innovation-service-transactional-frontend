@@ -8,6 +8,7 @@ import {
   combineLatest,
   debounceTime,
   filter,
+  map,
   of,
   switchMap,
   take,
@@ -24,8 +25,13 @@ import { DeepPartial } from '@app/base/types';
 import isUndefined from 'lodash/isUndefined';
 import omitBy from 'lodash/omitBy';
 
+type PendingUserNames = Pick<UserInfo, 'id' | 'givenName' | 'surname' | 'displayName'>;
+
 @Injectable()
 export class UserContextStore {
+  private pendingNames?: PendingUserNames;
+  private readonly pendingNamesKey = 'pendingUserNames';
+
   // State
   private state = signal<UserContextType>({
     user: EMPTY_USER_INFO,
@@ -80,6 +86,7 @@ export class UserContextStore {
     private envVariablesStore: EnvironmentVariablesStore,
     private userCtxService: UserContextService
   ) {
+    this.pendingNames = this.readPendingNames();
     // Reducers
     this.fetch$
       .pipe(
@@ -88,7 +95,8 @@ export class UserContextStore {
           this.state.update(state => ({ ...state, isStateLoaded: false, error: undefined }));
         }),
         switchMap(forceRefresh =>
-          this.userCtxService.getUserInfo(forceRefresh).pipe(
+          this.userCtxService.getUserInfo(forceRefresh || !!this.pendingNames).pipe(
+            map(user => this.applyPendingNames(user)),
             catchError(error => {
               this.state.update(state => ({ ...state, error }));
               return of(null);
@@ -124,8 +132,25 @@ export class UserContextStore {
   }
 
   updateUserInfo$(body: UpdateUserInfo, updateState = true): Observable<{ id: string }> {
+    const userId = this.getUserId();
+    const names = {
+      givenName: body.givenName,
+      surname: body.surname,
+      displayName: `${body.givenName} ${body.surname}`
+    };
     return this.userCtxService.updateUserInfo(body).pipe(
-      tap(() => {
+      tap(result => {
+        if (!userId || this.getUserId() !== userId || result.id !== userId) {
+          return;
+        }
+        if (isPlatformBrowser(this.platformId)) {
+          this.pendingNames = { id: userId, ...names };
+          try {
+            sessionStorage.setItem(this.pendingNamesKey, JSON.stringify(this.pendingNames));
+          } catch {
+            // Storage may be blocked; keep the acknowledgement for this page lifetime.
+          }
+        }
         if (updateState) {
           this.updateStateOnUserInfoUpdate(body);
         }
@@ -153,8 +178,18 @@ export class UserContextStore {
   }
 
   signOut(): void {
-    LocalStorageHelper.removeItem('userContext');
-    sessionStorage.clear();
+    this.clear();
+    this.clearPendingNames();
+    try {
+      LocalStorageHelper.removeItem('userContext');
+    } catch {
+      // Storage restrictions must not prevent sign out.
+    }
+    try {
+      sessionStorage.clear();
+    } catch {
+      // Storage restrictions must not prevent sign out.
+    }
     window.location.replace(`${this.envVariablesStore.APP_URL}/signout`); // Full reload to hit SSR.
   }
 
@@ -184,6 +219,56 @@ export class UserContextStore {
       default:
         return '';
     }
+  }
+
+  private readPendingNames(): PendingUserNames | undefined {
+    if (!isPlatformBrowser(this.platformId)) {
+      return undefined;
+    }
+    try {
+      const value = JSON.parse(sessionStorage.getItem(this.pendingNamesKey) ?? 'null');
+      if (
+        value &&
+        typeof value.id === 'string' &&
+        value.id &&
+        typeof value.givenName === 'string' &&
+        typeof value.surname === 'string' &&
+        typeof value.displayName === 'string'
+      ) {
+        return { id: value.id, givenName: value.givenName, surname: value.surname, displayName: value.displayName };
+      }
+    } catch {
+      // Invalid or unavailable storage is not an authentication failure.
+    }
+    return undefined;
+  }
+
+  private clearPendingNames(): void {
+    this.pendingNames = undefined;
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        sessionStorage.removeItem(this.pendingNamesKey);
+      } catch {
+        // Storage may be blocked.
+      }
+    }
+  }
+
+  private applyPendingNames(user: UserInfo): UserInfo {
+    const pending = this.pendingNames;
+    if (!pending) {
+      return user;
+    }
+    if (
+      pending.id !== user.id ||
+      (pending.givenName === user.givenName &&
+        pending.surname === user.surname &&
+        pending.displayName === user.displayName)
+    ) {
+      this.clearPendingNames();
+      return user;
+    }
+    return { ...user, givenName: pending.givenName, surname: pending.surname, displayName: pending.displayName };
   }
 
   private calculateUserContext(user: UserInfo): void {

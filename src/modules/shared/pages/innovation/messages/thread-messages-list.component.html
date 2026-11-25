@@ -142,7 +142,10 @@
 
             <p *ngIf="message.file" class="nhsuk-body-s nhsuk-u-margin-bottom-0">
               <span class="d-block nhsuk-u-font-weight-bold">Document</span>
-              <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/documents/{{ message.file.id }}"> {{ message.file.name }} </a>
+              <a class="d-block text-word-break" routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/documents/{{ message.file.id }}"> {{ message.file.name }} </a>
+              <span class="d-block nhsuk-u-margin-top-2"
+                ><shared-file-download [file]="message.file" [fileId]="message.file.id" [fileName]="message.file.name" [stacked]="false"></shared-file-download
+              ></span>
             </p>
           </div>
           <div class="nhsuk-u-padding-bottom-4">

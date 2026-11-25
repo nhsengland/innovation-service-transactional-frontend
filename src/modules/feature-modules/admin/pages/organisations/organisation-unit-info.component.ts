@@ -9,7 +9,8 @@ import { TableModel } from '@app/base/models';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores';
-import { ObservedValueOf } from 'rxjs';
+import { EMPTY, ObservedValueOf, expand, map, of, reduce, switchMap } from 'rxjs';
+import { UsersListDTO } from '@modules/shared/dtos/users.dto';
 import { OrganisationDataResolver } from '../../resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from '../../resolvers/organisation-unit-data.resolver';
 
@@ -90,25 +91,51 @@ export class OrganisationUnitInfoComponent extends CoreComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this.usersService.getUsersList({ queryParams: this.usersListFilters }).subscribe({
-      next: users => {
-        this.activeUsers = users.data
-          .filter(item => item.isActive)
-          .map(item => ({ id: item.id, name: item.name, email: item.email }));
-        this.inactiveUsers = users.data
-          .filter(item => !item.isActive)
-          .map(item => ({ id: item.id, name: item.name, email: item.email }));
-        if (this.isUnitTeamPage) {
-          this.getInnovationsList();
-        }
+    const queryParams = { ...this.usersListFilters };
+    const take = queryParams.take ?? 500;
+    this.subscriptions.push(
+      this.usersService
+        .getUsersList({ queryParams })
+        .pipe(
+          switchMap(firstPage => {
+            let skip = queryParams.skip ?? 0;
+            // Count is calculated before identity hydration. A short/empty page is not the end.
+            const initialCount = firstPage.count;
+            return of(firstPage).pipe(
+              expand(() => {
+                skip += take;
+                return skip < initialCount
+                  ? this.usersService.getUsersList({ queryParams: { ...queryParams, skip } })
+                  : EMPTY;
+              }, 1),
+              reduce((all, page) => {
+                page.data.forEach(user => all.set(user.id, user));
+                return all;
+              }, new Map<string, UsersListDTO['data'][number]>()),
+              map(all => Array.from(all.values()))
+            );
+          })
+        )
+        .subscribe({
+          next: users => {
+            this.activeUsers = users
+              .filter(item => item.isActive)
+              .map(item => ({ id: item.id, name: item.name, email: item.email }));
+            this.inactiveUsers = users
+              .filter(item => !item.isActive)
+              .map(item => ({ id: item.id, name: item.name, email: item.email }));
+            if (this.isUnitTeamPage) {
+              this.getInnovationsList();
+            }
 
-        this.setPageStatus('READY');
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-      }
-    });
+            this.setPageStatus('READY');
+          },
+          error: () => {
+            this.setPageStatus('ERROR');
+            this.setAlertUnknownError();
+          }
+        })
+    );
   }
 
   onInnovationsPageChange(event: { pageNumber: number }): void {

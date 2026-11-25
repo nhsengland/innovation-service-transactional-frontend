@@ -8,6 +8,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSharesListDTO } from '@modules/shared/services/innovations.dtos';
 import { concatMap, forkJoin } from 'rxjs';
+import { requiredDocumentErrorAlert } from '@modules/shared/helpers/required-document-errors';
 
 @Component({
   selector: 'app-innovator-pages-innovation-data-sharing-edit',
@@ -148,8 +149,17 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
           );
           this.redirectTo(redirectUrl);
         },
-        error: () => {
+        error: error => {
           this.submitButton = { isActive: true, label: 'Confirm submission' };
+          const alert = requiredDocumentErrorAlert(
+            error,
+            this.innovationId,
+            this.ctx.schema.getIrSchemaTranslationsMap()
+          );
+          if (alert) {
+            this.setAlertError(alert.message, alert);
+            return;
+          }
           this.setAlertError(
             'An error occurred while submiting your innovation record. Please, try again or contact us for further help'
           );

@@ -1,3 +1,4 @@
+import { FileDownloadComponent } from '@modules/shared/components/file-download/file-download.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -139,6 +140,7 @@ import { InnovationRegulationsDocumentsTableComponent } from './components/regul
 import { PageInnovationSectionRegulationInfoComponent } from './pages/innovation/sections/section-regulation-info';
 @NgModule({
   imports: [
+    FileDownloadComponent,
     RouterModule,
     CommonModule,
     TranslateModule.forChild(),
@@ -286,6 +288,7 @@ import { PageInnovationSectionRegulationInfoComponent } from './pages/innovation
     PluralTranslatePipe
   ],
   exports: [
+    FileDownloadComponent,
     CommonModule,
     TranslateModule,
     DynamicModule,

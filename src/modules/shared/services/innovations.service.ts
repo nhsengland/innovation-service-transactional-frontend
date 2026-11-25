@@ -1,3 +1,4 @@
+import { FileDownloadType } from './file-scan.types';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
@@ -116,11 +117,7 @@ export type GetThreadMessagesListInDTO = {
   count: number;
   messages: {
     id: string;
-    file: {
-      id: string;
-      name: string;
-      url: string;
-    };
+    file?: { id: string; name: string } & FileDownloadType;
     message: string;
     createdAt: DateISOType;
     createdBy: {

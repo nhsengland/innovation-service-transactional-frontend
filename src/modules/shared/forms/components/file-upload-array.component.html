@@ -23,7 +23,7 @@
     <dl class="nhsuk-summary-list">
       <div *ngFor="let item of previousUploadedFiles" class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__value">
-          <a href="{{ item.url }}"> {{ item.name }} </a>
+          <shared-file-download [file]="item" [label]="item.name" [fileName]="item.name"></shared-file-download>
         </dt>
         <dd class="nhsuk-summary-list__actions">
           <a href="javascript:void(0)" (click)="onRemovePreviousUploadedFile(item.id)"
@@ -64,6 +64,7 @@
     >
       <ngx-dropzone-label class="font-color-text overflow-hidden">
         <div class="text-ellipsis text-vertical-ellipsis-2-lines">{{ f.file.name }}</div>
+        <div role="status" aria-live="polite">Scanning file… Save your changes to check the result.</div>
         <div class="nhsuk-u-padding-top-1 nhsuk-u-font-size-14">Click to remove</div>
       </ngx-dropzone-label>
     </theme-file-upload-preview>

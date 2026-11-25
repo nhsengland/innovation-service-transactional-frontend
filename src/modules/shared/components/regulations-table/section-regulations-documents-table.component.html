@@ -3,9 +3,8 @@
     <dt class="nhsuk-summary-list__key">{{ item | irv3translate: "items" : "standards" }}</dt>
     <dd class="nhsuk-summary-list__value text-pre-wrap">
       <p *ngFor="let doc of regulationsDocuments[item]">
-        <a href="{{ doc.file.url }}" attr.aria-label="Download {{ doc.name }} file"
-          >{{ doc.name }} ({{ doc.file.extension | uppercase }}{{ doc.file.size ? ", " + (doc.file.size | bytesPrettyPrint) : "" }})</a
-        >
+        <shared-file-download [file]="doc.file" [fileId]="doc.id" [fileName]="doc.name" [label]="doc.name"></shared-file-download>
+        <span class="d-block">({{ doc.file.extension | uppercase }}{{ doc.file.size ? ", " + (doc.file.size | bytesPrettyPrint) : "" }})</span>
       </p>
     </dd>
     <dd class="nhsuk-summary-list__actions">
