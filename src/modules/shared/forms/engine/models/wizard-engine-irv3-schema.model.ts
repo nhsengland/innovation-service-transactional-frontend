@@ -227,6 +227,22 @@ export class WizardIRV3EngineModel {
   }
 
   addAnswers(data: Record<string, any>): this {
+    // A submitted fields-group contains row-owned child answers. Replace its
+    // positional child keys so deleted rows cannot donate answers to survivors.
+    this.steps.forEach(step => {
+      const parent = step.parameters[0];
+      if (parent.dataType !== 'fields-group' || !parent.addQuestions || !Array.isArray(data[parent.id])) return;
+
+      parent.addQuestions.forEach(child => {
+        const prefix = `${child.id}_`;
+        Object.keys(this.currentAnswers).forEach(key => {
+          if (key.startsWith(prefix) && /^\d+$/.test(key.slice(prefix.length))) delete this.currentAnswers[key];
+        });
+        data[parent.id].forEach((row: Record<string, any>, index: number) => {
+          this.currentAnswers[`${child.id}_${index}`] = row[child.id];
+        });
+      });
+    });
     this.currentAnswers = { ...this.currentAnswers, ...data };
 
     return this;
@@ -551,7 +567,9 @@ export class WizardIRV3EngineModel {
                         /{{[^{}]*}}/,
                         this.currentAnswers[stepParams.id][i][stepParams.field!.id]
                       );
-                      value = stepAnswers[i][aq.id];
+                      value = Object.prototype.hasOwnProperty.call(currentAnswers, stepId)
+                        ? currentAnswers[stepId]
+                        : stepAnswers[i][aq.id];
 
                       const childStepParam = this.steps.find(step => step.parameters[0]?.id === stepId)?.parameters[0];
                       const mandatoryAndNotAnswered = this.checkIsQuestionMandatoryAndNotAnswered(
@@ -771,7 +789,7 @@ export class WizardIRV3EngineModel {
             stepParams.addQuestions?.forEach(aq => {
               const addQuestionId = `${aq.id}_${i}`;
 
-              if (this.currentAnswers[addQuestionId]) {
+              if (Object.prototype.hasOwnProperty.call(this.currentAnswers, addQuestionId)) {
                 item[aq.id] = this.currentAnswers[addQuestionId];
               }
             });
